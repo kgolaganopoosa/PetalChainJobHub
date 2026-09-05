@@ -15,8 +15,8 @@ const BANK_DETAILS = {
 // Initial Registered Users (Stored in LocalStorage on First Load)
 const DEFAULT_USERS = [
     { passwordKey: "#PetalChain_26", status: "Subscribed" },
-    { passwordKey: "#UserKey_01", status: "Pending" },
-    { passwordKey: "#UserKey_02", status: "Inactive" }
+    { passwordKey: "#UserKey_01", status: "Subscribed" },
+    { passwordKey: "#UserKey_02", status: "Active" }
 ];
 
 // Load Users from LocalStorage or Initialize

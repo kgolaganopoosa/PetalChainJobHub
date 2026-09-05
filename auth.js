@@ -16,6 +16,7 @@ const BANK_DETAILS = {
 const DEFAULT_USERS = [
     { passwordKey: "#PetalChain_26", status: "Subscribed" },
     { passwordKey: "#UserKey_01", status: "Subscribed" },
+    { passwordKey: "#UserKey_26", status: "Subscribed" },
     { passwordKey: "#UserKey_02", status: "Active" }
 ];
 

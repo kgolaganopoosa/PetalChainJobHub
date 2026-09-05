@@ -6,9 +6,262 @@
     <title>Arcknowledge - Job Hub | Global Directory</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --ink: #f7f8fb;
+            --muted: #9aa6b8;
+            --muted-strong: #c3ccd9;
+            --surface: rgba(16, 27, 45, 0.76);
+            --surface-solid: #101b2d;
+            --surface-soft: rgba(21, 35, 57, 0.78);
+            --line: rgba(148, 163, 184, 0.17);
+            --line-strong: rgba(148, 163, 184, 0.29);
+            --blue: #73a7ff;
+            --mint: #70e1c2;
+            --violet: #b59aff;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background:
+                radial-gradient(circle at 8% -10%, rgba(75, 110, 255, 0.22), transparent 32rem),
+                radial-gradient(circle at 94% 4%, rgba(112, 225, 194, 0.10), transparent 28rem),
+                #07111f !important;
+            color: var(--ink) !important;
+            font-family: "Manrope", ui-sans-serif, system-ui, sans-serif !important;
+        }
+
+        ::selection { background: rgba(115, 167, 255, 0.32); color: white; }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #07111f; }
+        ::-webkit-scrollbar-thumb { background: #263957; border: 2px solid #07111f; border-radius: 999px; }
+
         .modal { transition: opacity 0.2s ease, visibility 0.2s ease; }
         body.modal-active { overflow: hidden !important; }
+
+        #loginPage {
+            background:
+                linear-gradient(135deg, rgba(7, 17, 31, 0.94), rgba(10, 25, 45, 0.88)),
+                radial-gradient(circle at 20% 20%, rgba(115, 167, 255, 0.28), transparent 34rem) !important;
+        }
+        #loginPage::before, #loginPage::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(2px);
+            pointer-events: none;
+        }
+        #loginPage::before {
+            width: 28rem;
+            height: 28rem;
+            top: -13rem;
+            right: -8rem;
+            background: rgba(112, 225, 194, 0.12);
+            border: 1px solid rgba(112, 225, 194, 0.14);
+        }
+        #loginPage::after {
+            width: 20rem;
+            height: 20rem;
+            bottom: -10rem;
+            left: -6rem;
+            background: rgba(115, 167, 255, 0.14);
+            border: 1px solid rgba(115, 167, 255, 0.16);
+        }
+        #loginPage > div {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(22, 38, 62, 0.92), rgba(11, 24, 42, 0.94)) !important;
+            border: 1px solid rgba(148, 163, 184, 0.24) !important;
+            border-radius: 28px !important;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+            padding: 2.4rem !important;
+        }
+        #loginPage > div::before {
+            content: "ARCKNOWLEDGE  /  CAREER INTELLIGENCE";
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--mint);
+            font: 500 0.63rem/1 "DM Mono", monospace;
+            letter-spacing: 0.14em;
+        }
+        #loginPage [class*="bg-[#f6f8fa]"] {
+            background: rgba(255, 255, 255, 0.045) !important;
+            border-color: rgba(148, 163, 184, 0.2) !important;
+        }
+        #loginPage h2 { color: var(--ink) !important; font-size: 1.55rem !important; letter-spacing: -0.04em; }
+        #loginPage p, #loginPage label { color: var(--muted) !important; }
+        #loginPage input {
+            color: var(--ink) !important;
+            background: rgba(5, 15, 28, 0.48) !important;
+            border-color: rgba(148, 163, 184, 0.23) !important;
+            border-radius: 13px !important;
+            padding-top: 0.82rem !important;
+            padding-bottom: 0.82rem !important;
+        }
+        #loginPage input:focus { border-color: var(--blue) !important; box-shadow: 0 0 0 4px rgba(115, 167, 255, 0.12) !important; }
+        #loginPage button[type="submit"] {
+            background: linear-gradient(135deg, #7c9cff, #5c7ff0) !important;
+            color: #07111f !important;
+            border: 0 !important;
+            border-radius: 13px !important;
+            padding: 0.78rem !important;
+            box-shadow: 0 12px 24px rgba(92, 127, 240, 0.22) !important;
+        }
+        #loginPage button[type="submit"]:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+        #mainContent { background: transparent !important; }
+        #mainContent > header {
+            background: rgba(7, 17, 31, 0.76) !important;
+            border-color: var(--line) !important;
+            backdrop-filter: blur(18px);
+        }
+        #mainContent > header > div { height: 4.75rem !important; }
+        #mainContent header [class*="bg-[#24292f]"] {
+            background: linear-gradient(135deg, #86a9ff, #6c79e9) !important;
+            color: #07111f !important;
+            border-radius: 13px !important;
+            box-shadow: 0 8px 24px rgba(85, 113, 236, 0.22);
+        }
+        #mainContent header span.text-lg { color: var(--ink) !important; letter-spacing: -0.04em; }
+        #mainContent header span.text-xs { color: var(--mint) !important; font-family: "DM Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+        #mainContent header button {
+            background: rgba(255, 255, 255, 0.045) !important;
+            color: var(--muted-strong) !important;
+            border-color: var(--line) !important;
+            border-radius: 10px !important;
+        }
+        #mainContent header button:hover { background: rgba(255, 255, 255, 0.09) !important; border-color: var(--line-strong) !important; }
+
+        #mainContent main { padding-top: 3.8rem !important; padding-bottom: 4rem !important; }
+        #mainContent main > .max-w-3xl {
+            max-width: 58rem !important;
+            margin-bottom: 2.6rem !important;
+            padding: clamp(1.5rem, 4vw, 3.2rem) !important;
+            border: 1px solid var(--line) !important;
+            border-radius: 28px !important;
+            background:
+                linear-gradient(120deg, rgba(20, 36, 60, 0.92), rgba(12, 27, 47, 0.70)),
+                radial-gradient(circle at 92% 4%, rgba(112, 225, 194, 0.13), transparent 18rem) !important;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+        }
+        #mainContent main h1 {
+            max-width: 46rem;
+            color: var(--ink) !important;
+            font-size: clamp(2.1rem, 5vw, 4.25rem) !important;
+            line-height: 0.99 !important;
+            letter-spacing: -0.075em !important;
+        }
+        #mainContent main h1::after {
+            content: ".";
+            color: var(--mint);
+        }
+        #mainContent main h1 + p { color: var(--muted) !important; max-width: 38rem; line-height: 1.75; }
+        #searchInput {
+            min-height: 3.6rem;
+            color: var(--ink) !important;
+            background: rgba(4, 14, 28, 0.58) !important;
+            border-color: rgba(148, 163, 184, 0.24) !important;
+            border-radius: 14px !important;
+            padding-left: 3rem !important;
+        }
+        #searchInput::placeholder { color: #708096; }
+        #searchInput:focus {
+            border-color: var(--blue) !important;
+            box-shadow: 0 0 0 4px rgba(115, 167, 255, 0.12) !important;
+        }
+        #categoryContainer { gap: 0.55rem !important; margin-top: 0.2rem; }
+        #categoryContainer .cat-btn {
+            border-radius: 999px !important;
+            border-color: var(--line) !important;
+            background: rgba(255, 255, 255, 0.045) !important;
+            color: var(--muted-strong) !important;
+            padding: 0.55rem 0.85rem !important;
+        }
+        #categoryContainer .cat-btn:hover { color: var(--ink) !important; background: rgba(255, 255, 255, 0.09) !important; }
+        #categoryContainer .cat-btn.active {
+            background: var(--ink) !important;
+            color: #0a1525 !important;
+            border-color: var(--ink) !important;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.17);
+        }
+        #directoryGrid { gap: 1rem !important; }
+        #directoryGrid > div {
+            min-height: 13.5rem;
+            padding: 1.3rem !important;
+            border: 1px solid var(--line) !important;
+            border-radius: 20px !important;
+            background: linear-gradient(160deg, rgba(20, 35, 57, 0.82), rgba(12, 25, 43, 0.72)) !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease !important;
+        }
+        #directoryGrid > div:hover {
+            transform: translateY(-4px);
+            border-color: rgba(115, 167, 255, 0.58) !important;
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(115, 167, 255, 0.08);
+        }
+        #directoryGrid > div h3, #directoryGrid > div h3 a { color: var(--ink) !important; }
+        #directoryGrid > div h3 a:hover { color: var(--blue) !important; }
+        #directoryGrid > div p { color: var(--muted) !important; line-height: 1.65; }
+        #directoryGrid > div [class*="text-[#636c76]"] { color: var(--muted) !important; }
+        #directoryGrid > div > div > div:first-child > span:first-child {
+            border-radius: 999px !important;
+            background: rgba(115, 167, 255, 0.12) !important;
+            border-color: rgba(115, 167, 255, 0.25) !important;
+            color: #9dbdff !important;
+        }
+        #directoryGrid > div > a {
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.055) !important;
+            color: var(--muted-strong) !important;
+            border-color: var(--line) !important;
+            border-radius: 10px !important;
+            padding: 0.65rem 0.8rem !important;
+        }
+        #directoryGrid > div > a:hover { color: var(--ink) !important; background: rgba(115, 167, 255, 0.12) !important; border-color: rgba(115, 167, 255, 0.35) !important; }
+        #noResults {
+            background: var(--surface) !important;
+            border-color: var(--line) !important;
+            border-radius: 20px !important;
+        }
+        #noResults h3 { color: var(--ink) !important; }
+        #noResults p { color: var(--muted) !important; }
+
+        .modal { background: rgba(2, 8, 18, 0.74) !important; backdrop-filter: blur(10px); }
+        .modal > div {
+            background: linear-gradient(145deg, #172842, #0d1c31) !important;
+            border-color: var(--line-strong) !important;
+            border-radius: 22px !important;
+            box-shadow: 0 28px 70px rgba(0, 0, 0, 0.4) !important;
+            color: var(--ink) !important;
+        }
+        .modal h3 { color: var(--ink) !important; }
+        .modal p, .modal span, .modal label { color: var(--muted-strong); }
+        .modal input, .modal select {
+            color: var(--ink) !important;
+            background: rgba(3, 13, 25, 0.48) !important;
+            border-color: var(--line) !important;
+            border-radius: 10px !important;
+        }
+        .modal table { color: var(--muted-strong); }
+        .modal thead { background: rgba(255,255,255,0.045) !important; border-color: var(--line) !important; }
+        .modal tbody { border-color: var(--line) !important; }
+        .modal tbody tr:hover { background: rgba(255,255,255,0.045) !important; }
+        .modal [class*="bg-[#f6f8fa]"] { background: rgba(255,255,255,0.045) !important; border-color: var(--line) !important; }
+        .modal button[onclick*="closeModal"] { color: var(--muted) !important; }
+
+        @media (max-width: 640px) {
+            #mainContent > header > div { padding-left: 1rem !important; padding-right: 1rem !important; }
+            #mainContent header button span { display: none; }
+            #mainContent main { padding-top: 1.25rem !important; }
+            #mainContent main > .max-w-3xl { border-radius: 22px !important; padding: 1.25rem !important; }
+            #mainContent main h1 { font-size: 2.35rem !important; }
+            #loginPage > div { padding: 1.5rem !important; border-radius: 22px !important; }
+        }
     </style>
 </head>
 <body class="bg-[#f6f8fa] text-[#1f2328] flex flex-col min-h-screen font-sans antialiased selection:bg-[#0969da] selection:text-white">

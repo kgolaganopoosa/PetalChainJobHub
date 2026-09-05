@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcknowledge - Job Hub | Global Directory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .modal { transition: opacity 0.2s ease, visibility 0.2s ease; }
+        body.modal-active { overflow: hidden !important; }
+    </style>
+</head>
+<body class="bg-[#f6f8fa] text-[#1f2328] flex flex-col min-h-screen font-sans antialiased selection:bg-[#0969da] selection:text-white">
+
+    <div id="loginPage" class="fixed inset-0 z-50 flex items-center justify-center bg-[#f6f8fa] p-4">
+        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-md p-6 shadow-sm">
+            <div class="flex flex-col items-center mb-6 text-center">
+                <div class="p-3 bg-[#f6f8fa] border border-[#d0d7de] rounded-full text-[#1f2328] mb-3">
+                    <i data-lucide="shield-check" class="w-7 h-7 text-[#0969da]"></i>
+                </div>
+                <h2 class="text-xl font-semibold tracking-tight text-[#1f2328]">Member Authentication</h2>
+                <p class="text-xs text-[#636c76] mt-1">Sign in with your access password key.</p>
+            </div>
+
+            <form onsubmit="handleUserLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-[#1f2328] mb-1">Access Password Key</label>
+                    <input type="password" id="userLoginPassword" placeholder="Enter password key..." required class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-3 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]">
+                </div>
+
+                <div id="statusWarning" class="hidden p-3 rounded-md text-xs border space-y-2"></div>
+
+                <button type="submit" class="w-full bg-[#1f2328] hover:bg-[#24292f] text-white text-sm font-medium py-2 rounded-md transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
+                </button>
+            </form>
+
+            <div class="mt-4 pt-4 border-t border-[#d0d7de] text-center">
+                <span class="text-xs text-[#636c76]">Demo Keys for Testing:</span>
+                <div class="flex justify-center gap-2 mt-1 text-[11px] text-[#0969da]">
+                    <code>#PetalChain_26</code> | <code>#UserKey_01</code> | <code>#UserKey_02</code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainContent" class="hidden flex-col min-h-screen">
+        <header class="bg-[#ffffff] border-b border-[#d0d7de] sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-[#24292f] text-white rounded-md">
+                        <i data-lucide="briefcase" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <span class="text-lg font-semibold text-[#1f2328] tracking-tight">Arcknowledge</span>
+                        <span class="text-xs text-[#0969da] font-medium block -mt-1">Job Hub</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="openModal('accountStatusModal')" class="flex items-center gap-1.5 bg-[#f6f8fa] hover:bg-[#eaeef2] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
+                        <i data-lucide="user-check" class="w-3.5 h-3.5 text-[#0969da]"></i>
+                        <span id="headerSubStatus">Status</span>
+                    </button>
+                    <button onclick="openModal('adminAuthModal')" class="flex items-center gap-1.5 bg-[#f6f8fa] hover:bg-[#eaeef2] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
+                        <i data-lucide="shield-lock" class="w-3.5 h-3.5 text-[#8250df]"></i>
+                        Admin
+                    </button>
+                    <button onclick="handleLogout()" class="p-1.5 bg-[#f6f8fa] hover:bg-[#ffebe9] text-[#cf222e] rounded-md border border-[#d0d7de]" title="Logout">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-3xl mx-auto mb-8">
+                <h1 class="text-2xl sm:text-3xl font-semibold text-[#1f2328] tracking-tight mb-2">Global Job Portals & Career Directory</h1>
+                <p class="text-[#636c76] text-sm mb-6">Explore 100+ aggregated employment platforms, corporate career hubs, and regional portals.</p>
+                
+                <div class="space-y-3">
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3.5 top-2.5 w-4 h-4 text-[#636c76]"></i>
+                        <input type="text" id="searchInput" onkeyup="filterPortals()" placeholder="Search portals, locations, or types (e.g., Remote, Google, Tech, Africa)..." class="w-full bg-[#ffffff] border border-[#d0d7de] rounded-md pl-10 pr-4 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]">
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5" id="categoryContainer">
+                        <button onclick="setCategory('All')" class="cat-btn active bg-[#0969da] text-white px-3 py-1 rounded-full text-xs font-medium">All (100+)</button>
+                        <button onclick="setCategory('Aggregator')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Aggregators</button>
+                        <button onclick="setCategory('Company Career')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Company Careers</button>
+                        <button onclick="setCategory('Remote & Tech')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Remote & Tech</button>
+                        <button onclick="setCategory('Regional')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Regional & SA</button>
+                        <button onclick="setCategory('Freelance')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Freelance</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+            <div id="noResults" class="hidden text-center py-16 bg-[#ffffff] border border-[#d0d7de] rounded-md mt-4">
+                <i data-lucide="folder-search" class="w-10 h-10 text-[#636c76] mx-auto mb-2"></i>
+                <h3 class="text-sm font-semibold text-[#1f2328]">No portals matching your search query</h3>
+                <p class="text-[#636c76] text-xs mt-1">Try resetting category filters or searching with different keywords.</p>
+            </div>
+        </main>
+    </div>
+
+    <div id="accountStatusModal" class="modal opacity-0 pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#24292f]/40">
+        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-sm p-5 shadow-lg relative">
+            <button onclick="closeModal('accountStatusModal')" class="absolute top-3 right-3 text-[#636c76]"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h3 class="text-base font-semibold text-[#1f2328] mb-3">Subscription Details</h3>
+            <div class="bg-[#f6f8fa] border border-[#d0d7de] rounded-md p-3 space-y-2 text-xs">
+                <div class="flex justify-between"><span>Password Key:</span><code id="userModalKey" class="font-mono text-[#1f2328]">--</code></div>
+                <div class="flex justify-between"><span>Status:</span><span id="userModalStatus" class="px-2 py-0.5 rounded-full text-[11px] font-medium border">--</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminAuthModal" class="modal opacity-0 pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#24292f]/40">
+        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-sm p-5 shadow-lg relative">
+            <button onclick="closeModal('adminAuthModal')" class="absolute top-3 right-3 text-[#636c76]"><i data-lucide="x" class="w-4 h-4"></i></button>
+            <h3 class="text-base font-semibold text-[#1f2328] mb-2">Admin Access</h3>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-3">
+                <input type="password" id="adminPassword" placeholder="Admin Password" required class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-2.5 py-1.5 text-xs text-[#1f2328]">
+                <p id="authError" class="text-[#cf222e] text-xs hidden">Incorrect password.</p>
+                <button type="submit" class="w-full bg-[#2da44e] text-white text-xs font-semibold py-1.5 rounded-md">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="adminPanelModal" class="modal opacity-0 pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#24292f]/40">
+        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-2xl p-6 shadow-lg relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('adminPanelModal')" class="absolute top-4 right-4 text-[#636c76]"><i data-lucide="x" class="w-4 h-4"></i></button>
+            
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <h3 class="text-base font-semibold text-[#1f2328]">Admin Dashboard - Manage Users</h3>
+                <span id="adminUserCount" class="text-xs text-[#636c76]">Showing 0 users</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                <div class="relative flex-grow">
+                    <i data-lucide="search" class="absolute left-2.5 top-2 w-3.5 h-3.5 text-[#636c76]"></i>
+                    <input type="text" id="adminUserSearchInput" onkeyup="renderAdminUserTable()" placeholder="Search password key..." class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md pl-8 pr-3 py-1.5 text-xs text-[#1f2328] focus:outline-none focus:border-[#0969da]">
+                </div>
+                <select id="adminStatusFilter" onchange="renderAdminUserTable()" class="bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-2 py-1.5 text-xs text-[#1f2328] focus:outline-none focus:border-[#0969da]">
+                    <option value="All">All Statuses</option>
+                    <option value="Subscribed">Subscribed</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+
+            <div class="border border-[#d0d7de] rounded-md overflow-hidden">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-[#f6f8fa] border-b border-[#d0d7de] text-[#636c76]">
+                        <tr>
+                            <th class="p-2.5">Password Key</th>
+                            <th class="p-2.5">Current Status</th>
+                            <th class="p-2.5 text-right">Update Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody" class="divide-y divide-[#d0d7de]"></tbody>
+                </table>
+                <div id="adminNoUsersFound" class="hidden text-center py-6 text-xs text-[#636c76]">
+                    No matching password keys found.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+
+    <script>
+        // Comprehensive List of 100+ Job Portals & Company Career Sites
+        const initialPortals = [
+            // Aggregators & General Job Boards (1-20)
+            { id: 1, title: "LinkedIn Jobs", category: "Aggregator", region: "Global", url: "https://www.linkedin.com/jobs", desc: "The premier professional network and job search engine worldwide." },
+            { id: 2, title: "Indeed", category: "Aggregator", region: "Global", url: "https://www.indeed.com", desc: "Leading global search engine aggregator compiling employment opportunities." },
+            { id: 3, title: "Glassdoor Jobs", category: "Aggregator", region: "Global", url: "https://www.glassdoor.com", desc: "Job listings coupled with authentic salary data and company reviews." },
+            { id: 4, title: "Monster", category: "Aggregator", region: "Global", url: "https://www.monster.com", desc: "Global employment agency board for corporate and local vacancies." },
+            { id: 5, title: "ZipRecruiter", category: "Aggregator", region: "North America", url: "https://www.ziprecruiter.com", desc: "AI-powered job matching marketplace for job seekers and hirers." },
+            { id: 6, title: "CareerBuilder", category: "Aggregator", region: "Global", url: "https://www.careerbuilder.com", desc: "Long-standing job board offering labor market data and vacancy listings." },
+            { id: 7, title: "SimplyHired", category: "Aggregator", region: "Global", url: "https://www.simplyhired.com", desc: "Job search engine aggregating opportunities across thousands of sites." },
+            { id: 8, title: "Google for Jobs", category: "Aggregator", region: "Global", url: "https://jobs.google.com", desc: "Google's direct job search aggregation interface for local and global listings." },
+            { id: 9, title: "CareerJet", category: "Aggregator", region: "Global", url: "https://www.careerjet.com", desc: "Search engine mapping job listings published on corporate career portals." },
+            { id: 10, title: "Jooble", category: "Aggregator", region: "Global", url: "https://jooble.org", desc: "Global job aggregator indexing vacancies across 70+ countries." },
+            { id: 11, title: "Snagajob", category: "Aggregator", region: "North America", url: "https://www.snagajob.com", desc: "Specialized job portal for hourly workers, retail, and service industry roles." },
+            { id: 12, title: "Lensa", category: "Aggregator", region: "Global", url: "https://lensa.com", desc: "Career management platform utilizing machine learning for job matching." },
+            { id: 13, title: "Nexxt", category: "Aggregator", region: "Global", url: "https://www.nexxt.com", desc: "Diverse network of job boards targeting specialized industry sectors." },
+            { id: 14, title: "USAJOBS", category: "Aggregator", region: "North America", url: "https://www.usajobs.gov", desc: "Official job site for federal employment across US government agencies." },
+            { id: 15, title: "FlexJobs", category: "Aggregator", region: "Global", url: "https://www.flexjobs.com", desc: "Vetted remote, part-time, and flexible work opportunity directory." },
+            { id: 16, title: "Joblist", category: "Aggregator", region: "Global", url: "https://www.joblist.com", desc: "Personalized job search engine combining top listing databases." },
+            { id: 17, title: "LinkUp", category: "Aggregator", region: "Global", url: "https://www.linkup.com", desc: "Directory indexing jobs directly sourced from official company portals." },
+            { id: 18, title: "Adzuna", category: "Aggregator", region: "Global", url: "https://www.adzuna.com", desc: "Job aggregator providing market salary estimates and vacancy insights." },
+            { id: 19, title: "Talent.com", category: "Aggregator", region: "Global", url: "https://www.talent.com", desc: "Centralized job portal indexing millions of vacancies globally." },
+            { id: 20, title: "Otta", category: "Aggregator", region: "Global", url: "https://otta.com", desc: "Curated job search platform specifically targeting high-growth tech companies." },
+
+            // Tech & Remote Job Boards (21-40)
+            { id: 21, title: "We Work Remotely", category: "Remote & Tech", region: "Remote", url: "https://weworkremotely.com", desc: "The largest remote work community for developers, designers, and managers." },
+            { id: 22, title: "Remote OK", category: "Remote & Tech", region: "Remote", url: "https://remoteok.com", desc: "Popular digital nomad job board for software engineering and tech roles." },
+            { id: 23, title: "Dice", category: "Remote & Tech", region: "Global", url: "https://www.dice.com", desc: "Dedicated technology career site for IT and software development roles." },
+            { id: 24, title: "Wellfound (AngelList)", category: "Remote & Tech", region: "Global", url: "https://wellfound.com", desc: "The premier portal for startup jobs and equity-focused employment." },
+            { id: 25, title: "Stack Overflow Jobs", category: "Remote & Tech", region: "Global", url: "https://stackoverflow.com/jobs", desc: "Tech community career ecosystem for developers and systems engineers." },
+            { id: 26, title: "Built In", category: "Remote & Tech", region: "North America", url: "https://builtin.com", desc: "Tech hub directory connecting tech professionals with startups and enterprises." },
+            { id: 27, title: "Hired", category: "Remote & Tech", region: "Global", url: "https://hired.com", desc: "Reverse job board where tech companies apply directly to candidate profiles." },
+            { id: 28, title: "Working Nomads", category: "Remote & Tech", region: "Remote", url: "https://www.workingnomads.com", desc: "Curated list of remote jobs for digital professionals working anywhere." },
+            { id: 29, title: "Remotive", category: "Remote & Tech", region: "Remote", url: "https://remotive.com", desc: "Active community and job board for vetted remote software roles." },
+            { id: 30, title: "Jobspresso", category: "Remote & Tech", region: "Remote", url: "https://jobspresso.co", desc: "Curated remote careers in tech, marketing, customer support, and design." },
+            { id: 31, title: "Arc.dev", category: "Remote & Tech", region: "Remote", url: "https://arc.dev", desc: "Remote career marketplace matching senior developers with tech companies." },
+            { id: 32, title: "Virtual Vocations", category: "Remote & Tech", region: "Remote", url: "https://www.virtualvocations.com", desc: "Hand-screened telecommute job board with full-time and contract positions." },
+            { id: 33, title: "Authentic Jobs", category: "Remote & Tech", region: "Global", url: "https://authenticjobs.com", desc: "Job board specifically tailored for designers, developers, and creative pros." },
+            { id: 34, title: "Dribbble Jobs", category: "Remote & Tech", region: "Global", url: "https://dribbble.com/jobs", desc: "Leading career portal for visual designers, UI/UX, and creative art directors." },
+            { id: 35, title: "Behance Careers", category: "Remote & Tech", region: "Global", url: "https://www.behance.net/joblist", desc: "Adobe's creative showcase portal featuring global design and branding vacancies." },
+            { id: 36, title: "Gun.io", category: "Remote & Tech", region: "Remote", url: "https://gun.io", desc: "Exclusive network matching elite software engineers with high-paying client roles." },
+            { id: 37, title: "Toptal", category: "Remote & Tech", region: "Remote", url: "https://www.toptal.com", desc: "Freelance tech network matching the top 3% of global software talent." },
+            { id: 38, title: "Crypto Jobs List", category: "Remote & Tech", region: "Global", url: "https://cryptojobslist.com", desc: "Job portal for Web3, blockchain, smart contract, and crypto startups." },
+            { id: 39, title: "Design Jobs Board", category: "Remote & Tech", region: "Global", url: "https://www.designjobsboard.com", desc: "Specialized directory listing vacancies across multidisciplinary design fields." },
+            { id: 40, title: "Tech Careers", category: "Remote & Tech", region: "Global", url: "https://www.techcareers.com", desc: "Online job repository for technical, engineering, and digital candidates." },
+
+            // Major Corporate Career Sites (41-70)
+            { id: 41, title: "Google Careers", category: "Company Career", region: "Global", url: "https://careers.google.com", desc: "Engineering, product management, and enterprise sales roles at Google." },
+            { id: 42, title: "Microsoft Careers", category: "Company Career", region: "Global", url: "https://careers.microsoft.com", desc: "Cloud computing, AI research, and software positions at Microsoft." },
+            { id: 43, title: "Amazon Jobs", category: "Company Career", region: "Global", url: "https://www.amazon.jobs", desc: "AWS, corporate logistics, retail operations, and tech engineering opportunities." },
+            { id: 44, title: "Apple Careers", category: "Company Career", region: "Global", url: "https://www.apple.com/careers", desc: "Hardware development, iOS software, retail leadership, and design at Apple." },
+            { id: 45, title: "Meta Careers", category: "Company Career", region: "Global", url: "https://www.metacareers.com", desc: "Infrastructure, VR/AR, and social platform engineering roles at Meta." },
+            { id: 46, title: "Netflix Jobs", category: "Company Career", region: "Global", url: "https://jobs.netflix.com", desc: "Streaming infrastructure, content production, and corporate positions." },
+            { id: 47, title: "Tesla Careers", category: "Company Career", region: "Global", url: "https://www.tesla.com/careers", desc: "Clean energy, automotive engineering, manufacturing, and robotics jobs." },
+            { id: 48, title: "IBM Careers", category: "Company Career", region: "Global", url: "https://www.ibm.com/employment", desc: "Enterprise AI, Quantum computing, and IT consulting jobs at IBM." },
+            { id: 49, title: "Salesforce Careers", category: "Company Career", region: "Global", url: "https://www.salesforce.com/company/careers", desc: "Enterprise cloud software development, sales, and account management." },
+            { id: 50, title: "Adobe Careers", category: "Company Career", region: "Global", url: "https://www.adobe.com/careers.html", desc: "Digital media tools, cloud software development, and UX design careers." },
+            { id: 51, title: "Spotify Jobs", category: "Company Career", region: "Global", url: "https://www.lifeatspotify.com", desc: "Audio streaming tech, machine learning, and music industry roles." },
+            { id: 52, title: "Uber Careers", category: "Company Career", region: "Global", url: "https://www.uber.com/us/en/careers", desc: "Logistics routing, mobility engineering, and corporate operations positions." },
+            { id: 53, title: "Airbnb Careers", category: "Company Career", region: "Global", url: "https://careers.airbnb.com", desc: "Marketplace tech, hospitality engineering, and brand management roles." },
+            { id: 54, title: "NVIDIA Careers", category: "Company Career", region: "Global", url: "https://www.nvidia.com/en-us/about-nvidia/careers", desc: "AI chips, GPU hardware development, and deep learning engineering." },
+            { id: 55, title: "Intel Careers", category: "Company Career", region: "Global", url: "https://jobs.intel.com", desc: "Semiconductor architecture, microchip manufacturing, and hardware R&D." },
+            { id: 56, title: "Cisco Careers", category: "Company Career", region: "Global", url: "https://jobs.cisco.com", desc: "Networking equipment, enterprise cybersecurity, and IoT engineering." },
+            { id: 57, title: "Oracle Careers", category: "Company Career", region: "Global", url: "https://www.oracle.com/corporate/careers", desc: "Database cloud architecture, ERP development, and enterprise IT sales." },
+            { id: 58, title: "SAP Careers", category: "Company Career", region: "Global", url: "https://jobs.sap.com", desc: "Enterprise software solutions, supply chain systems, and cloud management." },
+            { id: 59, title: "Deloitte Careers", category: "Company Career", region: "Global", url: "https://www2.deloitte.com/global/en/careers/careers.html", desc: "Financial auditing, tax advisory, and management consulting careers." },
+            { id: 60, title: "PwC Careers", category: "Company Career", region: "Global", url: "https://www.pwc.com/gx/en/careers.html", desc: "Global professional services, accounting, tax, and risk management." },
+            { id: 61, title: "EY (Ernst & Young)", category: "Company Career", region: "Global", url: "https://www.ey.com/en_gl/careers", desc: "Financial advisory, assurance services, and strategic consulting." },
+            { id: 62, title: "KPMG Careers", category: "Company Career", region: "Global", url: "https://home.kpmg/xx/en/home/careers.html", desc: "International tax advisory, corporate audit, and business strategy roles." },
+            { id: 63, title: "McKinsey & Company", category: "Company Career", region: "Global", url: "https://www.mckinsey.com/careers", desc: "Management consulting, business analytics, and executive advisory." },
+            { id: 64, title: "JPMorgan Chase", category: "Company Career", region: "Global", url: "https://careers.jpmorganchase.com", desc: "Investment banking, fintech engineering, and financial asset management." },
+            { id: 65, title: "Goldman Sachs", category: "Company Career", region: "Global", url: "https://www.goldmansachs.com/careers", desc: "Global investment banking, quantitative finance, and trading technology." },
+            { id: 66, title: "Unilever Careers", category: "Company Career", region: "Global", url: "https://www.unilever.com/careers", desc: "Fast-moving consumer goods, supply chain management, and global marketing." },
+            { id: 67, title: "Procter & Gamble (P&G)", category: "Company Career", region: "Global", url: "https://www.pgcareers.com", desc: "Brand management, manufacturing engineering, and product distribution." },
+            { id: 68, title: "Siemens Careers", category: "Company Career", region: "Global", url: "https://jobs.siemens.com", desc: "Industrial automation, smart infrastructure, and green energy technology." },
+            { id: 69, title: "BMW Group Careers", category: "Company Career", region: "Global", url: "https://www.bmwgroup.jobs", desc: "Automotive engineering, electric vehicle innovation, and manufacturing." },
+            { id: 70, title: "Samsung Careers", category: "Company Career", region: "Global", url: "https://www.samsung.com/us/careers", desc: "Consumer electronics, mobile device design, and display technologies." },
+
+            // Regional & South African Portals (71-85)
+            { id: 71, title: "Careers24", category: "Regional", region: "South Africa", url: "https://www.careers24.com", desc: "Major South African job portal listing corporate and regional vacancies." },
+            { id: 72, title: "Pnet", category: "Regional", region: "South Africa", url: "https://www.pnet.co.za", desc: "Leading online recruitment site in South Africa for professional careers." },
+            { id: 73, title: "Job Mail", category: "Regional", region: "South Africa", url: "https://www.jobmail.co.za", desc: "South African portal for general employment, trade work, and retail roles." },
+            { id: 74, title: "Bizcommunity Jobs", category: "Regional", region: "South Africa", url: "https://www.bizcommunity.com/Jobs", desc: "South Africa's top platform for marketing, media, advertising, and PR roles." },
+            { id: 75, title: "Best Jobs SA", category: "Regional", region: "South Africa", url: "https://www.bestjobs.co.za", desc: "Regional job directory across various provinces and sectors in SA." },
+            { id: 76, title: "OfferZen", category: "Regional", region: "South Africa / EU", url: "https://www.offerzen.com", desc: "Tech talent marketplace connecting developers directly with top SA/EU firms." },
+            { id: 77, title: "Government Jobs SA", category: "Regional", region: "South Africa", url: "https://www.gov.za/about-government/vacancies-government", desc: "Official vacancy directory for South African public sector and civil service." },
+            { id: 78, title: "Seek", category: "Regional", region: "Australia / NZ", url: "https://www.seek.com.au", desc: "Australia and New Zealand's dominant employment marketplace board." },
+            { id: 79, title: "Reed.co.uk", category: "Regional", region: "United Kingdom", url: "https://www.reed.co.uk", desc: "One of the UK's leading online recruitment sites and training providers." },
+            { id: 80, title: "CV-Library", category: "Regional", region: "United Kingdom", url: "https://www.cv-library.co.uk", desc: "Independent UK job board with thousands of nationwide vacancies." },
+            { id: 81, title: "Totaljobs", category: "Regional", region: "United Kingdom", url: "https://www.totaljobs.com", desc: "UK portal connecting job seekers with employment agencies and employers." },
+            { id: 82, title: "StepStone", category: "Regional", region: "Europe", url: "https://www.stepstone.de", desc: "Major European digital recruitment platform headquartered in Germany." },
+            { id: 83, title: "Naukri", category: "Regional", region: "India", url: "https://www.naukri.com", desc: "India's premier job portal across IT, engineering, and corporate sectors." },
+            { id: 84, title: "Bayt", category: "Regional", region: "Middle East", url: "https://www.bayt.com", desc: "The leading recruitment job board serving the Gulf region and Middle East." },
+            { id: 85, title: "JobStreet", category: "Regional", region: "Southeast Asia", url: "https://www.jobstreet.com", desc: "Dominant job portal serving Malaysia, Singapore, Philippines, and Indonesia." },
+
+            // Freelance & Gig Economy Platforms (86-102)
+            { id: 86, title: "Upwork", category: "Freelance", region: "Global", url: "https://www.upwork.com", desc: "Global freelancing platform for software, design, writing, and consulting." },
+            { id: 87, title: "Fiverr", category: "Freelance", region: "Global", url: "https://www.fiverr.com", desc: "Online marketplace for freelance digital services and creative micro-tasks." },
+            { id: 88, title: "Freelancer", category: "Freelance", region: "Global", url: "https://www.freelancer.com", desc: "Crowdsourcing marketplace for coding, copywriting, and data entry jobs." },
+            { id: 89, title: "PeoplePerHour", category: "Freelance", region: "Global", url: "https://www.peopleperhour.com", desc: "UK-based freelance platform for web developers, designers, and marketers." },
+            { id: 90, title: "Guru", category: "Freelance", region: "Global", url: "https://www.guru.com", desc: "Network connecting businesses with freelance technical and creative experts." },
+            { id: 91, title: "99designs", category: "Freelance", region: "Global", url: "https://99designs.com", desc: "Creative graphic design platform for logos, packaging, and digital assets." },
+            { id: 92, title: "SimplyHired Freelance", category: "Freelance", region: "Global", url: "https://www.simplyhired.com/search?q=freelance", desc: "Filtered index of contract and freelance roles aggregated across boards." },
+            { id: 93, title: "Contra", category: "Freelance", region: "Global", url: "https://contra.com", desc: "Commission-free freelance network built for modern digital creators." },
+            { id: 94, title: "DesignHill", category: "Freelance", region: "Global", url: "https://www.designhill.com", desc: "Marketplace for custom graphic design contests and freelance design gigs." },
+            { id: 95, title: "TaskRabbit", category: "Freelance", region: "North America / EU", url: "https://www.taskrabbit.com", desc: "Gig economy platform for local assembly, moving, and administrative help." },
+            { id: 96, title: "Hubstaff Talent", category: "Freelance", region: "Global", url: "https://talent.hubstaff.com", desc: "Free remote agency and freelancer directory for virtual assistant work." },
+            { id: 97, title: "ProBlogger Jobs", category: "Freelance", region: "Global", url: "https://problogger.com/jobs", desc: "Dedicated job board for professional copywriters, bloggers, and content leads." },
+            { id: 98, title: "SolidGigs", category: "Freelance", region: "Global", url: "https://solidgigs.com", desc: "Curated freelance leads site filtering top 1% contract opportunities daily." },
+            { id: 99, title: "Twine", category: "Freelance", region: "Global", url: "https://www.twine.net", desc: "Network connecting companies with freelance audio, video, and design talent." },
+            { id: 100, title: "WriterAccess", category: "Freelance", region: "Global", url: "https://www.writeraccess.com", desc: "Content creation platform matching freelance writers and editors with brands." },
+            { id: 101, title: "Krop", category: "Freelance", region: "Global", url: "https://www.krop.com", desc: "Creative industry job board and portfolio hosting website for designers." },
+            { id: 102, title: "Workana", category: "Freelance", region: "Latin America", url: "https://www.workana.com", desc: "Leading freelance work platform operating across Latin America and Spain." }
+        ];
+
+        let portals = [];
+        let activeCategory = 'All';
+
+        function initData() {
+            const stored = localStorage.getItem('arcknowledge_portals');
+            if (stored) {
+                portals = JSON.parse(stored);
+            } else {
+                portals = initialPortals;
+                localStorage.setItem('arcknowledge_portals', JSON.stringify(portals));
+            }
+            renderGrid(portals);
+        }
+
+        function handleUserLogin(e) {
+            e.preventDefault();
+            const passKey = document.getElementById('userLoginPassword').value;
+            const warningBox = document.getElementById('statusWarning');
+
+            const result = authenticateUser(passKey);
+
+            if (!result.success) {
+                warningBox.classList.remove('hidden');
+                
+                if (result.reason === "INVALID_KEY") {
+                    warningBox.className = "p-3 rounded-md text-xs border bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30";
+                    warningBox.innerHTML = "<strong>Access Denied:</strong> Invalid password key provided.";
+                } else if (result.reason === "PENDING") {
+                    warningBox.className = "p-3 rounded-md text-xs border bg-[#fff8c5] text-[#9a6700] border-[#d4a72c]/30";
+                    warningBox.innerHTML = `<strong>Account Pending:</strong> Your account status for key <code>${result.key}</code> is pending activation. Please wait for administrator review.`;
+                } else if (result.reason === "INACTIVE") {
+                    const b = result.bankDetails;
+                    warningBox.className = "p-3 rounded-md text-xs border bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30 space-y-2";
+                    warningBox.innerHTML = `
+                        <div><strong>Account Inactive:</strong> Your subscription has expired or is inactive.</div>
+                        <div class="bg-white p-2.5 rounded border border-[#ff8182]/30 text-[#1f2328] space-y-1">
+                            <div class="font-semibold text-xs border-b pb-1 text-[#cf222e]">Bank Payment Details for Reactivation:</div>
+                            <div><strong>Bank Name:</strong> ${b.bankName}</div>
+                            <div><strong>Branch Name:</strong> ${b.branchName}</div>
+                            <div><strong>Branch Code:</strong> ${b.branchCode}</div>
+                            <div><strong>Account Holder:</strong> ${b.accountHolder}</div>
+                            <div><strong>Account Number:</strong> ${b.accountNumber}</div>
+                            <div><strong>Account Type:</strong> ${b.accountType}</div>
+                            <div><strong>SWIFT Code:</strong> ${b.swiftCode}</div>
+                            <div class="text-[10px] text-[#636c76] mt-1">* Use your Password Key as payment reference.</div>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            warningBox.classList.add('hidden');
+            showMainSite();
+        }
+
+        function showMainSite() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('mainContent').classList.remove('hidden');
+            document.getElementById('mainContent').classList.add('flex');
+            
+            const users = getUsers();
+            const activeKey = sessionStorage.getItem('active_user_key');
+            const currentUser = users.find(u => u.passwordKey === activeKey);
+
+            if (currentUser) {
+                document.getElementById('headerSubStatus').innerText = currentUser.status;
+                document.getElementById('userModalKey').innerText = currentUser.passwordKey;
+                document.getElementById('userModalStatus').innerText = currentUser.status;
+            }
+
+            initData();
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('active_user_key');
+            document.getElementById('mainContent').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('userLoginPassword').value = '';
+            document.getElementById('statusWarning').classList.add('hidden');
+        }
+
+        // FILTERABLE & SEARCHABLE ADMIN USER TABLE
+        function renderAdminUserTable() {
+            const tbody = document.getElementById('userTableBody');
+            const noUsersFound = document.getElementById('adminNoUsersFound');
+            const userCountLabel = document.getElementById('adminUserCount');
+            const searchQuery = (document.getElementById('adminUserSearchInput')?.value || '').toLowerCase().trim();
+            const statusFilter = document.getElementById('adminStatusFilter')?.value || 'All';
+
+            tbody.innerHTML = '';
+            const allUsers = getUsers();
+
+            // Filter users based on search term & status select
+            const filteredUsers = allUsers.filter(user => {
+                const matchesSearch = user.passwordKey.toLowerCase().includes(searchQuery);
+                const matchesStatus = statusFilter === 'All' || user.status === statusFilter;
+                return matchesSearch && matchesStatus;
+            });
+
+            // Update user count header
+            userCountLabel.innerText = `Showing ${filteredUsers.length} of ${allUsers.length} users`;
+
+            if (filteredUsers.length === 0) {
+                noUsersFound.classList.remove('hidden');
+                return;
+            } else {
+                noUsersFound.classList.add('hidden');
+            }
+
+            filteredUsers.forEach((user) => {
+                // Find actual index in original stored array for precise updates
+                const originalIndex = allUsers.findIndex(u => u.passwordKey === user.passwordKey);
+                
+                let badgeStyle = "bg-[#dafbe1] text-[#1a7f37] border-[#4ac26b]/30";
+                if (user.status === "Pending") badgeStyle = "bg-[#fff8c5] text-[#9a6700] border-[#d4a72c]/30";
+                if (user.status === "Inactive") badgeStyle = "bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30";
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-[#f6f8fa] transition-colors";
+                tr.innerHTML = `
+                    <td class="p-2.5 font-mono text-[#1f2328] font-medium">${user.passwordKey}</td>
+                    <td class="p-2.5">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-medium border ${badgeStyle}">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td class="p-2.5 text-right">
+                        <select onchange="updateUserStatus(${originalIndex}, this.value)" class="bg-white border border-[#d0d7de] rounded px-2 py-1 text-xs focus:outline-none focus:border-[#0969da]">
+                            <option value="Subscribed" ${user.status === 'Subscribed' ? 'selected' : ''}>Subscribed</option>
+                            <option value="Pending" ${user.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                            <option value="Inactive" ${user.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
+                        </select>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateUserStatus(index, newStatus) {
+            const users = getUsers();
+            users[index].status = newStatus;
+            saveUsers(users);
+            renderAdminUserTable();
+        }
+
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
+                document.getElementById('authError').classList.add('hidden');
+                closeModal('adminAuthModal');
+                
+                // Clear search inputs upon opening
+                if (document.getElementById('adminUserSearchInput')) document.getElementById('adminUserSearchInput').value = '';
+                if (document.getElementById('adminStatusFilter')) document.getElementById('adminStatusFilter').value = 'All';
+                
+                renderAdminUserTable();
+                openModal('adminPanelModal');
+            } else {
+                document.getElementById('authError').classList.remove('hidden');
+            }
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('directoryGrid');
+            const noResults = document.getElementById('noResults');
+            grid.innerHTML = '';
+
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white border border-[#d0d7de] rounded-md p-4 flex flex-col justify-between hover:border-[#0969da] transition-all shadow-xs";
+                
+                let badgeColor = "bg-[#ddf4ff] text-[#0969da] border-[#54aef0]/30";
+                if (item.category === "Company Career") badgeColor = "bg-[#dafbe1] text-[#1a7f37] border-[#4ac26b]/30";
+                if (item.category === "Remote & Tech") badgeColor = "bg-[#fff8c5] text-[#9a6700] border-[#d4a72c]/30";
+                if (item.category === "Freelance") badgeColor = "bg-[#fff0f5] text-[#bf3989] border-[#ff80bf]/30";
+                if (item.category === "Regional") badgeColor = "bg-[#fbefff] text-[#8250df] border-[#c297ff]/30";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="px-2 py-0.5 rounded-full text-[11px] font-medium border ${badgeColor}">${item.category}</span>
+                            <span class="text-[11px] text-[#636c76] flex items-center gap-1">
+                                <i data-lucide="globe" class="w-3 h-3"></i> ${item.region}
+                            </span>
+                        </div>
+                        <h3 class="text-sm font-semibold text-[#0969da] hover:underline mb-1">
+                            <a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.title}</a>
+                        </h3>
+                        <p class="text-[#636c76] text-xs line-clamp-2 mb-3 leading-normal">${item.desc}</p>
+                    </div>
+                    <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 bg-[#f6f8fa] hover:bg-[#eaeef2] text-[#24292f] py-1 px-3 rounded-md text-xs font-semibold border border-[#d0d7de] transition-colors">
+                        Visit Portal
+                        <i data-lucide="external-link" class="w-3 h-3 text-[#636c76]"></i>
+                    </a>
+                `;
+                grid.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        function filterPortals() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = portals.filter(item => {
+                const matchesCategory = activeCategory === 'All' || 
+                                        (activeCategory === 'Regional' && (item.category === 'Regional' || item.region.includes('South Africa'))) || 
+                                        item.category === activeCategory;
+                const matchesSearch = item.title.toLowerCase().includes(query) ||
+                                      item.desc.toLowerCase().includes(query) ||
+                                      item.region.toLowerCase().includes(query) ||
+                                      item.category.toLowerCase().includes(query);
+                return matchesCategory && matchesSearch;
+            });
+            renderGrid(filtered);
+        }
+
+        function setCategory(category) {
+            activeCategory = category;
+            const buttons = document.querySelectorAll('.cat-btn');
+            buttons.forEach(btn => {
+                if(btn.innerText.startsWith(category) || (category === 'All' && btn.innerText.startsWith('All'))) {
+                    btn.className = "cat-btn active bg-[#0969da] text-white px-3 py-1 rounded-full text-xs font-medium transition-colors";
+                } else {
+                    btn.className = "cat-btn bg-[#ffffff] hover:bg-[#f6f8fa] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors";
+                }
+            });
+            filterPortals();
+        }
+
+        function openModal(id) { document.getElementById(id).classList.remove('opacity-0', 'pointer-events-none'); }
+        function closeModal(id) { document.getElementById(id).classList.add('opacity-0', 'pointer-events-none'); }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const activeKey = sessionStorage.getItem('active_user_key');
+            if (activeKey) showMainSite();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

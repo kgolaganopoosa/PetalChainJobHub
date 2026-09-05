@@ -6,6 +6,38 @@
     <title>Arcknowledge - Job Hub | Global Directory 500</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  #backToTopBtn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 99;
+    width: 48px;
+    height: 48px;
+    border: none;
+    outline: none;
+    background-color: #007bff;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease;
+  }
+
+  #backToTopBtn.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  #backToTopBtn:hover {
+    background-color: #0056b3;
+    transform: translateY(-3px);
+  }
+</style>
 </head>
 <body class="bg-[#f6f8fa] text-[#1f2328] flex flex-col min-h-screen font-sans antialiased selection:bg-[#0969da] selection:text-white">
 
@@ -59,6 +91,11 @@
         </div>
     </main>
 
+    <!-- Back to Top Button -->
+<button id="backToTopBtn" aria-label="Back to top" onclick="scrollToTop()">
+  &#8593;
+</button>
+    
     <footer class="bg-[#ffffff] border-t border-[#d0d7de] py-6 mt-12 text-center text-xs text-[#636c76]">
         <p>Arcknowledge Job Hub &copy; 2026. Centralized global employment directory.</p>
     </footer>
@@ -656,6 +693,26 @@
             renderGrid(portals);
             lucide.createIcons();
         });
+    </script>
+    <script>
+  const backToTopBtn = document.getElementById("backToTopBtn");
+
+  // Show button when scrolled down 300px from the top
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.add("show");
+    } else {
+      backToTopBtn.classList.remove("show");
+    }
+  });
+
+  // Smooth scroll back to top function
+  function scrollToTop() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }
     </script>
 </body>
 </html>

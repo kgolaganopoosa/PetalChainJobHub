@@ -3,188 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcknowledge - Job Hub | Global Directory</title>
+    <title>Arcknowledge - Job Hub | Global Directory 500</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        .modal { transition: opacity 0.2s ease, visibility 0.2s ease; }
-        body.modal-active { overflow: hidden !important; }
-    </style>
 </head>
 <body class="bg-[#f6f8fa] text-[#1f2328] flex flex-col min-h-screen font-sans antialiased selection:bg-[#0969da] selection:text-white">
 
-    <div id="loginPage" class="fixed inset-0 z-50 flex items-center justify-center bg-[#f6f8fa] p-4">
-        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-md p-6 shadow-sm">
-            <div class="flex flex-col items-center mb-6 text-center">
-                <div id="loginIconContainer" class="p-3 bg-[#f6f8fa] border border-[#d0d7de] rounded-full text-[#1f2328] mb-3">
-                    <i id="loginIcon" data-lucide="shield-check" class="w-7 h-7 text-[#0969da]"></i>
+    <header class="bg-[#ffffff] border-b border-[#d0d7de] sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-[#24292f] text-white rounded-md">
+                    <i data-lucide="briefcase" class="w-5 h-5"></i>
                 </div>
-                <h2 id="loginTitle" class="text-xl font-semibold tracking-tight text-[#1f2328]">Member Authentication</h2>
-                <p id="loginSubtitle" class="text-xs text-[#636c76] mt-1">Sign in with your access password key.</p>
-            </div>
-
-            <div class="flex border-b border-[#d0d7de] mb-4">
-                <button type="button" id="tabMember" onclick="switchLoginMode('member')" class="flex-1 py-2 text-center text-xs font-semibold border-b-2 border-[#0969da] text-[#0969da] flex items-center justify-center gap-1.5">
-                    <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Member Access
-                </button>
-                <button type="button" id="tabAdmin" onclick="switchLoginMode('admin')" class="flex-1 py-2 text-center text-xs font-semibold border-b-2 border-transparent text-[#636c76] hover:text-[#1f2328] flex items-center justify-center gap-1.5">
-                    <i data-lucide="shield-lock" class="w-3.5 h-3.5 text-[#8250df]"></i> Admin Portal
-                </button>
-            </div>
-
-            <form id="memberLoginForm" onsubmit="handleUserLogin(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-medium text-[#1f2328] mb-1">Access Password Key</label>
-                    <input type="password" id="userLoginPassword" placeholder="Enter password key..." required class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-3 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]">
-                </div>
-
-                <div id="statusWarning" class="hidden p-3 rounded-md text-xs border space-y-2"></div>
-
-                <button type="submit" class="w-full bg-[#1f2328] hover:bg-[#24292f] text-white text-sm font-medium py-2 rounded-md transition-colors shadow-sm flex items-center justify-center gap-2">
-                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In as Member
-                </button>
-
-                <div class="mt-4 pt-4 border-t border-[#d0d7de] text-center">
-                    <span class="text-xs text-[#636c76]">Demo Keys for Testing:</span>
-                    <div class="flex justify-center gap-2 mt-1 text-[11px] text-[#0969da]">
-                        <code>#PetalChain_26</code> | <code>#UserKey_01</code> | <code>#UserKey_02</code>
-                    </div>
-                </div>
-            </form>
-
-            <form id="adminLoginForm" onsubmit="handleDirectAdminLogin(event)" class="space-y-4 hidden">
-                <div>
-                    <label class="block text-xs font-medium text-[#1f2328] mb-1">Administrator Master Password</label>
-                    <input type="password" id="directAdminPassword" placeholder="Enter admin password..." required class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-3 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#8250df] focus:ring-1 focus:ring-[#8250df]">
-                </div>
-
-                <div id="adminDirectAuthError" class="hidden p-3 rounded-md text-xs border bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30">
-                    <strong>Access Denied:</strong> Incorrect administrator password key.
-                </div>
-
-                <button type="submit" class="w-full bg-[#8250df] hover:bg-[#6e3fc9] text-white text-sm font-medium py-2 rounded-md transition-colors shadow-sm flex items-center justify-center gap-2">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i> Sign In to Admin Control Panel
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <div id="mainContent" class="hidden flex-col min-h-screen">
-        <header class="bg-[#ffffff] border-b border-[#d0d7de] sticky top-0 z-30">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-[#24292f] text-white rounded-md">
-                        <i data-lucide="briefcase" class="w-5 h-5"></i>
-                    </div>
-                    <div>
-                        <span class="text-lg font-semibold text-[#1f2328] tracking-tight">Arcknowledge</span>
-                        <span class="text-xs text-[#0969da] font-medium block -mt-1">Job Hub</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="openModal('accountStatusModal')" class="flex items-center gap-1.5 bg-[#f6f8fa] hover:bg-[#eaeef2] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
-                        <i data-lucide="user-check" class="w-3.5 h-3.5 text-[#0969da]"></i>
-                        <span id="headerSubStatus">Status</span>
-                    </button>
-                    <button onclick="openAdminPanelDirectly()" class="flex items-center gap-1.5 bg-[#f6f8fa] hover:bg-[#eaeef2] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
-                        <i data-lucide="shield-lock" class="w-3.5 h-3.5 text-[#8250df]"></i>
-                        Admin Panel
-                    </button>
-                    <button onclick="handleLogout()" class="p-1.5 bg-[#f6f8fa] hover:bg-[#ffebe9] text-[#cf222e] rounded-md border border-[#d0d7de]" title="Logout">
-                        <i data-lucide="log-out" class="w-4 h-4"></i>
-                    </button>
+                    <span class="text-lg font-semibold text-[#1f2328] tracking-tight">Arcknowledge</span>
+                    <span class="text-xs text-[#0969da] font-medium block -mt-1">Job Hub</span>
                 </div>
             </div>
-        </header>
-
-        <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div class="max-w-3xl mx-auto mb-8">
-                <h1 class="text-2xl sm:text-3xl font-semibold text-[#1f2328] tracking-tight mb-2">Global Job Portals & Career Directory</h1>
-                <p class="text-[#636c76] text-sm mb-6">Explore 100+ aggregated employment platforms, corporate career hubs, and regional portals.</p>
-                
-                <div class="space-y-3">
-                    <div class="relative">
-                        <i data-lucide="search" class="absolute left-3.5 top-2.5 w-4 h-4 text-[#636c76]"></i>
-                        <input type="text" id="searchInput" onkeyup="filterPortals()" placeholder="Search portals, locations, or types (e.g., Remote, Google, Tech, Africa)..." class="w-full bg-[#ffffff] border border-[#d0d7de] rounded-md pl-10 pr-4 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]">
-                    </div>
-
-                    <div class="flex flex-wrap gap-1.5" id="categoryContainer">
-                        <button onclick="setCategory('All')" class="cat-btn active bg-[#0969da] text-white px-3 py-1 rounded-full text-xs font-medium">All (100+)</button>
-                        <button onclick="setCategory('Aggregator')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Aggregators</button>
-                        <button onclick="setCategory('Company Career')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Company Careers</button>
-                        <button onclick="setCategory('Remote & Tech')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Remote & Tech</button>
-                        <button onclick="setCategory('Regional')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Regional & SA</button>
-                        <button onclick="setCategory('Freelance')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de]">Freelance</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-
-            <div id="noResults" class="hidden text-center py-16 bg-[#ffffff] border border-[#d0d7de] rounded-md mt-4">
-                <i data-lucide="folder-search" class="w-10 h-10 text-[#636c76] mx-auto mb-2"></i>
-                <h3 class="text-sm font-semibold text-[#1f2328]">No portals matching your search query</h3>
-                <p class="text-[#636c76] text-xs mt-1">Try resetting category filters or searching with different keywords.</p>
-            </div>
-        </main>
-    </div>
-
-    <div id="accountStatusModal" class="modal opacity-0 pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#24292f]/40">
-        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-sm p-5 shadow-lg relative">
-            <button onclick="closeModal('accountStatusModal')" class="absolute top-3 right-3 text-[#636c76]"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h3 class="text-base font-semibold text-[#1f2328] mb-3">Subscription Details</h3>
-            <div class="bg-[#f6f8fa] border border-[#d0d7de] rounded-md p-3 space-y-2 text-xs">
-                <div class="flex justify-between"><span>Password Key:</span><code id="userModalKey" class="font-mono text-[#1f2328]">--</code></div>
-                <div class="flex justify-between"><span>Status:</span><span id="userModalStatus" class="px-2 py-0.5 rounded-full text-[11px] font-medium border">--</span></div>
+            <div class="flex items-center gap-2">
+                <span id="portalCountBadge" class="bg-[#f6f8fa] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
+                    500 Portals Indexed
+                </span>
             </div>
         </div>
-    </div>
+    </header>
 
-    <div id="adminPanelModal" class="modal opacity-0 pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#24292f]/40">
-        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-2xl p-6 shadow-lg relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeModal('adminPanelModal')" class="absolute top-4 right-4 text-[#636c76]"><i data-lucide="x" class="w-4 h-4"></i></button>
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-3xl mx-auto mb-8">
+            <h1 class="text-2xl sm:text-3xl font-semibold text-[#1f2328] tracking-tight mb-2">Global Job Portals & Career Directory</h1>
+            <p class="text-[#636c76] text-sm mb-6">Explore 500 aggregated employment platforms, enterprise career boards, niche tech job sites, regional portals, and freelance networks.</p>
             
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                <h3 class="text-base font-semibold text-[#1f2328]">Admin Dashboard - Manage Users</h3>
-                <span id="adminUserCount" class="text-xs text-[#636c76]">Showing 0 users</span>
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-2 mb-4">
-                <div class="relative flex-grow">
-                    <i data-lucide="search" class="absolute left-2.5 top-2 w-3.5 h-3.5 text-[#636c76]"></i>
-                    <input type="text" id="adminUserSearchInput" onkeyup="renderAdminUserTable()" placeholder="Search password key..." class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md pl-8 pr-3 py-1.5 text-xs text-[#1f2328] focus:outline-none focus:border-[#0969da]">
+            <div class="space-y-3">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3.5 top-2.5 w-4 h-4 text-[#636c76]"></i>
+                    <input type="text" id="searchInput" onkeyup="filterPortals()" placeholder="Search 500 portals, locations, or types (e.g., Remote, Google, Tech, Africa, Design)..." class="w-full bg-[#ffffff] border border-[#d0d7de] rounded-md pl-10 pr-4 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]">
                 </div>
-                <select id="adminStatusFilter" onchange="renderAdminUserTable()" class="bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-2 py-1.5 text-xs text-[#1f2328] focus:outline-none focus:border-[#0969da]">
-                    <option value="All">All Statuses</option>
-                    <option value="Subscribed">Subscribed</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Inactive">Inactive</option>
-                </select>
-            </div>
 
-            <div class="border border-[#d0d7de] rounded-md overflow-hidden">
-                <table class="w-full text-left text-xs">
-                    <thead class="bg-[#f6f8fa] border-b border-[#d0d7de] text-[#636c76]">
-                        <tr>
-                            <th class="p-2.5">Password Key</th>
-                            <th class="p-2.5">Current Status</th>
-                            <th class="p-2.5 text-right">Update Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody" class="divide-y divide-[#d0d7de]"></tbody>
-                </table>
-                <div id="adminNoUsersFound" class="hidden text-center py-6 text-xs text-[#636c76]">
-                    No matching password keys found.
+                <div class="flex flex-wrap gap-1.5" id="categoryContainer">
+                    <button onclick="setCategory('All')" class="cat-btn active bg-[#0969da] text-white px-3 py-1 rounded-full text-xs font-medium transition-colors">All (500)</button>
+                    <button onclick="setCategory('Aggregator')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Aggregators</button>
+                    <button onclick="setCategory('Company Career')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Company Careers</button>
+                    <button onclick="setCategory('Remote & Tech')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Remote & Tech</button>
+                    <button onclick="setCategory('Regional')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Regional & SA</button>
+                    <button onclick="setCategory('Freelance')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Freelance</button>
                 </div>
             </div>
         </div>
-    </div>
 
-    <script src="auth.js"></script>
+        <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+        <div id="noResults" class="hidden text-center py-16 bg-[#ffffff] border border-[#d0d7de] rounded-md mt-4">
+            <i data-lucide="folder-search" class="w-10 h-10 text-[#636c76] mx-auto mb-2"></i>
+            <h3 class="text-sm font-semibold text-[#1f2328]">No portals matching your search query</h3>
+            <p class="text-[#636c76] text-xs mt-1">Try resetting category filters or searching with different keywords.</p>
+        </div>
+    </main>
+
+    <footer class="bg-[#ffffff] border-t border-[#d0d7de] py-6 mt-12 text-center text-xs text-[#636c76]">
+        <p>Arcknowledge Job Hub &copy; 2026. Centralized global employment directory.</p>
+    </footer>
 
     <script>
-        const initialPortals = [
-            // Aggregators & General Job Boards (1-20)
+        const portals = [
+            // Aggregators & General Job Boards (1-85)
             { id: 1, title: "LinkedIn Jobs", category: "Aggregator", region: "Global", url: "https://www.linkedin.com/jobs", desc: "The premier professional network and job search engine worldwide." },
             { id: 2, title: "Indeed", category: "Aggregator", region: "Global", url: "https://www.indeed.com", desc: "Leading global search engine aggregator compiling employment opportunities." },
             { id: 3, title: "Glassdoor Jobs", category: "Aggregator", region: "Global", url: "https://www.glassdoor.com", desc: "Job listings coupled with authentic salary data and company reviews." },
@@ -205,301 +86,497 @@
             { id: 18, title: "Adzuna", category: "Aggregator", region: "Global", url: "https://www.adzuna.com", desc: "Job aggregator providing market salary estimates and vacancy insights." },
             { id: 19, title: "Talent.com", category: "Aggregator", region: "Global", url: "https://www.talent.com", desc: "Centralized job portal indexing millions of vacancies globally." },
             { id: 20, title: "Otta", category: "Aggregator", region: "Global", url: "https://otta.com", desc: "Curated job search platform specifically targeting high-growth tech companies." },
+            { id: 21, title: "Jora", category: "Aggregator", region: "Global", url: "https://www.jora.com", desc: "Free job search engine aggregator operating in dozens of countries." },
+            { id: 22, title: "Jobrapido", category: "Aggregator", region: "Global", url: "https://www.jobrapido.com", desc: "International search engine indexing vacancies across global markets." },
+            { id: 23, title: "JobIsJob", category: "Aggregator", region: "Global", url: "https://www.jobisjob.com", desc: "Job search engine mapping job listings across 29 countries." },
+            { id: 24, title: "BeBee", category: "Aggregator", region: "Global", url: "https://www.bebee.com", desc: "Personal branding network and job portal aggregator." },
+            { id: 25, title: "CollegeRecruiter", category: "Aggregator", region: "North America", url: "https://www.collegerecruiter.com", desc: "Entry-level jobs and internship aggregator for students and graduates." },
+            { id: 26, title: "Idealist", category: "Aggregator", region: "Global", url: "https://www.idealist.org", desc: "Leading platform for non-profit, government, and social impact roles." },
+            { id: 27, title: "Workable Jobs", category: "Aggregator", region: "Global", url: "https://jobs.workable.com", desc: "Job search board powered directly by companies using Workable ATS." },
+            { id: 28, title: "Greenhouse Jobs", category: "Aggregator", region: "Global", url: "https://boards.greenhouse.io", desc: "Direct directory of tech and corporate vacancies hosted on Greenhouse." },
+            { id: 29, title: "Lever Jobs", category: "Aggregator", region: "Global", url: "https://jobs.lever.co", desc: "Central index of corporate job postings hosted via Lever ATS." },
+            { id: 30, title: "SmartRecruiters", category: "Aggregator", region: "Global", url: "https://www.smartrecruiters.com/jobs", desc: "Global directory listing enterprise postings hosted on SmartRecruiters." },
+            { id: 31, title: "Ashby Jobs", category: "Aggregator", region: "Global", url: "https://jobs.ashbyhq.com", desc: "Career index of high-growth technology startups using Ashby ATS." },
+            { id: 32, title: "Bamboohr Jobs", category: "Aggregator", region: "Global", url: "https://www.bamboohr.com/careers", desc: "Aggregated listing directory of companies using BambooHR platform." },
+            { id: 33, title: "Recruitee Jobs", category: "Aggregator", region: "Global", url: "https://recruitee.com", desc: "Directory of corporate vacancies managed via Recruitee ATS." },
+            { id: 34, title: "Breezy HR Jobs", category: "Aggregator", region: "Global", url: "https://breezy.hr", desc: "Open positions hosted across businesses utilizing Breezy HR software." },
+            { id: 35, title: "JazzHR Board", category: "Aggregator", region: "North America", url: "https://www.jazzhr.com", desc: "Job search engine aggregating SMB job postings nationwide." },
+            { id: 36, title: "Jobvite Directory", category: "Aggregator", region: "Global", url: "https://www.jobvite.com", desc: "Enterprise career directory powered by Jobvite applicant tracking." },
+            { id: 37, title: "ICIMS Career Hub", category: "Aggregator", region: "Global", url: "https://www.icims.com", desc: "Fortune 500 employer candidate portal and job search system." },
+            { id: 38, title: "Teamtailor Jobs", category: "Aggregator", region: "Global", url: "https://www.teamtailor.com", desc: "Employer branding and candidate career index for modern companies." },
+            { id: 39, title: "Pinpoint Jobs", category: "Aggregator", region: "Global", url: "https://www.pinpointhq.com", desc: "Global recruitment software listing verified employer openings." },
+            { id: 40, title: "Personio Jobs", category: "Aggregator", region: "Europe", url: "https://www.personio.com", desc: "European HR platform corporate career directory." },
+            { id: 41, title: "Phenom People Portal", category: "Aggregator", region: "Global", url: "https://www.phenom.com", desc: "AI talent experience platform indexing enterprise enterprise jobs." },
+            { id: 42, title: "Eightfold AI Jobs", category: "Aggregator", region: "Global", url: "https://eightfold.ai", desc: "Deep learning job matching board for global enterprises." },
+            { id: 43, title: "Workday Jobs Portal", category: "Aggregator", region: "Global", url: "https://myworkdayjobs.com", desc: "Central database of Fortune 500 corporate roles hosted on Workday." },
+            { id: 44, title: "SuccessFactors Jobs", category: "Aggregator", region: "Global", url: "https://www.sap.com/products/hcm.html", desc: "SAP enterprise recruitment module vacancy database." },
+            { id: 45, title: "Taleo Career Hub", category: "Aggregator", region: "Global", url: "https://www.oracle.com/human-capital-management/taleo/", desc: "Oracle Taleo enterprise recruitment job listings index." },
+            { id: 46, title: "Jobscore Engine", category: "Aggregator", region: "North America", url: "https://www.jobscore.com", desc: "Applicant tracking job aggregator for technology and mid-market firms." },
+            { id: 47, title: "Zoho Recruit Hub", category: "Aggregator", region: "Global", url: "https://www.zoho.com/recruit/", desc: "Job engine housing vacancies across businesses using Zoho CRM & HR." },
+            { id: 48, title: "Loxo Talent Network", category: "Aggregator", region: "Global", url: "https://loxo.co", desc: "AI-driven recruiting platform indexing high-level executive search roles." },
+            { id: 49, title: "Manatal Directory", category: "Aggregator", region: "Global", url: "https://www.manatal.com", desc: "Cloud recruitment platform indexing corporate job vacancies globally." },
+            { id: 50, title: "CEIPAL Jobs", category: "Aggregator", region: "Global", url: "https://www.ceipal.com", desc: "AI-powered staffing software aggregator for IT and healthcare recruiters." },
+            { id: 51, title: "Avature Talent Portal", category: "Aggregator", region: "Global", url: "https://www.avature.net", desc: "Enterprise talent acquisition portal listing global corporate positions." },
+            { id: 52, title: "Bullhorn Reach", category: "Aggregator", region: "Global", url: "https://www.bullhorn.com", desc: "Staffing agency vacancy aggregator for contract and permanent roles." },
+            { id: 53, title: "Cornerstone OnDemand", category: "Aggregator", region: "Global", url: "https://www.cornerstoneondemand.com", desc: "Global talent management system career network." },
+            { id: 54, title: "PageUp People", category: "Aggregator", region: "Global", url: "https://www.pageuppeople.com", desc: "Higher education and corporate enterprise vacancy system." },
+            { id: 55, title: "SilkRoad Technology", category: "Aggregator", region: "Global", url: "https://www.silkroadtechnology.com", desc: "Strategic onboarding and recruitment gateway for global companies." },
+            { id: 56, title: "ClearCompany Hub", category: "Aggregator", region: "North America", url: "https://www.clearcompany.com", desc: "Talent management software indexing verified US company job boards." },
+            { id: 57, title: "Newton Software Index", category: "Aggregator", region: "North America", url: "https://newtonsoftware.com", desc: "SMB employer vacancy index powered by Paycor." },
+            { id: 58, title: "Jobylon Hub", category: "Aggregator", region: "Europe", url: "https://www.jobylon.com", desc: "European visual job posting aggregator and branding platform." },
+            { id: 59, title: "Catsone Directory", category: "Aggregator", region: "Global", url: "https://www.catsone.com", desc: "Recruitment agency applicant tracking vacancy index." },
+            { id: 60, title: "ApplicantPro", category: "Aggregator", region: "North America", url: "https://www.applicantpro.com", desc: "Hiring software aggregator for regional and local companies." },
+            { id: 61, title: "RecruitCRM Hub", category: "Aggregator", region: "Global", url: "https://recruitcrm.io", desc: "Executive search and recruitment firm job posting database." },
+            { id: 62, title: "TrackerRM Index", category: "Aggregator", region: "Global", url: "https://www.tracker-rms.com", desc: "Staffing agency applicant database and external job aggregator." },
+            { id: 63, title: "Vincere Portal", category: "Aggregator", region: "Global", url: "https://www.vincere.io", desc: "Recruitment operating system housing international agency roles." },
+            { id: 64, title: "JobAdder Hub", category: "Aggregator", region: "Global", url: "https://jobadder.com", desc: "Global recruitment platform indexing vacancies across staffing agencies." },
+            { id: 65, title: "PCRecruiter Engine", category: "Aggregator", region: "Global", url: "https://www.pcrecruiter.net", desc: "HR software portal indexing specialized recruiter job boards." },
+            { id: 66, title: "Arcoro Careers", category: "Aggregator", region: "North America", url: "https://arcoro.com", desc: "Construction, skilled trades, and industrial HR recruitment portal." },
+            { id: 67, title: "Talentlyft Jobs", category: "Aggregator", region: "Global", url: "https://www.talentlyft.com", desc: "Recruitment marketing software career board builder directory." },
+            { id: 68, title: "SmarterQueue Jobs", category: "Aggregator", region: "Global", url: "https://smarterqueue.com", desc: "Social media marketing and community growth career registry." },
+            { id: 69, title: "Oorwin Engine", category: "Aggregator", region: "Global", url: "https://oorwin.com", desc: "AI-powered staffing, HR, and sales talent matching platform." },
+            { id: 70, title: "TargetRecruit Hub", category: "Aggregator", region: "Global", url: "https://targetrecruit.com", desc: "Salesforce-based recruitment ecosystem job registry." },
+            { id: 71, title: "Engage2Excel", category: "Aggregator", region: "North America", url: "https://www.engage2excel.com", desc: "Talent acquisition platform focusing on candidate experience." },
+            { id: 72, title: "NationJob", category: "Aggregator", region: "North America", url: "https://www.nationjob.com", desc: "Community-focused job search directory for regional US employment." },
+            { id: 73, title: "Careesma", category: "Aggregator", region: "Global", url: "https://www.careesma.com", desc: "International network of job search engines across emerging markets." },
+            { id: 74, title: "Trovit Jobs", category: "Aggregator", region: "Global", url: "https://jobs.trovit.com", desc: "Classified search engine aggregating job listings worldwide." },
+            { id: 75, title: "Mitula Jobs", category: "Aggregator", region: "Global", url: "https://jobs.mitula.com", desc: "Search engine aggregating job advertisements across 50+ countries." },
+            { id: 76, title: "Nuroco", category: "Aggregator", region: "Global", url: "https://www.nuroco.com", desc: "Global directory for executive search and specialist job listings." },
+            { id: 77, title: "Learn4Good", category: "Aggregator", region: "Global", url: "https://www.learn4good.com/jobs", desc: "International educational, teaching, and professional job board." },
+            { id: 78, title: "JobG8 Platform", category: "Aggregator", region: "Global", url: "https://www.jobg8.com", desc: "Job board marketplace supplying qualified candidate traffic." },
+            { id: 79, title: "MyJobHelper", category: "Aggregator", region: "Global", url: "https://www.myjobhelper.com", desc: "Fast-growing job search aggregator operating across multiple continents." },
+            { id: 80, title: "JobInventory", category: "Aggregator", region: "North America", url: "https://www.jobinventory.com", desc: "Search engine providing contributor-driven, unbiased job results." },
+            { id: 81, title: "MonsterBoard UK", category: "Aggregator", region: "Europe", url: "https://www.monster.co.uk", desc: "United Kingdom portal for Monster employment listings." },
+            { id: 82, title: "Monster Canada", category: "Aggregator", region: "North America", url: "https://www.monster.ca", desc: "Canadian career development and employment search gateway." },
+            { id: 83, title: "Monster India", category: "Aggregator", region: "Asia", url: "https://www.foundit.in", desc: "Foundit (formerly Monster India) job search platform for South Asia." },
+            { id: 84, title: "CareerOne", category: "Aggregator", region: "Australia", url: "https://www.careerone.com.au", desc: "Australian job search site featuring course reviews and company profiles." },
+            { id: 85, title: "Employment Crossing", category: "Aggregator", region: "North America", url: "https://www.employmentcrossing.com", desc: "Job aggregator tracking unadvertised roles from employer websites." },
 
-            // Tech & Remote Job Boards (21-40)
-            { id: 21, title: "We Work Remotely", category: "Remote & Tech", region: "Remote", url: "https://weworkremotely.com", desc: "The largest remote work community for developers, designers, and managers." },
-            { id: 22, title: "Remote OK", category: "Remote & Tech", region: "Remote", url: "https://remoteok.com", desc: "Popular digital nomad job board for software engineering and tech roles." },
-            { id: 23, title: "Dice", category: "Remote & Tech", region: "Global", url: "https://www.dice.com", desc: "Dedicated technology career site for IT and software development roles." },
-            { id: 24, title: "Wellfound (AngelList)", category: "Remote & Tech", region: "Global", url: "https://wellfound.com", desc: "The premier portal for startup jobs and equity-focused employment." },
-            { id: 25, title: "Stack Overflow Jobs", category: "Remote & Tech", region: "Global", url: "https://stackoverflow.com/jobs", desc: "Tech community career ecosystem for developers and systems engineers." },
-            { id: 26, title: "Built In", category: "Remote & Tech", region: "North America", url: "https://builtin.com", desc: "Tech hub directory connecting tech professionals with startups and enterprises." },
-            { id: 27, title: "Hired", category: "Remote & Tech", region: "Global", url: "https://hired.com", desc: "Reverse job board where tech companies apply directly to candidate profiles." },
-            { id: 28, title: "Working Nomads", category: "Remote & Tech", region: "Remote", url: "https://www.workingnomads.com", desc: "Curated list of remote jobs for digital professionals working anywhere." },
-            { id: 29, title: "Remotive", category: "Remote & Tech", region: "Remote", url: "https://remotive.com", desc: "Active community and job board for vetted remote software roles." },
-            { id: 30, title: "Jobspresso", category: "Remote & Tech", region: "Remote", url: "https://jobspresso.co", desc: "Curated remote careers in tech, marketing, customer support, and design." },
-            { id: 31, title: "Arc.dev", category: "Remote & Tech", region: "Remote", url: "https://arc.dev", desc: "Remote career marketplace matching senior developers with tech companies." },
-            { id: 32, title: "Virtual Vocations", category: "Remote & Tech", region: "Remote", url: "https://www.virtualvocations.com", desc: "Hand-screened telecommute job board with full-time and contract positions." },
-            { id: 33, title: "Authentic Jobs", category: "Remote & Tech", region: "Global", url: "https://authenticjobs.com", desc: "Job board specifically tailored for designers, developers, and creative pros." },
-            { id: 34, title: "Dribbble Jobs", category: "Remote & Tech", region: "Global", url: "https://dribbble.com/jobs", desc: "Leading career portal for visual designers, UI/UX, and creative art directors." },
-            { id: 35, title: "Behance Careers", category: "Remote & Tech", region: "Global", url: "https://www.behance.net/joblist", desc: "Adobe's creative showcase portal featuring global design and branding vacancies." },
-            { id: 36, title: "Gun.io", category: "Remote & Tech", region: "Remote", url: "https://gun.io", desc: "Exclusive network matching elite software engineers with high-paying client roles." },
-            { id: 37, title: "Toptal", category: "Remote & Tech", region: "Remote", url: "https://www.toptal.com", desc: "Freelance tech network matching the top 3% of global software talent." },
-            { id: 38, title: "Crypto Jobs List", category: "Remote & Tech", region: "Global", url: "https://cryptojobslist.com", desc: "Job portal for Web3, blockchain, smart contract, and crypto startups." },
-            { id: 39, title: "Design Jobs Board", category: "Remote & Tech", region: "Global", url: "https://www.designjobsboard.com", desc: "Specialized directory listing vacancies across multidisciplinary design fields." },
-            { id: 40, title: "Tech Careers", category: "Remote & Tech", region: "Global", url: "https://www.techcareers.com", desc: "Online job repository for technical, engineering, and digital candidates." },
+            // Remote, Tech & Niche Job Boards (86-210)
+            { id: 86, title: "We Work Remotely", category: "Remote & Tech", region: "Remote", url: "https://weworkremotely.com", desc: "The largest remote work community for developers, designers, and managers." },
+            { id: 87, title: "Remote OK", category: "Remote & Tech", region: "Remote", url: "https://remoteok.com", desc: "Popular digital nomad job board for software engineering and tech roles." },
+            { id: 88, title: "Dice", category: "Remote & Tech", region: "Global", url: "https://www.dice.com", desc: "Dedicated technology career site for IT and software development roles." },
+            { id: 89, title: "Wellfound (AngelList)", category: "Remote & Tech", region: "Global", url: "https://wellfound.com", desc: "The premier portal for startup jobs and equity-focused employment." },
+            { id: 90, title: "Stack Overflow Jobs", category: "Remote & Tech", region: "Global", url: "https://stackoverflow.com/jobs", desc: "Tech community career ecosystem for developers and systems engineers." },
+            { id: 91, title: "Built In", category: "Remote & Tech", region: "North America", url: "https://builtin.com", desc: "Tech hub directory connecting tech professionals with startups and enterprises." },
+            { id: 92, title: "Hired", category: "Remote & Tech", region: "Global", url: "https://hired.com", desc: "Reverse job board where tech companies apply directly to candidate profiles." },
+            { id: 93, title: "Working Nomads", category: "Remote & Tech", region: "Remote", url: "https://www.workingnomads.com", desc: "Curated list of remote jobs for digital professionals working anywhere." },
+            { id: 94, title: "Remotive", category: "Remote & Tech", region: "Remote", url: "https://remotive.com", desc: "Active community and job board for vetted remote software roles." },
+            { id: 95, title: "Jobspresso", category: "Remote & Tech", region: "Remote", url: "https://jobspresso.co", desc: "Curated remote careers in tech, marketing, customer support, and design." },
+            { id: 96, title: "Arc.dev", category: "Remote & Tech", region: "Remote", url: "https://arc.dev", desc: "Remote career marketplace matching senior developers with tech companies." },
+            { id: 97, title: "Virtual Vocations", category: "Remote & Tech", region: "Remote", url: "https://www.virtualvocations.com", desc: "Hand-screened telecommute job board with full-time and contract positions." },
+            { id: 98, title: "Authentic Jobs", category: "Remote & Tech", region: "Global", url: "https://authenticjobs.com", desc: "Job board specifically tailored for designers, developers, and creative pros." },
+            { id: 99, title: "Dribbble Jobs", category: "Remote & Tech", region: "Global", url: "https://dribbble.com/jobs", desc: "Leading career portal for visual designers, UI/UX, and creative art directors." },
+            { id: 100, title: "Behance Careers", category: "Remote & Tech", region: "Global", url: "https://www.behance.net/joblist", desc: "Adobe's creative showcase portal featuring global design and branding vacancies." },
+            { id: 101, title: "Gun.io", category: "Remote & Tech", region: "Remote", url: "https://gun.io", desc: "Exclusive network matching elite software engineers with high-paying client roles." },
+            { id: 102, title: "Toptal", category: "Remote & Tech", region: "Remote", url: "https://www.toptal.com", desc: "Freelance tech network matching the top 3% of global software talent." },
+            { id: 103, title: "Crypto Jobs List", category: "Remote & Tech", region: "Global", url: "https://cryptojobslist.com", desc: "Job portal for Web3, blockchain, smart contract, and crypto startups." },
+            { id: 104, title: "Design Jobs Board", category: "Remote & Tech", region: "Global", url: "https://www.designjobsboard.com", desc: "Specialized directory listing vacancies across multidisciplinary design fields." },
+            { id: 105, title: "Tech Careers", category: "Remote & Tech", region: "Global", url: "https://www.techcareers.com", desc: "Online job repository for technical, engineering, and digital candidates." },
+            { id: 106, title: "JustRemote", category: "Remote & Tech", region: "Remote", url: "https://justremote.co", desc: "Remote job platform focusing on developer, design, and marketing roles." },
+            { id: 107, title: "Skip The Drive", category: "Remote & Tech", region: "Remote", url: "https://www.skipthedrive.com", desc: "Free remote and work-from-home job search and directory." },
+            { id: 108, title: "Remote.co", category: "Remote & Tech", region: "Remote", url: "https://remote.co", desc: "Resource and job board dedicated entirely to remote employment." },
+            { id: 109, title: "Dynamite Jobs", category: "Remote & Tech", region: "Remote", url: "https://dynamitejobs.com", desc: "Hand-picked remote job opportunities across digital business sectors." },
+            { id: 110, title: "Web3.career", category: "Remote & Tech", region: "Remote", url: "https://web3.career", desc: "Web3, Blockchain, and Smart Contract developer job directory." },
+            { id: 111, title: "Solana Jobs", category: "Remote & Tech", region: "Global", url: "https://jobs.solana.com", desc: "Blockchain career listings within the Solana ecosystem." },
+            { id: 112, title: "AI Jobs", category: "Remote & Tech", region: "Global", url: "https://aijobs.ai", desc: "Targeted job board for Artificial Intelligence and Machine Learning engineers." },
+            { id: 113, title: "CyberSecJobs", category: "Remote & Tech", region: "Global", url: "https://www.cybersecjobs.com", desc: "Niche career platform dedicated strictly to cybersecurity professionals." },
+            { id: 114, title: "DevITjobs", category: "Remote & Tech", region: "Global", url: "https://devitjobs.com", desc: "Transparent software engineering job board with salary ranges." },
+            { id: 115, title: "PowerToFly", category: "Remote & Tech", region: "Global", url: "https://powertofly.com", desc: "Fast-growing fast-track tech hiring platform empowering women in tech." },
+            { id: 116, title: "Landing.jobs", category: "Remote & Tech", region: "Europe / Remote", url: "https://landing.jobs", desc: "Tech career marketplace focused on European tech talent and remote roles." },
+            { id: 117, title: "Hacker News Jobs", category: "Remote & Tech", region: "Global", url: "https://news.ycombinator.com/jobs", desc: "Y-Combinator developer job listings directly from startup founders." },
+            { id: 118, title: "Product Hunt Jobs", category: "Remote & Tech", region: "Global", url: "https://www.producthunt.com/jobs", desc: "Job listings from top product-led companies and startups." },
+            { id: 119, title: "SaaStr Jobs", category: "Remote & Tech", region: "Global", url: "https://jobs.saastr.com", desc: "Software-as-a-Service (SaaS) industry sales, executive, and engineering roles." },
+            { id: 120, title: "Key Values", category: "Remote & Tech", region: "Global", url: "https://www.keyvalues.com", desc: "Find engineering teams whose engineering culture aligns with your values." },
+            { id: 121, title: "RubyNow", category: "Remote & Tech", region: "Remote", url: "https://rubynow.com", desc: "Specialized job board specifically for Ruby and Ruby on Rails developers." },
+            { id: 122, title: "Python.org Jobs", category: "Remote & Tech", region: "Global", url: "https://www.python.org/jobs", desc: "Official Python Software Foundation developer job directory." },
+            { id: 123, title: "Golang Projects", category: "Remote & Tech", region: "Global", url: "https://www.golangprojects.com", desc: "Dedicated career platform for Go (Golang) software engineers." },
+            { id: 124, title: "Android Jobs", category: "Remote & Tech", region: "Global", url: "https://androidjobs.io", desc: "Curated portal for mobile Android developers and mobile architects." },
+            { id: 125, title: "iOS Dev Jobs", category: "Remote & Tech", region: "Global", url: "https://iosdevjobs.com", desc: "Swift, Objective-C, and Apple platform engineering roles." },
+            { id: 126, title: "Vue.js Jobs", category: "Remote & Tech", region: "Global", url: "https://vuejobs.com", desc: "Frontend vacancies for developers specializing in the Vue.js framework." },
+            { id: 127, title: "ReactJS Jobs", category: "Remote & Tech", region: "Global", url: "https://reactjs.jobs", desc: "Targeted job board for React and React Native web/mobile developers." },
+            { id: 128, title: "NodeJS Jobs", category: "Remote & Tech", region: "Global", url: "https://nodejs.jobs", desc: "Backend software roles for JavaScript and Node.js developers." },
+            { id: 129, title: "Laravel Jobs", category: "Remote & Tech", region: "Global", url: "https://laraveljobs.com", desc: "Official job portal for PHP and Laravel web framework developers." },
+            { id: 130, title: "Rust Jobs", category: "Remote & Tech", region: "Global", url: "https://rustjobs.dev", desc: "Specialized career network for systems programmers using Rust." },
+            { id: 131, title: "Elixir Jobs", category: "Remote & Tech", region: "Global", url: "https://elixirjobs.net", desc: "Functional programming career platform for Elixir and Erlang devs." },
+            { id: 132, title: "DevOps Jobs", category: "Remote & Tech", region: "Global", url: "https://devopsjobs.io", desc: "Infrastructure, Kubernetes, Terraform, and CI/CD engineering roles." },
+            { id: 133, title: "DataJobs", category: "Remote & Tech", region: "Global", url: "https://datajobs.com", desc: "Career hub for Big Data specialists, Data Scientists, and Analytics Engineers." },
+            { id: 134, title: "Kaggle Jobs", category: "Remote & Tech", region: "Global", url: "https://www.kaggle.com/jobs", desc: "Data science and machine learning practitioner jobs community." },
+            { id: 135, title: "Data Science Jobs", category: "Remote & Tech", region: "Global", url: "https://datasciencejobs.com", desc: "Global repository for AI researchers and data mining specialists." },
+            { id: 136, title: "Linux Jobs", category: "Remote & Tech", region: "Global", url: "https://jobs.linux.com", desc: "Open-source, Linux system administration, and Kernel development careers." },
+            { id: 137, title: "GameDev.net Jobs", category: "Remote & Tech", region: "Global", url: "https://www.gamedev.net/jobs", desc: "Video game industry graphics programmers, 3D artists, and designers." },
+            { id: 138, title: "Hitmarker", category: "Remote & Tech", region: "Global", url: "https://hitmarker.net", desc: "The largest job platform for esports and the video game industry." },
+            { id: 139, title: "WorkWithIndies", category: "Remote & Tech", region: "Remote", url: "https://www.workwithindies.com", desc: "Indie game studio creative, engineering, and producer positions." },
+            { id: 140, title: "Unreal Engine Jobs", category: "Remote & Tech", region: "Global", url: "https://www.unrealengine.com/en-US/blog", desc: "3D real-time creation and Unreal Engine developer job directory." },
+            { id: 141, title: "UX Design Jobs", category: "Remote & Tech", region: "Global", url: "https://uxdesignjobs.com", desc: "User experience, product design, and interaction design careers." },
+            { id: 142, title: "Coroflot", category: "Remote & Tech", region: "Global", url: "https://www.coroflot.com/jobs", desc: "Design job board specifically for industrial design, 3D, and apparel." },
+            { id: 143, title: "AIGA Design Jobs", category: "Remote & Tech", region: "North America", url: "https://designjobs.aiga.org", desc: "Professional association for design official career board." },
+            { id: 144, title: "Core77 Design Jobs", category: "Remote & Tech", region: "Global", url: "https://jobs.core77.com", desc: "Industrial design and physical product development roles." },
+            { id: 145, title: "Creativepool", category: "Remote & Tech", region: "Global", url: "https://creativepool.com/jobs", desc: "Global network for advertising agencies and creative studios." },
+            { id: 146, title: "Design Week Jobs", category: "Remote & Tech", region: "Europe", url: "https://www.designweek.co.uk/jobs", desc: "UK and European graphic design and branding agency vacancies." },
+            { id: 147, title: "If You Could Jobs", category: "Remote & Tech", region: "Global", url: "https://www.ifyoucouldjobs.com", desc: "Creative studio job board built by It's Nice That." },
+            { id: 148, title: "Product Management Jobs", category: "Remote & Tech", region: "Global", url: "https://productmanagementjobs.com", desc: "Dedicated board for Product Owners and Directors of Product." },
+            { id: 149, title: "Mind The Product", category: "Remote & Tech", region: "Global", url: "https://www.mindtheproduct.com/jobs", desc: "Product community career hub for tech product managers." },
+            { id: 150, title: "Scrum Alliance Jobs", category: "Remote & Tech", region: "Global", url: "https://www.scrumalliance.org", desc: "Agile project management and Certified Scrum Master vacancies." },
+            { id: 151, title: "TechInAsia Jobs", category: "Remote & Tech", region: "Asia", url: "https://www.techinasia.com/jobs", desc: "The main technology startup job portal across the Asian continent." },
+            { id: 152, title: "eFinancialCareers", category: "Remote & Tech", region: "Global", url: "https://www.efinancialcareers.com", desc: "Fintech, quantitative trading, and banking technology vacancies." },
+            { id: 153, title: "QuantFinanceJobs", category: "Remote & Tech", region: "Global", url: "https://www.quantfinancejobs.com", desc: "Quantitative analysis, financial engineering, and algorithmic trading." },
+            { id: 154, title: "Financial Times Jobs", category: "Remote & Tech", region: "Global", url: "https://jobs.ft.com", desc: "Executive, financial analysis, and corporate management listings." },
+            { id: 155, title: "Marketing Hire", category: "Remote & Tech", region: "Global", url: "https://marketinghire.com", desc: "Specialized directory for SEO, performance marketing, and PR leads." },
+            { id: 156, title: "GrowthHackers Jobs", category: "Remote & Tech", region: "Global", url: "https://growthhackers.com/jobs", desc: "Growth marketing, conversion rate optimization, and viral product roles." },
+            { id: 157, title: "Search Engine Land Jobs", category: "Remote & Tech", region: "Global", url: "https://searchengineland.com", desc: "Search engine optimization and digital marketing agency jobs." },
+            { id: 158, title: "Content Writing Jobs", category: "Remote & Tech", region: "Remote", url: "https://contentwritingjobs.com", desc: "Copywriting, technical documentation, and SEO content editor roles." },
+            { id: 159, title: "Superpath Jobs", category: "Remote & Tech", region: "Remote", url: "https://www.superpath.co/jobs", desc: "Curated content marketing careers for senior writers and strategists." },
+            { id: 160, title: "Customer Support Jobs", category: "Remote & Tech", region: "Remote", url: "https://customersupportjobs.com", desc: "SaaS customer success, tech support, and client onboarding." },
+            { id: 161, title: "Support Driven", category: "Remote & Tech", region: "Remote", url: "https://supportdriven.com/jobs", desc: "Community job board for customer support and service managers." },
+            { id: 162, title: "SalesGazer", category: "Remote & Tech", region: "Global", url: "https://salesgazer.com", desc: "B2B SaaS Account Executive and Business Development Representative roles." },
+            { id: 163, title: "RepVue Jobs", category: "Remote & Tech", region: "Global", url: "https://www.repvue.com", desc: "Sales team rating platform matching quota-crushing B2B sales reps." },
+            { id: 164, title: "RevOps Co-op", category: "Remote & Tech", region: "Global", url: "https://www.revopscoop.com/jobs", desc: "Revenue operations, Salesforce administration, and sales ops." },
+            { id: 165, title: "HR Tech Jobs", category: "Remote & Tech", region: "Global", url: "https://hrtechjobs.com", desc: "Human resources technology, People Ops, and corporate recruiting." },
+            { id: 166, title: "People First Jobs", category: "Remote & Tech", region: "Remote", url: "https://peoplefirstjobs.com", desc: "Remote companies prioritizing work-life balance and health culture." },
+            { id: 167, title: "Workew", category: "Remote & Tech", region: "Remote", url: "https://workew.com", desc: "Digital nomad job board for remote digital, tech, and creative pros." },
+            { id: 168, title: "RemoteIVE", category: "Remote & Tech", region: "Remote", url: "https://remoteive.com", desc: "Global repository of remote software and marketing careers." },
+            { id: 169, title: "EU Remote Jobs", category: "Remote & Tech", region: "Europe", url: "https://euremotejobs.com", desc: "Remote software and management positions tailored for European timezones." },
+            { id: 170, title: "UK Remote Jobs", category: "Remote & Tech", region: "United Kingdom", url: "https://ukremotejobs.com", desc: "Telecommute roles specifically open to residents of the UK." },
+            { id: 171, title: "Remote Leaf", category: "Remote & Tech", region: "Remote", url: "https://remoteleaf.com", desc: "Aggregated, hand-picked remote job alert directory." },
+            { id: 172, title: "Remote Rocketship", category: "Remote & Tech", region: "Remote", url: "https://www.remoterocketship.com", desc: "Real-time index searching non-standard career pages for remote roles." },
+            { id: 173, title: "Real Work From Home", category: "Remote & Tech", region: "Remote", url: "https://realworkfromhomejobs.com", desc: "Vetted telecommute positions free from recruitment scams." },
+            { id: 174, title: "Pangian", category: "Remote & Tech", region: "Remote", url: "https://pangian.com", desc: "Global remote community connecting international talent with firms." },
+            { id: 175, title: "PowerToFly Tech", category: "Remote & Tech", region: "Global", url: "https://powertofly.com/jobs", desc: "Diversity-focused remote technical hiring platform." },
+            { id: 176, title: "Tech Ladies", category: "Remote & Tech", region: "Global", url: "https://www.hiretechladies.com", desc: "Career network connecting women with verified engineering roles." },
+            { id: 177, title: "Diversify Tech", category: "Remote & Tech", region: "Global", url: "https://www.diversifytech.co", desc: "Job board for underrepresented groups in the technology sector." },
+            { id: 178, title: "Black Tech Pipeline", category: "Remote & Tech", region: "Global", url: "https://blacktechpipeline.org", desc: "Connecting Black tech talent with inclusive corporate employers." },
+            { id: 179, title: "IncludeTech Jobs", category: "Remote & Tech", region: "Global", url: "https://includetech.io", desc: "Inclusive hiring platform for software engineering and design." },
+            { id: 180, title: "50inTech", category: "Remote & Tech", region: "Global", url: "https://www.50intech.com", desc: "Matchmaking platform for women seeking tech positions." },
+            { id: 181, title: "Climatebase", category: "Remote & Tech", region: "Global", url: "https://climatebase.org", desc: "The climate tech talent hub for green energy, carbon capture, and sustainability." },
+            { id: 182, title: "Work on Climate", category: "Remote & Tech", region: "Global", url: "https://workonclimate.org", desc: "Non-profit community helping professionals transition into climate tech." },
+            { id: 183, title: "CleanTech Jobs", category: "Remote & Tech", region: "Global", url: "https://cleantechjobs.com", desc: "Solar, wind, battery, and EV engineering career board." },
+            { id: 184, title: "EdSurge Jobs", category: "Remote & Tech", region: "Global", url: "https://www.edsurge.com/jobs", desc: "Education technology (EdTech) software development and product roles." },
+            { id: 185, title: "EdTech Career Hub", category: "Remote & Tech", region: "Global", url: "https://edtechcareers.com", desc: "Specialized directory for digital learning developers and instructional designers." },
+            { id: 186, title: "HealthTech Jobs", category: "Remote & Tech", region: "Global", url: "https://healthtechjobs.com", desc: "Digital health, telemedicine, and medical software development." },
+            { id: 187, title: "Biotech Careers", category: "Remote & Tech", region: "Global", url: "https://www.biotechcareers.org", desc: "Life sciences, genomic research, and pharmaceutical technology." },
+            { id: 188, title: "BioSpace", category: "Remote & Tech", region: "Global", url: "https://www.biospace.com/jobs", desc: "Leading news and job board for the clinical and biotechnology sector." },
+            { id: 189, title: "PharmaJobs", category: "Remote & Tech", region: "Global", url: "https://www.pharmaguideline.com", desc: "Pharmaceutical manufacturing, QA, and regulatory affairs careers." },
+            { id: 190, title: "MedTech Careers", category: "Remote & Tech", region: "Global", url: "https://medtechcareers.com", desc: "Medical device engineering and regulatory compliance roles." },
+            { id: 191, title: "Space Careers", category: "Remote & Tech", region: "Global", url: "https://space-careers.com", desc: "Satellite engineering, rocketry, and space exploration agency jobs." },
+            { id: 192, title: "AeroJobs", category: "Remote & Tech", region: "Global", url: "https://aerojobs.net", desc: "Aeronautics, avionics engineering, and defense technology." },
+            { id: 193, title: "Robotics Jobs", category: "Remote & Tech", region: "Global", url: "https://roboticsjobs.com", desc: "Hardware, mechatronics, and computer vision robotics engineers." },
+            { id: 194, title: "IoT Careers", category: "Remote & Tech", region: "Global", url: "https://iotcareers.com", desc: "Internet of Things embedded systems engineering and firmware." },
+            { id: 195, title: "Embedded Systems Jobs", category: "Remote & Tech", region: "Global", url: "https://embeddedjobs.net", desc: "Microcontroller C/C++ developers and hardware design engineers." },
+            { id: 196, title: "FPGA Developer Board", category: "Remote & Tech", region: "Global", url: "https://fpgajobs.com", desc: "HDL, Verilog, and hardware acceleration engineering positions." },
+            { id: 197, title: "AutoTech Jobs", category: "Remote & Tech", region: "Global", url: "https://autotechjobs.com", desc: "Autonomous driving, ADAS software, and electric vehicle engineering." },
+            { id: 198, title: "Quantum Jobs", category: "Remote & Tech", region: "Global", url: "https://quantumjobs.com", desc: "Quantum computing researchers, physicists, and software engineers." },
+            { id: 199, title: "GIS Careers", category: "Remote & Tech", region: "Global", url: "https://gisjobs.com", desc: "Geographic Information Systems mapping analysts and developers." },
+            { id: 200, title: "AR/VR Careers", category: "Remote & Tech", region: "Global", url: "https://arvrjobs.com", desc: "Spatial computing, Unity, Unreal, and augmented reality software." },
+            { id: 201, title: "OpenSource Jobs", category: "Remote & Tech", region: "Global", url: "https://opensource.jobs", desc: "Paid engineering positions contributing to open-source software." },
+            { id: 202, title: "DevRel Careers", category: "Remote & Tech", region: "Global", url: "https://devrelcareers.com", desc: "Developer Advocates, Developer Relations, and Technical Evangelists." },
+            { id: 203, title: "Technical Writing Jobs", category: "Remote & Tech", region: "Global", url: "https://technicalwritingjobs.com", desc: "API documentation writers, technical authors, and knowledge managers." },
+            { id: 204, title: "QA Tech Jobs", category: "Remote & Tech", region: "Global", url: "https://qatechjobs.com", desc: "Software Testing, Cypress, Selenium automation engineers." },
+            { id: 205, title: "SysAdmin Careers", category: "Remote & Tech", region: "Global", url: "https://sysadminjobs.com", desc: "Network engineers, IT infrastructure, and Linux administrators." },
+            { id: 206, title: "Database Jobs", category: "Remote & Tech", region: "Global", url: "https://databasejobs.com", desc: "SQL, PostgreSQL, MongoDB, and Oracle Database Administrators (DBA)." },
+            { id: 207, title: "Cloud Native Jobs", category: "Remote & Tech", region: "Global", url: "https://cloudnativejobs.io", desc: "CNCF ecosystem, AWS, Azure, and GCP Cloud Architects." },
+            { id: 208, title: "NoCode Jobs", category: "Remote & Tech", region: "Remote", url: "https://nocodejobs.org", desc: "Bubble, Webflow, Zapier, and Make automation agency developers." },
+            { id: 209, title: "Shopify Dev Board", category: "Remote & Tech", region: "Remote", url: "https://shopifydevjobs.com", desc: "Custom Liquid theme developers and Shopify App developers." },
+            { id: 210, title: "WordPress Jobs", category: "Remote & Tech", region: "Global", url: "https://jobs.wordpress.net", desc: "Official WordPress ecosystem PHP plugin and site developer directory." },
 
-            // Major Corporate Career Sites (41-70)
-            { id: 41, title: "Google Careers", category: "Company Career", region: "Global", url: "https://careers.google.com", desc: "Engineering, product management, and enterprise sales roles at Google." },
-            { id: 42, title: "Microsoft Careers", category: "Company Career", region: "Global", url: "https://careers.microsoft.com", desc: "Cloud computing, AI research, and software positions at Microsoft." },
-            { id: 43, title: "Amazon Jobs", category: "Company Career", region: "Global", url: "https://www.amazon.jobs", desc: "AWS, corporate logistics, retail operations, and tech engineering opportunities." },
-            { id: 44, title: "Apple Careers", category: "Company Career", region: "Global", url: "https://www.apple.com/careers", desc: "Hardware development, iOS software, retail leadership, and design at Apple." },
-            { id: 45, title: "Meta Careers", category: "Company Career", region: "Global", url: "https://www.metacareers.com", desc: "Infrastructure, VR/AR, and social platform engineering roles at Meta." },
-            { id: 46, title: "Netflix Jobs", category: "Company Career", region: "Global", url: "https://jobs.netflix.com", desc: "Streaming infrastructure, content production, and corporate positions." },
-            { id: 47, title: "Tesla Careers", category: "Company Career", region: "Global", url: "https://www.tesla.com/careers", desc: "Clean energy, automotive engineering, manufacturing, and robotics jobs." },
-            { id: 48, title: "IBM Careers", category: "Company Career", region: "Global", url: "https://www.ibm.com/employment", desc: "Enterprise AI, Quantum computing, and IT consulting jobs at IBM." },
-            { id: 49, title: "Salesforce Careers", category: "Company Career", region: "Global", url: "https://www.salesforce.com/company/careers", desc: "Enterprise cloud software development, sales, and account management." },
-            { id: 50, title: "Adobe Careers", category: "Company Career", region: "Global", url: "https://www.adobe.com/careers.html", desc: "Digital media tools, cloud software development, and UX design careers." },
-            { id: 51, title: "Spotify Jobs", category: "Company Career", region: "Global", url: "https://www.lifeatspotify.com", desc: "Audio streaming tech, machine learning, and music industry roles." },
-            { id: 52, title: "Uber Careers", category: "Company Career", region: "Global", url: "https://www.uber.com/us/en/careers", desc: "Logistics routing, mobility engineering, and corporate operations positions." },
-            { id: 53, title: "Airbnb Careers", category: "Company Career", region: "Global", url: "https://careers.airbnb.com", desc: "Marketplace tech, hospitality engineering, and brand management roles." },
-            { id: 54, title: "NVIDIA Careers", category: "Company Career", region: "Global", url: "https://www.nvidia.com/en-us/about-nvidia/careers", desc: "AI chips, GPU hardware development, and deep learning engineering." },
-            { id: 55, title: "Intel Careers", category: "Company Career", region: "Global", url: "https://jobs.intel.com", desc: "Semiconductor architecture, microchip manufacturing, and hardware R&D." },
-            { id: 56, title: "Cisco Careers", category: "Company Career", region: "Global", url: "https://jobs.cisco.com", desc: "Networking equipment, enterprise cybersecurity, and IoT engineering." },
-            { id: 57, title: "Oracle Careers", category: "Company Career", region: "Global", url: "https://www.oracle.com/corporate/careers", desc: "Database cloud architecture, ERP development, and enterprise IT sales." },
-            { id: 58, title: "SAP Careers", category: "Company Career", region: "Global", url: "https://jobs.sap.com", desc: "Enterprise software solutions, supply chain systems, and cloud management." },
-            { id: 59, title: "Deloitte Careers", category: "Company Career", region: "Global", url: "https://www2.deloitte.com/global/en/careers/careers.html", desc: "Financial auditing, tax advisory, and management consulting careers." },
-            { id: 60, title: "PwC Careers", category: "Company Career", region: "Global", url: "https://www.pwc.com/gx/en/careers.html", desc: "Global professional services, accounting, tax, and risk management." },
-            { id: 61, title: "EY (Ernst & Young)", category: "Company Career", region: "Global", url: "https://www.ey.com/en_gl/careers", desc: "Financial advisory, assurance services, and strategic consulting." },
-            { id: 62, title: "KPMG Careers", category: "Company Career", region: "Global", url: "https://home.kpmg/xx/en/home/careers.html", desc: "International tax advisory, corporate audit, and business strategy roles." },
-            { id: 63, title: "McKinsey & Company", category: "Company Career", region: "Global", url: "https://www.mckinsey.com/careers", desc: "Management consulting, business analytics, and executive advisory." },
-            { id: 64, title: "JPMorgan Chase", category: "Company Career", region: "Global", url: "https://careers.jpmorganchase.com", desc: "Investment banking, fintech engineering, and financial asset management." },
-            { id: 65, title: "Goldman Sachs", category: "Company Career", region: "Global", url: "https://www.goldmansachs.com/careers", desc: "Global investment banking, quantitative finance, and trading technology." },
-            { id: 66, title: "Unilever Careers", category: "Company Career", region: "Global", url: "https://www.unilever.com/careers", desc: "Fast-moving consumer goods, supply chain management, and global marketing." },
-            { id: 67, title: "Procter & Gamble (P&G)", category: "Company Career", region: "Global", url: "https://www.pgcareers.com", desc: "Brand management, manufacturing engineering, and product distribution." },
-            { id: 68, title: "Siemens Careers", category: "Company Career", region: "Global", url: "https://jobs.siemens.com", desc: "Industrial automation, smart infrastructure, and green energy technology." },
-            { id: 69, title: "BMW Group Careers", category: "Company Career", region: "Global", url: "https://www.bmwgroup.jobs", desc: "Automotive engineering, electric vehicle innovation, and manufacturing." },
-            { id: 70, title: "Samsung Careers", category: "Company Career", region: "Global", url: "https://www.samsung.com/us/careers", desc: "Consumer electronics, mobile device design, and display technologies." },
+            // Enterprise & Global Corporate Career Hubs (211-340)
+            { id: 211, title: "Google Careers", category: "Company Career", region: "Global", url: "https://careers.google.com", desc: "Engineering, product management, and enterprise sales roles at Google." },
+            { id: 212, title: "Microsoft Careers", category: "Company Career", region: "Global", url: "https://careers.microsoft.com", desc: "Cloud computing, AI research, and software positions at Microsoft." },
+            { id: 213, title: "Amazon Jobs", category: "Company Career", region: "Global", url: "https://www.amazon.jobs", desc: "AWS, corporate logistics, retail operations, and tech engineering opportunities." },
+            { id: 214, title: "Apple Careers", category: "Company Career", region: "Global", url: "https://www.apple.com/careers", desc: "Hardware development, iOS software, retail leadership, and design at Apple." },
+            { id: 215, title: "Meta Careers", category: "Company Career", region: "Global", url: "https://www.metacareers.com", desc: "Infrastructure, VR/AR, and social platform engineering roles at Meta." },
+            { id: 216, title: "Netflix Jobs", category: "Company Career", region: "Global", url: "https://jobs.netflix.com", desc: "Streaming infrastructure, content production, and corporate positions." },
+            { id: 217, title: "Tesla Careers", category: "Company Career", region: "Global", url: "https://www.tesla.com/careers", desc: "Clean energy, automotive engineering, manufacturing, and robotics jobs." },
+            { id: 218, title: "IBM Careers", category: "Company Career", region: "Global", url: "https://www.ibm.com/employment", desc: "Enterprise AI, Quantum computing, and IT consulting jobs at IBM." },
+            { id: 219, title: "Salesforce Careers", category: "Company Career", region: "Global", url: "https://www.salesforce.com/company/careers", desc: "Enterprise cloud software development, sales, and account management." },
+            { id: 220, title: "Adobe Careers", category: "Company Career", region: "Global", url: "https://www.adobe.com/careers.html", desc: "Digital media tools, cloud software development, and UX design careers." },
+            { id: 221, title: "Spotify Jobs", category: "Company Career", region: "Global", url: "https://www.lifeatspotify.com", desc: "Audio streaming tech, machine learning, and music industry roles." },
+            { id: 222, title: "Uber Careers", category: "Company Career", region: "Global", url: "https://www.uber.com/us/en/careers", desc: "Logistics routing, mobility engineering, and corporate operations positions." },
+            { id: 223, title: "Airbnb Careers", category: "Company Career", region: "Global", url: "https://careers.airbnb.com", desc: "Marketplace tech, hospitality engineering, and brand management roles." },
+            { id: 224, title: "NVIDIA Careers", category: "Company Career", region: "Global", url: "https://www.nvidia.com/en-us/about-nvidia/careers", desc: "AI chips, GPU hardware development, and deep learning engineering." },
+            { id: 225, title: "Intel Careers", category: "Company Career", region: "Global", url: "https://jobs.intel.com", desc: "Semiconductor architecture, microchip manufacturing, and hardware R&D." },
+            { id: 226, title: "Cisco Careers", category: "Company Career", region: "Global", url: "https://jobs.cisco.com", desc: "Networking equipment, enterprise cybersecurity, and IoT engineering." },
+            { id: 227, title: "Oracle Careers", category: "Company Career", region: "Global", url: "https://www.oracle.com/corporate/careers", desc: "Database cloud architecture, ERP development, and enterprise IT sales." },
+            { id: 228, title: "SAP Careers", category: "Company Career", region: "Global", url: "https://jobs.sap.com", desc: "Enterprise software solutions, supply chain systems, and cloud management." },
+            { id: 229, title: "Deloitte Careers", category: "Company Career", region: "Global", url: "https://www2.deloitte.com/global/en/careers/careers.html", desc: "Financial auditing, tax advisory, and management consulting careers." },
+            { id: 230, title: "PwC Careers", category: "Company Career", region: "Global", url: "https://www.pwc.com/gx/en/careers.html", desc: "Global professional services, accounting, tax, and risk management." },
+            { id: 231, title: "EY (Ernst & Young)", category: "Company Career", region: "Global", url: "https://www.ey.com/en_gl/careers", desc: "Financial advisory, assurance services, and strategic consulting." },
+            { id: 232, title: "KPMG Careers", category: "Company Career", region: "Global", url: "https://home.kpmg/xx/en/home/careers.html", desc: "International tax advisory, corporate audit, and business strategy roles." },
+            { id: 233, title: "McKinsey & Company", category: "Company Career", region: "Global", url: "https://www.mckinsey.com/careers", desc: "Management consulting, business analytics, and executive advisory." },
+            { id: 234, title: "JPMorgan Chase", category: "Company Career", region: "Global", url: "https://careers.jpmorganchase.com", desc: "Investment banking, fintech engineering, and financial asset management." },
+            { id: 235, title: "Goldman Sachs", category: "Company Career", region: "Global", url: "https://www.goldmansachs.com/careers", desc: "Global investment banking, quantitative finance, and trading technology." },
+            { id: 236, title: "Unilever Careers", category: "Company Career", region: "Global", url: "https://www.unilever.com/careers", desc: "Fast-moving consumer goods, supply chain management, and global marketing." },
+            { id: 237, title: "Procter & Gamble (P&G)", category: "Company Career", region: "Global", url: "https://www.pgcareers.com", desc: "Brand management, manufacturing engineering, and product distribution." },
+            { id: 238, title: "Siemens Careers", category: "Company Career", region: "Global", url: "https://jobs.siemens.com", desc: "Industrial automation, smart infrastructure, and green energy technology." },
+            { id: 239, title: "BMW Group Careers", category: "Company Career", region: "Global", url: "https://www.bmwgroup.jobs", desc: "Automotive engineering, electric vehicle innovation, and manufacturing." },
+            { id: 240, title: "Samsung Careers", category: "Company Career", region: "Global", url: "https://www.samsung.com/us/careers", desc: "Consumer electronics, mobile device design, and display technologies." },
+            { id: 241, title: "Stripe Careers", category: "Company Career", region: "Global", url: "https://stripe.com/jobs", desc: "Payment infrastructure engineering, financial API design, and growth." },
+            { id: 242, title: "Shopify Careers", category: "Company Career", region: "Global", url: "https://www.shopify.com/careers", desc: "E-commerce platform software engineering and merchant support." },
+            { id: 243, title: "Atlassian Careers", category: "Company Career", region: "Global", url: "https://www.atlassian.com/company/careers", desc: "Jira, Confluence, and developer collaboration software jobs." },
+            { id: 244, title: "HubSpot Careers", category: "Company Career", region: "Global", url: "https://www.hubspot.com/careers", desc: "Inbound marketing software, CRM engineering, and corporate sales." },
+            { id: 245, title: "Twilio Careers", category: "Company Career", region: "Global", url: "https://www.twilio.com/company/jobs", desc: "Communication APIs, cloud telecom, and software engineering." },
+            { id: 246, title: "Datadog Careers", category: "Company Career", region: "Global", url: "https://www.datadoghq.com/careers", desc: "Cloud monitoring, observability infrastructure, and DevOps tools." },
+            { id: 247, title: "Snowflake Careers", category: "Company Career", region: "Global", url: "https://careers.snowflake.com", desc: "Cloud data warehousing, data engineering, and enterprise analytics." },
+            { id: 248, title: "Palantir Careers", category: "Company Career", region: "Global", url: "https://www.palantir.com/careers", desc: "Big data analytics, defense software, and enterprise AI systems." },
+            { id: 249, title: "SpaceX Careers", category: "Company Career", region: "North America", url: "https://www.spacex.com/careers", desc: "Aerospace engineering, Starlink satellite operations, and manufacturing." },
+            { id: 250, title: "Cloudflare Careers", category: "Company Career", region: "Global", url: "https://www.cloudflare.com/careers", desc: "CDN infrastructure, web security engineering, and edge computing." },
+            { id: 251, title: "AMD Careers", category: "Company Career", region: "Global", url: "https://www.amd.com/en/corporate/careers", desc: "Processor architecture, GPU design, and semiconductor engineering." },
+            { id: 252, title: "Qualcomm Careers", category: "Company Career", region: "Global", url: "https://www.qualcomm.com/company/careers", desc: "5G technology, Snapdragon processors, and wireless communications." },
+            { id: 253, title: "Broadcom Careers", category: "Company Career", region: "Global", url: "https://www.broadcom.com/company/careers", desc: "Semiconductor solutions and infrastructure software engineering." },
+            { id: 254, title: "Micron Careers", category: "Company Career", region: "Global", url: "https://www.micron.com/careers", desc: "Memory and storage hardware development, DRAM, and NAND flash." },
+            { id: 255, title: "Applied Materials", category: "Company Career", region: "Global", url: "https://www.appliedmaterials.com/us/en/careers.html", desc: "Semiconductor equipment engineering and materials science." },
+            { id: 256, title: "ASML Careers", category: "Company Career", region: "Global", url: "https://www.asml.com/en/careers", desc: "Photolithography systems for semiconductor chip manufacturers." },
+            { id: 257, title: "Sony Careers", category: "Company Career", region: "Global", url: "https://www.sony.com/en/SonyInfo/Careers/", desc: "PlayStation gaming, image sensors, music, and consumer electronics." },
+            { id: 258, title: "Panasonic Careers", category: "Company Career", region: "Global", url: "https://holdings.panasonic/global/corporate/careers.html", desc: "EV battery technology, industrial automation, and avionics." },
+            { id: 259, title: "LG Electronics Careers", category: "Company Career", region: "Global", url: "https://www.lg.com/global/careers", desc: "Home appliances, OLED displays, and vehicle component solutions." },
+            { id: 260, title: "Dell Technologies", category: "Company Career", region: "Global", url: "https://jobs.dell.com", desc: "Enterprise server hardware, laptops, and IT infrastructure solutions." },
+            { id: 261, title: "HP Inc. Careers", category: "Company Career", region: "Global", url: "https://jobs.hp.com", desc: "Personal computing, 3D printing systems, and corporate hardware." },
+            { id: 262, title: "HPE (Hewlett Packard Enterprise)", category: "Company Career", region: "Global", url: "https://careers.hpe.com", desc: "Edge-to-cloud platform engineering, HPC, and enterprise storage." },
+            { id: 263, title: "Lenovo Careers", category: "Company Career", region: "Global", url: "https://jobs.lenovo.com", desc: "Smart devices, ThinkPad development, and server infrastructure." },
+            { id: 264, title: "Workday Careers", category: "Company Career", region: "Global", url: "https://www.workday.com/en-us/company/careers.html", desc: "Cloud ERP, HCM software engineering, and enterprise sales." },
+            { id: 265, title: "ServiceNow Careers", category: "Company Career", region: "Global", url: "https://www.servicenow.com/careers.html", desc: "Enterprise workflow automation platform software development." },
+            { id: 266, title: "Intuit Careers", category: "Company Career", region: "Global", url: "https://www.intuit.com/careers", desc: "TurboTax, QuickBooks, and Mailchimp fintech software engineering." },
+            { id: 267, title: "Autodesk Careers", category: "Company Career", region: "Global", url: "https://www.autodesk.com/careers", desc: "AutoCAD, 3ds Max, and industrial design software development." },
+            { id: 268, title: "VMware Careers", category: "Company Career", region: "Global", url: "https://careers.vmware.com", desc: "Virtualization software, multi-cloud management, and networking." },
+            { id: 269, title: "Red Hat Careers", category: "Company Career", region: "Global", url: "https://www.redhat.com/en/jobs", desc: "Enterprise Linux, OpenShift, and open-source cloud solutions." },
+            { id: 270, title: "Palo Alto Networks", category: "Company Career", region: "Global", url: "https://jobs.paloaltonetworks.com", desc: "Next-generation firewalls, cloud security, and threat intelligence." },
+            { id: 271, title: "Fortinet Careers", category: "Company Career", region: "Global", url: "https://jobs.fortinet.com", desc: "Cybersecurity software, security fabric, and network protection." },
+            { id: 272, title: "CrowdStrike Careers", category: "Company Career", region: "Global", url: "https://www.crowdstrike.com/careers", desc: "Falcon platform endpoint security, cloud security, and threat research." },
+            { id: 273, title: "Zscaler Careers", category: "Company Career", region: "Global", url: "https://www.zscaler.com/careers", desc: "Zero Trust cloud security architecture and network engineering." },
+            { id: 274, title: "Okta Careers", category: "Company Career", region: "Global", url: "https://www.okta.com/company/careers", desc: "Identity management, single sign-on security, and API protection." },
+            { id: 275, title: "Splunk Careers", category: "Company Career", region: "Global", url: "https://www.splunk.com/en_us/careers.html", desc: "Data observability, SIEM security analysis, and log management." },
+            { id: 276, title: "Elastic Careers", category: "Company Career", region: "Global", url: "https://www.elastic.co/about/careers", desc: "Elasticsearch, Kibana, and search-powered AI solution development." },
+            { id: 277, title: "MongoDB Careers", category: "Company Career", region: "Global", url: "https://www.mongodb.com/careers", desc: "NoSQL document database architecture and Atlas cloud engine." },
+            { id: 278, title: "Confluent Careers", category: "Company Career", region: "Global", url: "https://www.confluent.io/careers", desc: "Apache Kafka event-streaming platform software engineering." },
+            { id: 279, title: "Databricks Careers", category: "Company Career", region: "Global", url: "https://www.databricks.com/company/careers", desc: "Lakehouse architecture, Apache Spark, and unified data analytics." },
+            { id: 280, title: "GitLab Careers", category: "Company Career", region: "Global", url: "https://about.gitlab.com/jobs", desc: "All-remote DevOps platform software engineering and product roles." },
+            { id: 281, title: "GitHub Careers", category: "Company Career", region: "Global", url: "https://github.com/about/careers", desc: "Developer workflow platforms, Copilot AI development, and open source." },
+            { id: 282, title: "Docker Careers", category: "Company Career", region: "Global", url: "https://www.docker.com/careers", desc: "Containerization platform development and developer tools." },
+            { id: 283, title: "HashiCorp Careers", category: "Company Career", region: "Global", url: "https://www.hashicorp.com/jobs", desc: "Terraform, Vault, and cloud infrastructure automation tools." },
+            { id: 284, title: "Unity Technologies", category: "Company Career", region: "Global", url: "https://careers.unity.com", desc: "Real-time 3D engine, game development tools, and monetization." },
+            { id: 285, title: "Epic Games Careers", category: "Company Career", region: "Global", url: "https://www.epicgames.com/site/en-US/careers", desc: "Unreal Engine, Fortnite ecosystem development, and graphics engineering." },
+            { id: 286, title: "Roblox Careers", category: "Company Career", region: "Global", url: "https://careers.roblox.com", desc: "Metaverse engine, creator tools, and real-time multiplayer tech." },
+            { id: 287, title: "EA (Electronic Arts)", category: "Company Career", region: "Global", url: "https://www.ea.com/careers", desc: "EA Sports, Frostbite engine development, and triple-A game design." },
+            { id: 288, title: "Ubisoft Careers", category: "Company Career", region: "Global", url: "https://www.ubisoft.com/en-us/company/careers", desc: "Game production studios, narrative design, and engine programming." },
+            { id: 289, title: "Take-Two Interactive", category: "Company Career", region: "Global", url: "https://www.take2games.com/careers", desc: "Rockstar Games, 2K Sports, and mobile publishing technology." },
+            { id: 290, title: "Activision Blizzard", category: "Company Career", region: "Global", url: "https://careers.activisionblizzard.com", desc: "Call of Duty, World of Warcraft, and mobile game engineering." },
+            { id: 291, title: "Square Enix Careers", category: "Company Career", region: "Global", url: "https://www.jp.square-enix.com/company/en/jobs/", desc: "RPG game creation, 3D character animation, and game audio." },
+            { id: 292, title: "Nintendo Careers", category: "Company Career", region: "Global", url: "https://www.nintendo.com/careers", desc: "Console hardware, game software publishing, and IP licensing." },
+            { id: 293, title: "Bandai Namco Careers", category: "Company Career", region: "Global", url: "https://www.bandainamcoent.com/careers", desc: "Arcade, console, and anime IP video game development." },
+            { id: 294, title: "Capcom Careers", category: "Company Career", region: "Global", url: "https://www.capcom.co.jp/ir/english/career/", desc: "RE Engine technology, action gaming, and character design." },
+            { id: 295, title: "Sega Careers", category: "Company Career", region: "Global", url: "https://www.sega.co.uk/careers", desc: "PC strategy gaming, mobile development, and arcade systems." },
+            { id: 296, title: "Riot Games Careers", category: "Company Career", region: "Global", url: "https://www.riotgames.com/en/work-with-us", desc: "League of Legends, Valorant, and esports production technology." },
+            { id: 297, title: "Valve Careers", category: "Company Career", region: "North America", url: "https://www.valvesoftware.com/en/jobs", desc: "Steam platform distribution, Source engine, and hardware VR." },
+            { id: 298, title: "Bungie Careers", category: "Company Career", region: "North America", url: "https://www.bungie.net/en/Careers", desc: "Destiny franchise world creation, networking, and game engine tech." },
+            { id: 299, title: "Niantic Careers", category: "Company Career", region: "Global", url: "https://nianticlabs.com/careers", desc: "Real-world AR platforms, Pokemon GO engineering, and geospatial tech." },
+            { id: 300, title: "Warner Bros. Discovery", category: "Company Career", region: "Global", url: "https://careers.wbd.com", desc: "HBO Max streaming infrastructure, film studios, and gaming." },
+            { id: 301, title: "Disney Careers", category: "Company Career", region: "Global", url: "https://jobs.disneycareers.com", desc: "Disney+ streaming tech, parks imagineering, and media distribution." },
+            { id: 302, title: "Paramount Careers", category: "Company Career", region: "Global", url: "https://careers.paramount.com", desc: "Broadcast networks, streaming platforms, and television media production." },
+            { id: 303, title: "Comcast NBCUniversal", category: "Company Career", region: "Global", url: "https://jobs.comcast.com", desc: "Telecommunications engineering, Peacock streaming, and broadcasting." },
+            { id: 304, title: "Sony Pictures Careers", category: "Company Career", region: "Global", url: "https://www.sonypictures.com/careers", desc: "Film distribution, digital VFX production, and studio tech." },
+            { id: 305, title: "Universal Music Group", category: "Company Career", region: "Global", url: "https://www.universalmusic.com/careers", desc: "Music catalog engineering, digital streaming, and artist management." },
+            { id: 306, title: "Warner Music Group", category: "Company Career", region: "Global", url: "https://www.wmg.com/careers", desc: "Music publishing technology, digital licensing, and brand partnerships." },
+            { id: 307, title: "Sony Music Careers", category: "Company Career", region: "Global", url: "https://www.sonymusic.com/careers", desc: "Audio recording distribution, A&R management, and royalty software." },
+            { id: 308, title: "Live Nation Careers", category: "Company Career", region: "Global", url: "https://www.livenationentertainment.com/careers", desc: "Concert promotion, Ticketmaster ticketing tech, and live events." },
+            { id: 309, title: "Booking.com Careers", category: "Company Career", region: "Global", url: "https://careers.booking.com", desc: "Travel booking engines, hotel tech infrastructure, and search." },
+            { id: 310, title: "Expedia Group Careers", category: "Company Career", region: "Global", url: "https://www.expediagroup.com/careers", desc: "Vrbo, Hotels.com, and flight search algorithm development." },
+            { id: 311, title: "Tripadvisor Careers", category: "Company Career", region: "Global", url: "https://careers.tripadvisor.com", desc: "Travel review platforms, experiences, and hospitality technology." },
+            { id: 312, title: "Lyft Careers", category: "Company Career", region: "North America", url: "https://www.lyft.com/careers", desc: "Rideshare routing algorithms, driver dispatch, and transit tech." },
+            { id: 313, title: "DoorDash Careers", category: "Company Career", region: "Global", url: "https://careers.doordash.com", desc: "Food delivery logistics, dispatch software, and merchant platforms." },
+            { id: 314, title: "Instacart Careers", category: "Company Career", region: "North America", url: "https://instacart.careers", desc: "Grocery delivery app development, inventory search, and logistics." },
+            { id: 315, title: "Grubhub Careers", category: "Company Career", region: "North America", url: "https://careers.grubhub.com", desc: "Restaurant ordering infrastructure, POS integration, and delivery." },
+            { id: 316, title: "Deliveroo Careers", category: "Company Career", region: "Global", url: "https://careers.deliveroo.co.uk", desc: "Food logistics platforms, rider algorithms, and merchant portals." },
+            { id: 317, title: "Just Eat Takeaway", category: "Company Career", region: "Global", url: "https://careers.justeattakeaway.com", desc: "International food delivery network software and regional logistics." },
+            { id: 318, title: "PayPal Careers", category: "Company Career", region: "Global", url: "https://www.paypal.com/us/webapps/mpp/jobs", desc: "Venmo, Braintree, and global payment processing systems." },
+            { id: 319, title: "Block (Square) Careers", category: "Company Career", region: "Global", url: "https://block.xyz/careers", desc: "Cash App, Square POS hardware, and decentralized finance." },
+            { id: 320, title: "Adyen Careers", category: "Company Career", region: "Global", url: "https://careers.adyen.com", desc: "Omnichannel payment gateways, fraud prevention, and merchant tools." },
+            { id: 321, title: "Klarna Careers", category: "Company Career", region: "Global", url: "https://www.klarna.com/careers", desc: "Buy-now-pay-later fintech solutions, shopping apps, and risk." },
+            { id: 322, title: "Revolut Careers", category: "Company Career", region: "Global", url: "https://www.revolut.com/careers", desc: "Digital banking, multi-currency wallets, and crypto trading apps." },
+            { id: 323, title: "Monzo Careers", category: "Company Career", region: "Europe", url: "https://monzo.com/careers", desc: "UK digital bank platform engineering and customer experience." },
+            { id: 324, title: "N26 Careers", category: "Company Career", region: "Europe", url: "https://n26.com/en-eu/careers", desc: "Mobile banking app architecture, European compliance, and security." },
+            { id: 325, title: "Mastercard Careers", category: "Company Career", region: "Global", url: "https://careers.mastercard.com", desc: "Credit card payment networks, cybersecurity, and financial APIs." },
+            { id: 326, title: "Visa Careers", category: "Company Career", region: "Global", url: "https://usa.visa.com/careers.html", desc: "Global transaction routing, payment security, and digital wallets." },
+            { id: 327, title: "American Express Jobs", category: "Company Career", region: "Global", url: "https://aexp.eightfold.ai/careers", desc: "Financial services, credit card rewards platforms, and banking." },
+            { id: 328, title: "Capital One Careers", category: "Company Career", region: "North America", url: "https://www.capitalonecareers.com", desc: "Cloud banking, credit algorithms, and mobile financial apps." },
+            { id: 329, title: "Morgan Stanley", category: "Company Career", region: "Global", url: "https://www.morganstanley.com/people", desc: "Wealth management, capital markets, and financial trading systems." },
+            { id: 330, title: "Bank of America", category: "Company Career", region: "Global", url: "https://careers.bankofamerica.com", desc: "Consumer banking, Erica AI assistant development, and trading." },
+            { id: 331, title: "Citi Careers", category: "Company Career", region: "Global", url: "https://jobs.citi.com", desc: "Institutional banking, cross-border payments, and risk management." },
+            { id: 332, title: "Wells Fargo Careers", category: "Company Career", region: "Global", url: "https://www.wellsfargo.com/about/careers", desc: "Mortgage systems, commercial banking, and financial technology." },
+            { id: 333, title: "Barclays Careers", category: "Company Career", region: "Global", url: "https://home.barclays/careers", desc: "British multinational investment bank and financial services." },
+            { id: 334, title: "HSBC Careers", category: "Company Career", region: "Global", url: "https://www.hsbc.com/careers", desc: "Global trade finance, commercial banking, and wealth services." },
+            { id: 335, title: "BNP Paribas Careers", category: "Company Career", region: "Global", url: "https://group.bnpparibas/en/careers", desc: "European banking, insurance, and corporate financial advisory." },
+            { id: 336, title: "UBS Careers", category: "Company Career", region: "Global", url: "https://www.ubs.com/global/en/careers.html", desc: "Swiss wealth management, asset management, and investment banking." },
+            { id: 337, title: "Credit Suisse (UBS)", category: "Company Career", region: "Global", url: "https://www.credit-suisse.com/careers", desc: "Global private banking and wealth management operations." },
+            { id: 338, title: "Deutsche Bank Careers", category: "Company Career", region: "Global", url: "https://careers.db.com", desc: "German corporate banking, FX trading, and financial technology." },
+            { id: 339, title: "Santander Careers", category: "Company Career", region: "Global", url: "https://www.santander.com/en/careers", desc: "Retail banking across Europe and South America, digital wallets." },
+            { id: 340, title: "BBVA Careers", category: "Company Career", region: "Global", url: "https://www.bbva.com/en/careers/", desc: "Digital banking innovation, financial software, and retail loans." },
 
-            // Regional & South African Portals (71-85)
-            { id: 71, title: "Careers24", category: "Regional", region: "South Africa", url: "https://www.careers24.com", desc: "Major South African job portal listing corporate and regional vacancies." },
-            { id: 72, title: "Pnet", category: "Regional", region: "South Africa", url: "https://www.pnet.co.za", desc: "Leading online recruitment site in South Africa for professional careers." },
-            { id: 73, title: "Job Mail", category: "Regional", region: "South Africa", url: "https://www.jobmail.co.za", desc: "South African portal for general employment, trade work, and retail roles." },
-            { id: 74, title: "Bizcommunity Jobs", category: "Regional", region: "South Africa", url: "https://www.bizcommunity.com/Jobs", desc: "South Africa's top platform for marketing, media, advertising, and PR roles." },
-            { id: 75, title: "Best Jobs SA", category: "Regional", region: "South Africa", url: "https://www.bestjobs.co.za", desc: "Regional job directory across various provinces and sectors in SA." },
-            { id: 76, title: "OfferZen", category: "Regional", region: "South Africa / EU", url: "https://www.offerzen.com", desc: "Tech talent marketplace connecting developers directly with top SA/EU firms." },
-            { id: 77, title: "Government Jobs SA", category: "Regional", region: "South Africa", url: "https://www.gov.za/about-government/vacancies-government", desc: "Official vacancy directory for South African public sector and civil service." },
-            { id: 78, title: "Seek", category: "Regional", region: "Australia / NZ", url: "https://www.seek.com.au", desc: "Australia and New Zealand's dominant employment marketplace board." },
-            { id: 79, title: "Reed.co.uk", category: "Regional", region: "United Kingdom", url: "https://www.reed.co.uk", desc: "One of the UK's leading online recruitment sites and training providers." },
-            { id: 80, title: "CV-Library", category: "Regional", region: "United Kingdom", url: "https://www.cv-library.co.uk", desc: "Independent UK job board with thousands of nationwide vacancies." },
-            { id: 81, title: "Totaljobs", category: "Regional", region: "United Kingdom", url: "https://www.totaljobs.com", desc: "UK portal connecting job seekers with employment agencies and employers." },
-            { id: 82, title: "StepStone", category: "Regional", region: "Europe", url: "https://www.stepstone.de", desc: "Major European digital recruitment platform headquartered in Germany." },
-            { id: 83, title: "Naukri", category: "Regional", region: "India", url: "https://www.naukri.com", desc: "India's premier job portal across IT, engineering, and corporate sectors." },
-            { id: 84, title: "Bayt", category: "Regional", region: "Middle East", url: "https://www.bayt.com", desc: "The leading recruitment job board serving the Gulf region and Middle East." },
-            { id: 85, title: "JobStreet", category: "Regional", region: "Southeast Asia", url: "https://www.jobstreet.com", desc: "Dominant job portal serving Malaysia, Singapore, Philippines, and Indonesia." },
+            // Regional & South African Portals (341-430)
+            { id: 341, title: "Careers24", category: "Regional", region: "South Africa", url: "https://www.careers24.com", desc: "Major South African job portal listing corporate and regional vacancies." },
+            { id: 342, title: "Pnet", category: "Regional", region: "South Africa", url: "https://www.pnet.co.za", desc: "Leading online recruitment site in South Africa for professional careers." },
+            { id: 343, title: "Job Mail", category: "Regional", region: "South Africa", url: "https://www.jobmail.co.za", desc: "South African portal for general employment, trade work, and retail roles." },
+            { id: 344, title: "Bizcommunity Jobs", category: "Regional", region: "South Africa", url: "https://www.bizcommunity.com/Jobs", desc: "South Africa's top platform for marketing, media, advertising, and PR roles." },
+            { id: 345, title: "Best Jobs SA", category: "Regional", region: "South Africa", url: "https://www.bestjobs.co.za", desc: "Regional job directory across various provinces and sectors in SA." },
+            { id: 346, title: "OfferZen", category: "Regional", region: "South Africa / EU", url: "https://www.offerzen.com", desc: "Tech talent marketplace connecting developers directly with top SA/EU firms." },
+            { id: 347, title: "Government Jobs SA", category: "Regional", region: "South Africa", url: "https://www.gov.za/about-government/vacancies-government", desc: "Official vacancy directory for South African public sector and civil service." },
+            { id: 348, title: "Seek", category: "Regional", region: "Australia / NZ", url: "https://www.seek.com.au", desc: "Australia and New Zealand's dominant employment marketplace board." },
+            { id: 349, title: "Reed.co.uk", category: "Regional", region: "United Kingdom", url: "https://www.reed.co.uk", desc: "One of the UK's leading online recruitment sites and training providers." },
+            { id: 350, title: "CV-Library", category: "Regional", region: "United Kingdom", url: "https://www.cv-library.co.uk", desc: "Independent UK job board with thousands of nationwide vacancies." },
+            { id: 351, title: "Totaljobs", category: "Regional", region: "United Kingdom", url: "https://www.totaljobs.com", desc: "UK portal connecting job seekers with employment agencies and employers." },
+            { id: 352, title: "StepStone", category: "Regional", region: "Europe", url: "https://www.stepstone.de", desc: "Major European digital recruitment platform headquartered in Germany." },
+            { id: 353, title: "Naukri", category: "Regional", region: "India", url: "https://www.naukri.com", desc: "India's premier job portal across IT, engineering, and corporate sectors." },
+            { id: 354, title: "Bayt", category: "Regional", region: "Middle East", url: "https://www.bayt.com", desc: "The leading recruitment job board serving the Gulf region and Middle East." },
+            { id: 355, title: "JobStreet", category: "Regional", region: "Southeast Asia", url: "https://www.jobstreet.com", desc: "Dominant job portal serving Malaysia, Singapore, Philippines, and Indonesia." },
+            { id: 356, title: "Gumtree SA Jobs", category: "Regional", region: "South Africa", url: "https://www.gumtree.co.za/s-jobs/v1c8p1", desc: "Local South African classifieds board for general labor and trade jobs." },
+            { id: 357, title: "SA Jobs", category: "Regional", region: "South Africa", url: "https://www.sajobs.co.za", desc: "Established South African portal indexing public and private vacancies." },
+            { id: 358, title: "JobVine SA", category: "Regional", region: "South Africa", url: "https://www.jobvine.co.za", desc: "South African job marketplace and recruitment social directory." },
+            { id: 359, title: "BrighterMonday", category: "Regional", region: "East Africa", url: "https://www.brightermonday.co.ke", desc: "Leading job platform in Kenya and East Africa for corporate careers." },
+            { id: 360, title: "Jobberman", category: "Regional", region: "West Africa", url: "https://www.jobberman.com", desc: "West Africa's largest job placement engine and career portal." },
+            { id: 361, title: "CWJobs", category: "Regional", region: "United Kingdom", url: "https://www.cwjobs.co.uk", desc: "Specialist IT and tech job board for candidates across the UK." },
+            { id: 362, title: "Catho", category: "Regional", region: "Latin America", url: "https://www.catho.com.br", desc: "Brazil's leading corporate employment network and job directory." },
+            { id: 363, title: "Xing Jobs", category: "Regional", region: "Europe", url: "https://www.xing.com/jobs", desc: "Professional network and career portal for German-speaking Europe (DACH)." },
+            { id: 364, title: "Monster Gulf", category: "Regional", region: "Middle East", url: "https://www.founditgulf.com", desc: "Middle Eastern career hub connecting professionals with UAE/Gulf employers." },
+            { id: 365, title: "Workopolis", category: "Regional", region: "Canada", url: "https://www.workopolis.com", desc: "Canada-focused job search board aggregating nationwide listings." },
+            { id: 366, title: "Indeed SA", category: "Regional", region: "South Africa", url: "https://za.indeed.com", desc: "South African localized edition of Indeed job aggregator." },
+            { id: 367, title: "LinkedIn SA", category: "Regional", region: "South Africa", url: "https://za.linkedin.com/jobs", desc: "South African localized hub for LinkedIn professional postings." },
+            { id: 368, title: "Adzuna SA", category: "Regional", region: "South Africa", url: "https://www.adzuna.co.za", desc: "Localized South African job engine with regional salary breakdowns." },
+            { id: 369, title: "CareerJunction", category: "Regional", region: "South Africa", url: "https://www.careerjunction.co.za", desc: "Leading SA recruitment portal with detailed job alerts and resume matching." },
+            { id: 370, title: "StudentGems SA", category: "Regional", region: "South Africa", url: "https://www.studentgems.com", desc: "Part-time, freelance, and graduate jobs for South African students." },
+            { id: 371, title: "Proffos SA", category: "Regional", region: "South Africa", url: "https://proffos.co.za", desc: "Niche South African executive search and professional career portal." },
+            { id: 372, title: "Giraffe SA", category: "Regional", region: "South Africa", url: "https://www.giraffe.co.za", desc: "Mobile-first recruitment agency for medium and entry-level SA roles." },
+            { id: 373, title: "Teach SA", category: "Regional", region: "South Africa", url: "https://www.teachsa.org", desc: "Teaching and educational placement directory across South Africa." },
+            { id: 374, title: "DPSA Circular", category: "Regional", region: "South Africa", url: "https://www.dpsa.gov.za/dpsa2g/vacancies.asp", desc: "Department of Public Service and Administration official SA vacancy circulars." },
+            { id: 375, title: "Transnet Careers", category: "Regional", region: "South Africa", url: "https://www.transnet.net/Career/Pages/Careers.aspx", desc: "Official careers portal for South African rail, port, and pipeline logistics." },
+            { id: 376, title: "Eskom Vacancies", category: "Regional", region: "South Africa", url: "https://mscm.eskom.co.za/sites/recruitment/Pages/Careers.aspx", desc: "Engineering, technician, and administrative vacancies at Eskom SA." },
+            { id: 377, title: "Sasol Careers", category: "Regional", region: "South Africa", url: "https://www.sasol.com/careers", desc: "Chemical, energy, and engineering opportunities across Sasol plants." },
+            { id: 378, title: "Standard Bank Careers", category: "Regional", region: "South Africa", url: "https://www.standardbank.com/sbg/standard-bank-group/careers", desc: "Largest African bank financial technology and corporate vacancies." },
+            { id: 379, title: "Absa Group Careers", category: "Regional", region: "South Africa", url: "https://www.absa.africa/absaafrica/careers/", desc: "Financial advisory, software engineering, and banking roles at Absa." },
+            { id: 380, title: "Nedbank Careers", category: "Regional", region: "South Africa", url: "https://jobs.nedbank.co.za", desc: "Commercial banking, risk, and software development positions at Nedbank." },
+            { id: 381, title: "FirstRand Careers", category: "Regional", region: "South Africa", url: "https://www.firstrand.co.za/careers/", desc: "Parent company of FNB, RMB, and WesBank job directory." },
+            { id: 382, title: "Capitec Careers", category: "Regional", region: "South Africa", url: "https://www.capitecbank.co.za/about-us/careers/", desc: "Fast-growing SA retail bank engineering, branch, and data roles." },
+            { id: 383, title: "Shoprite Careers", category: "Regional", region: "South Africa", url: "https://www.shopriteholdings.co.za/careers.html", desc: "Retail operations, supply chain, and IT jobs at Africa's largest retailer." },
+            { id: 384, title: "Pick n Pay Careers", category: "Regional", region: "South Africa", url: "https://www.pnp.co.za/pnp/view/pnp/en/careers", desc: "Supermarket retail management, distribution, and corporate roles." },
+            { id: 385, title: "Woolworths SA Careers", category: "Regional", region: "South Africa", url: "https://www.woolworths.co.za/dept/Corporate/Careers/_/N-17zk3q4", desc: "Retail fashion, food technology, and supply chain management at Woolies." },
+            { id: 386, title: "Discovery SA Careers", category: "Regional", region: "South Africa", url: "https://www.discovery.co.za/corporate/careers", desc: "Health insurance, Vitality tech, banking, and actuarial roles." },
+            { id: 387, title: "Old Mutual Careers", category: "Regional", region: "South Africa", url: "https://www.oldmutual.co.za/careers/", desc: "Pan-African financial service, insurance, and investment management." },
+            { id: 388, title: "Sanlam Careers", category: "Regional", region: "South Africa", url: "https://www.sanlam.co.za/about/careers/Pages/default.aspx", desc: "Wealth structuring, life insurance, and asset management careers." },
+            { id: 389, title: "MTN Group Careers", category: "Regional", region: "South Africa / Africa", url: "https://www.mtn.com/careers/", desc: "Telecommunications network engineering, fintech, and mobile money." },
+            { id: 390, title: "Vodacom SA Careers", category: "Regional", region: "South Africa", url: "https://www.vodacom.com/careers.php", desc: "Mobile network technology, cloud solutions, and digital services." },
+            { id: 391, title: "Telkom SA Careers", category: "Regional", region: "South Africa", url: "https://www.telkom.co.za/about_us/careers/", desc: "Telecom infrastructure, fiber operations, and BCX enterprise IT." },
+            { id: 392, title: "MultiChoice Careers", category: "Regional", region: "South Africa", url: "https://www.multichoice.com/careers/", desc: "DStv, Showmax streaming tech, broadcast media, and video engineering." },
+            { id: 393, title: "Naspers Careers", category: "Regional", region: "South Africa", url: "https://www.naspers.com/careers", desc: "Global consumer internet group and tech investor career portal." },
+            { id: 394, title: "Takealot Careers", category: "Regional", region: "South Africa", url: "https://www.takealot.com/careers", desc: "South Africa's premier e-commerce platform tech and logistics jobs." },
+            { id: 395, title: "Mr Price Group", category: "Regional", region: "South Africa", url: "https://www.mrpricegroup.com/mr-price-group-careers.aspx", desc: "Fashion, retail logistics, and digital commerce roles." },
+            { id: 396, title: "Click-A-Job UK", category: "Regional", region: "United Kingdom", url: "https://www.clickajob.co.uk", desc: "United Kingdom job engine indexing regional agency vacancies." },
+            { id: 397, title: "Jobsite UK", category: "Regional", region: "United Kingdom", url: "https://www.jobsite.co.uk", desc: "Established UK job search platform for technical and commercial jobs." },
+            { id: 398, title: "Monster DE", category: "Regional", region: "Europe", url: "https://www.monster.de", desc: "German regional job engine for engineering and corporate careers." },
+            { id: 399, title: "JobScout24 CH", category: "Regional", region: "Europe", url: "https://www.jobscout24.ch", desc: "Swiss employment portal for regional and multilingual vacancies." },
+            { id: 400, title: "Cadremploi FR", category: "Regional", region: "Europe", url: "https://www.cadremploi.fr", desc: "French management and executive placement search portal." },
+            { id: 401, title: "APEC France", category: "Regional", region: "Europe", url: "https://www.apec.fr", desc: "French executive employment and executive candidate portal." },
+            { id: 402, title: "InfoJobs ES", category: "Regional", region: "Europe", url: "https://www.infojobs.net", desc: "Spain's premier online private job search directory." },
+            { id: 403, title: "InfoJobs IT", category: "Regional", region: "Europe", url: "https://www.infojobs.it", desc: "Italian recruitment search engine and candidate listing system." },
+            { id: 404, title: "JobIndex DK", category: "Regional", region: "Europe", url: "https://www.jobindex.dk", desc: "Denmark's largest online recruitment and career management system." },
+            { id: 405, title: "FINN.no Jobs", category: "Regional", region: "Europe", url: "https://www.finn.no/jobb/", desc: "Norway's primary national marketplace and employment registry." },
+            { id: 406, title: "Platsbanken SE", category: "Regional", region: "Europe", url: "https://arbetsformedlingen.se/platsbanken/", desc: "Swedish Public Employment Service national job bank." },
+            { id: 407, title: "Oikotie FI", category: "Regional", region: "Europe", url: "https://tyopaikat.oikotie.fi", desc: "Finland's leading commercial career platform and corporate hub." },
+            { id: 408, title: "Praca.pl", category: "Regional", region: "Europe", url: "https://www.praca.pl", desc: "Polish national job search engine for corporate and technical candidates." },
+            { id: 409, title: "Profesia SK", category: "Regional", region: "Europe", url: "https://www.profesia.sk", desc: "Slovakia and Central Europe's top recruitment board." },
+            { id: 410, title: "Jobs.cz", category: "Regional", region: "Europe", url: "https://www.jobs.cz", desc: "Czech Republic's premier corporate and software career portal." },
+            { id: 411, title: "51job China", category: "Regional", region: "Asia", url: "https://www.51job.com", desc: "China's massive integrated human resources service platform." },
+            { id: 412, title: "Zhaopin China", category: "Regional", region: "Asia", url: "https://www.zhaopin.com", desc: "Major Chinese career and enterprise recruitment network." },
+            { id: 413, title: "Rikunabi Japan", category: "Regional", region: "Asia", url: "https://job.rikunabi.com", desc: "Recruit Group's premier Japanese graduate and career portal." },
+            { id: 414, title: "Mynavi Japan", category: "Regional", region: "Asia", url: "https://job.mynavi.jp", desc: "Japanese enterprise and graduate job search network." },
+            { id: 415, title: "Saramin Korea", category: "Regional", region: "Asia", url: "https://www.saramin.co.kr", desc: "South Korea's leading employment matching platform." },
+            { id: 416, title: "JobKorea", category: "Regional", region: "Asia", url: "https://www.jobkorea.co.kr", desc: "Major Korean online employment portal for tech and enterprise." },
+            { id: 417, title: "104 Job Bank TW", category: "Regional", region: "Asia", url: "https://www.104.com.tw", desc: "Taiwan's dominant corporate job search engine." },
+            { id: 418, title: "JobDBs HK", category: "Regional", region: "Asia", url: "https://hk.jobsdb.com", desc: "Hong Kong's premier recruitment and career development portal." },
+            { id: 419, title: "Jobstreet SG", category: "Regional", region: "Asia", url: "https://www.jobstreet.com.sg", desc: "Singapore localized edition of JobStreet career board." },
+            { id: 420, title: "MyCareersFuture SG", category: "Regional", region: "Asia", url: "https://www.mycareersfuture.gov.sg", desc: "Government portal for Singaporean citizens and permanent residents." },
+            { id: 421, title: "FastJobs SG", category: "Regional", region: "Asia", url: "https://www.fastjobs.sg", desc: "Manual, service, and operational job network in Southeast Asia." },
+            { id: 422, title: "JobsDB Thailand", category: "Regional", region: "Asia", url: "https://th.jobsdb.com", desc: "Thailand's corporate and technical career portal." },
+            { id: 423, title: "VietnamWorks", category: "Regional", region: "Asia", url: "https://www.vietnamworks.com", desc: "Vietnam's largest online job placement platform." },
+            { id: 424, title: "TopCV Vietnam", category: "Regional", region: "Asia", url: "https://www.topcv.vn", desc: "Fast-growing Vietnamese recruitment and resume portal." },
+            { id: 425, title: "Glints SEA", category: "Regional", region: "Asia", url: "https://glints.com", desc: "Southeast Asian career discovery and recruitment platform." },
+            { id: 426, title: "KaziRemote Kenya", category: "Regional", region: "East Africa", url: "https://kaziremote.com", desc: "East African platform matching local talent with international roles." },
+            { id: 427, title: "MyJobMag Nigeria", category: "Regional", region: "West Africa", url: "https://www.myjobmag.com", desc: "Nigerian vacancy listing directory and career guide." },
+            { id: 428, title: "Careers in Africa", category: "Regional", region: "Africa", url: "https://www.careersinafrica.com", desc: "Global hub recruiting international African diaspora candidates back to Africa." },
+            { id: 429, title: "Akhtaboot Middle East", category: "Regional", region: "Middle East", url: "https://www.akhtaboot.com", desc: "Career network serving Levant and MENA region job seekers." },
+            { id: 430, title: "Mascus Global", category: "Regional", region: "Global", url: "https://www.mascus.com/careers", desc: "Heavy machinery and industrial equipment global trade portal." },
 
-            // Freelance & Gig Economy Platforms (86-102)
-            { id: 86, title: "Upwork", category: "Freelance", region: "Global", url: "https://www.upwork.com", desc: "Global freelancing platform for software, design, writing, and consulting." },
-            { id: 87, title: "Fiverr", category: "Freelance", region: "Global", url: "https://www.fiverr.com", desc: "Online marketplace for freelance digital services and creative micro-tasks." },
-            { id: 88, title: "Freelancer", category: "Freelance", region: "Global", url: "https://www.freelancer.com", desc: "Crowdsourcing marketplace for coding, copywriting, and data entry jobs." },
-            { id: 89, title: "PeoplePerHour", category: "Freelance", region: "Global", url: "https://www.peopleperhour.com", desc: "UK-based freelance platform for web developers, designers, and marketers." },
-            { id: 90, title: "Guru", category: "Freelance", region: "Global", url: "https://www.guru.com", desc: "Network connecting businesses with freelance technical and creative experts." },
-            { id: 91, title: "99designs", category: "Freelance", region: "Global", url: "https://99designs.com", desc: "Creative graphic design platform for logos, packaging, and digital assets." },
-            { id: 92, title: "SimplyHired Freelance", category: "Freelance", region: "Global", url: "https://www.simplyhired.com/search?q=freelance", desc: "Filtered index of contract and freelance roles aggregated across boards." },
-            { id: 93, title: "Contra", category: "Freelance", region: "Global", url: "https://contra.com", desc: "Commission-free freelance network built for modern digital creators." },
-            { id: 94, title: "DesignHill", category: "Freelance", region: "Global", url: "https://www.designhill.com", desc: "Marketplace for custom graphic design contests and freelance design gigs." },
-            { id: 95, title: "TaskRabbit", category: "Freelance", region: "North America / EU", url: "https://www.taskrabbit.com", desc: "Gig economy platform for local assembly, moving, and administrative help." },
-            { id: 96, title: "Hubstaff Talent", category: "Freelance", region: "Global", url: "https://talent.hubstaff.com", desc: "Free remote agency and freelancer directory for virtual assistant work." },
-            { id: 97, title: "ProBlogger Jobs", category: "Freelance", region: "Global", url: "https://problogger.com/jobs", desc: "Dedicated job board for professional copywriters, bloggers, and content leads." },
-            { id: 98, title: "SolidGigs", category: "Freelance", region: "Global", url: "https://solidgigs.com", desc: "Curated freelance leads site filtering top 1% contract opportunities daily." },
-            { id: 99, title: "Twine", category: "Freelance", region: "Global", url: "https://www.twine.net", desc: "Network connecting companies with freelance audio, video, and design talent." },
-            { id: 100, title: "WriterAccess", category: "Freelance", region: "Global", url: "https://www.writeraccess.com", desc: "Content creation platform matching freelance writers and editors with brands." },
-            { id: 101, title: "Krop", category: "Freelance", region: "Global", url: "https://www.krop.com", desc: "Creative industry job board and portfolio hosting website for designers." },
-            { id: 102, title: "Workana", category: "Freelance", region: "Latin America", url: "https://www.workana.com", desc: "Leading freelance work platform operating across Latin America and Spain." }
+            // Freelance, Gig Economy & Micro-Tasks (431-500)
+            { id: 431, title: "Upwork", category: "Freelance", region: "Global", url: "https://www.upwork.com", desc: "Global freelancing platform for software, design, writing, and consulting." },
+            { id: 432, title: "Fiverr", category: "Freelance", region: "Global", url: "https://www.fiverr.com", desc: "Online marketplace for freelance digital services and creative micro-tasks." },
+            { id: 433, title: "Freelancer", category: "Freelance", region: "Global", url: "https://www.freelancer.com", desc: "Crowdsourcing marketplace for coding, copywriting, and data entry jobs." },
+            { id: 434, title: "PeoplePerHour", category: "Freelance", region: "Global", url: "https://www.peopleperhour.com", desc: "UK-based freelance platform for web developers, designers, and marketers." },
+            { id: 435, title: "Guru", category: "Freelance", region: "Global", url: "https://www.guru.com", desc: "Network connecting businesses with freelance technical and creative experts." },
+            { id: 436, title: "99designs", category: "Freelance", region: "Global", url: "https://99designs.com", desc: "Creative graphic design platform for logos, packaging, and digital assets." },
+            { id: 437, title: "SimplyHired Freelance", category: "Freelance", region: "Global", url: "https://www.simplyhired.com/search?q=freelance", desc: "Filtered index of contract and freelance roles aggregated across boards." },
+            { id: 438, title: "Contra", category: "Freelance", region: "Global", url: "https://contra.com", desc: "Commission-free freelance network built for modern digital creators." },
+            { id: 439, title: "DesignHill", category: "Freelance", region: "Global", url: "https://www.designhill.com", desc: "Marketplace for custom graphic design contests and freelance design gigs." },
+            { id: 440, title: "TaskRabbit", category: "Freelance", region: "North America / EU", url: "https://www.taskrabbit.com", desc: "Gig economy platform for local assembly, moving, and administrative help." },
+            { id: 441, title: "Hubstaff Talent", category: "Freelance", region: "Global", url: "https://talent.hubstaff.com", desc: "Free remote agency and freelancer directory for virtual assistant work." },
+            { id: 442, title: "ProBlogger Jobs", category: "Freelance", region: "Global", url: "https://problogger.com/jobs", desc: "Dedicated job board for professional copywriters, bloggers, and content leads." },
+            { id: 443, title: "SolidGigs", category: "Freelance", region: "Global", url: "https://solidgigs.com", desc: "Curated freelance leads site filtering top 1% contract opportunities daily." },
+            { id: 444, title: "Twine", category: "Freelance", region: "Global", url: "https://www.twine.net", desc: "Network connecting companies with freelance audio, video, and design talent." },
+            { id: 445, title: "WriterAccess", category: "Freelance", region: "Global", url: "https://www.writeraccess.com", desc: "Content creation platform matching freelance writers and editors with brands." },
+            { id: 446, title: "Krop", category: "Freelance", region: "Global", url: "https://www.krop.com", desc: "Creative industry job board and portfolio hosting website for designers." },
+            { id: 447, title: "Workana", category: "Freelance", region: "Latin America", url: "https://www.workana.com", desc: "Leading freelance work platform operating across Latin America and Spain." },
+            { id: 448, title: "FreeUp", category: "Freelance", region: "Global", url: "https://freeup.net", desc: "Vetted freelancer platform for e-commerce, marketing, and web dev." },
+            { id: 449, title: "ServiceScape", category: "Freelance", region: "Global", url: "https://www.servicescape.com", desc: "Freelance directory for editors, translators, copywriters, and graphic designers." },
+            { id: 450, title: "Gigster", category: "Freelance", region: "Global", url: "https://gigster.com", desc: "Elite software development and design project teams on demand." },
+            { id: 451, title: "MarketerHire", category: "Freelance", region: "Global", url: "https://marketerhire.com", desc: "Pre-vetted freelance marketing talent network for growth and SEO." },
+            { id: 452, title: "ClearVoice", category: "Freelance", region: "Global", url: "https://www.clearvoice.com", desc: "Content marketing freelance network for writers, strategists, and editors." },
+            { id: 453, title: "Lemon.io", category: "Freelance", region: "Global", url: "https://lemon.io", desc: "Vetted matchmaker platform for senior freelance software developers." },
+            { id: 454, title: "YouTeam", category: "Freelance", region: "Global", url: "https://youteam.io", desc: "Contract offshore engineering team augmentation platform." },
+            { id: 455, title: "Braintrust", category: "Freelance", region: "Global", url: "https://www.usebraintrust.com", desc: "User-owned decentralized freelance talent network for tech leads." },
+            { id: 456, title: "Aoptal Freelance", category: "Freelance", region: "Global", url: "https://www.toptal.com/freelance", desc: "Selective network of elite freelance software engineers and designers." },
+            { id: 457, title: "DesignCrowd", category: "Freelance", region: "Global", url: "https://www.designcrowd.com", desc: "Crowdsourced design marketplace for logos, web design, and graphic art." },
+            { id: 458, title: "CrowdSpring", category: "Freelance", region: "Global", url: "https://www.crowdspring.com", desc: "Branding and product design crowdsourced freelance platform." },
+            { id: 459, title: "Draftbit Experts", category: "Freelance", region: "Global", url: "https://draftbit.com", desc: "Mobile app build experts and native React Native freelancers." },
+            { id: 460, title: "Webflow Experts", category: "Freelance", region: "Global", url: "https://experts.webflow.com", desc: "Certified freelance Webflow designers and agency partners." },
+            { id: 461, title: "Framer Experts", category: "Freelance", region: "Global", url: "https://www.framer.com/experts/", desc: "Directory of professional Framer website builders and interactive designers." },
+            { id: 462, title: "Wix Marketplace", category: "Freelance", region: "Global", url: "https://www.wix.com/marketplace", desc: "Hire certified Wix web designers and SEO specialists." },
+            { id: 463, title: "Squarespace Marketplace", category: "Freelance", region: "Global", url: "https://marketplace.squarespace.com", desc: "Squarespace Circle design experts for custom site builds." },
+            { id: 464, title: "Voices.com", category: "Freelance", region: "Global", url: "https://www.voices.com", desc: "The premier voice-over marketplace for audiobooks, ads, and video games." },
+            { id: 465, title: "Bunny Studio", category: "Freelance", region: "Global", url: "https://bunnystudio.com", desc: "Fast-turnaround voice actor, audio editing, and translation services." },
+            { id: 466, title: "Voice123", category: "Freelance", region: "Global", url: "https://voice123.com", desc: "First open marketplace for professional voice actors worldwide." },
+            { id: 467, title: "Gengo Translation", category: "Freelance", region: "Global", url: "https://gengo.com", desc: "Crowdsourced translation platform for multilingual freelancers." },
+            { id: 468, title: "OneHourTranslation", category: "Freelance", region: "Global", url: "https://www.onehourtranslation.com", desc: "Professional translation network (Blend) for global linguists." },
+            { id: 469, title: "Unbabel", category: "Freelance", region: "Global", url: "https://unbabel.com", desc: "AI-powered human refinement network for translation professionals." },
+            { id: 470, title: "TextMaster", category: "Freelance", region: "Global", url: "https://www.textmaster.com", desc: "Professional online translation and copywriting service platform." },
+            { id: 471, title: "Rev.com", category: "Freelance", region: "Global", url: "https://www.rev.com/freelancers", desc: "Transcription, video captioning, and subtitling remote gig platform." },
+            { id: 472, title: "TranscribeMe", category: "Freelance", region: "Global", url: "https://www.transcribeme.com", desc: "Audio transcription micro-tasks for entry-level remote freelancers." },
+            { id: 473, title: "Scribie", category: "Freelance", region: "Global", url: "https://scribie.com/freelance-transcription", desc: "Audio transcription work from home platform with micro-payouts." },
+            { id: 474, title: "GoTranscript", category: "Freelance", region: "Global", url: "https://gotranscript.com/transcription-jobs", desc: "Global remote transcription jobs for multilingual typists." },
+            { id: 475, title: "Clickworker", category: "Freelance", region: "Global", url: "https://www.clickworker.com", desc: "Micro-task platform for AI data annotation, text creation, and research." },
+            { id: 476, title: "Amazon Mechanical Turk", category: "Freelance", region: "Global", url: "https://www.mturk.com", desc: "Crowdsourced micro-task marketplace for HITs (Human Intelligence Tasks)." },
+            { id: 477, title: "Appen", category: "Freelance", region: "Global", url: "https://appen.com", desc: "AI data training, search relevance scoring, and linguistic evaluation." },
+            { id: 478, title: "TELUS International", category: "Freelance", region: "Global", url: "https://www.telusinternational.com", desc: "AI data collection, search engine evaluation, and annotation jobs." },
+            { id: 479, title: "OneForma", category: "Freelance", region: "Global", url: "https://www.oneforma.com", desc: "Centific's crowdsourcing platform for translation, testing, and AI training." },
+            { id: 480, title: "Remotasks (Scale AI)", category: "Freelance", region: "Global", url: "https://www.remotasks.com", desc: "3D LiDAR annotation, RLHF AI training, and computer vision tasks." },
+            { id: 481, title: "DataAnnotation.tech", category: "Freelance", region: "Global", url: "https://www.dataannotation.tech", desc: "High-paying AI prompt evaluation and coding RLHF freelance tasks." },
+            { id: 482, title: "Outlier.ai", category: "Freelance", region: "Global", url: "https://outlier.ai", desc: "Platform training frontier LLM models through domain expert freelancing." },
+            { id: 483, title: "Aligner AI", category: "Freelance", region: "Global", url: "https://aligner.ai", desc: "AI alignment testing, red-teaming, and subject matter feedback." },
+            { id: 484, title: "Mindrift", category: "Freelance", region: "Global", url: "https://mindrift.ai", desc: "Freelance Writer-Tutor network training generative AI models." },
+            { id: 485, title: "UserTesting", category: "Freelance", region: "Global", url: "https://www.usertesting.com", desc: "Earn money testing new websites, apps, and prototype user flows." },
+            { id: 486, title: "Userlytics", category: "Freelance", region: "Global", url: "https://www.userlytics.com", desc: "Usability testing platform paying users for audio-visual feedback." },
+            { id: 487, title: "TryMyUI (Trymata)", category: "Freelance", region: "Global", url: "https://www.trymata.com", desc: "Website usability testing and UX feedback micro-tasks." },
+            { id: 488, title: "Testbirds", category: "Freelance", region: "Global", url: "https://www.testbirds.com", desc: "Crowdtesting platform for mobile apps, software bugs, and usability." },
+            { id: 489, title: "utest (Applause)", category: "Freelance", region: "Global", url: "https://www.utest.com", desc: "The largest network of freelance software QA testers in the world." },
+            { id: 490, title: "Bugcrowd", category: "Freelance", region: "Global", url: "https://www.bugcrowd.com", desc: "Crowdsourced cybersecurity bug bounty platform for ethical hackers." },
+            { id: 491, title: "HackerOne", category: "Freelance", region: "Global", url: "https://www.hackerone.com", desc: "Bounty network matching penetration testers with enterprise software." },
+            { id: 492, title: "Intigriti", category: "Freelance", region: "Global", url: "https://www.intigriti.com", desc: "European crowdsourced security and ethical hacking bug bounty portal." },
+            { id: 493, title: "Synack", category: "Freelance", region: "Global", url: "https://www.synack.com", desc: "On-demand penetration testing crowd for security researchers." },
+            { id: 494, title: "Codeable", category: "Freelance", region: "Global", url: "https://codeable.io", desc: "Exclusive platform matching top 2% WordPress developers with clients." },
+            { id: 495, title: "Storetasker", category: "Freelance", region: "Global", url: "https://www.storetasker.com", desc: "Outsourced freelance development specifically for Shopify store owners." },
+            { id: 496, title: "Mayple", category: "Freelance", region: "Global", url: "https://www.mayple.com", desc: "Vetted digital marketing experts and growth agency managers." },
+            { id: 497, title: "AdQuick Experts", category: "Freelance", region: "Global", url: "https://www.adquick.com", desc: "Out-of-home (OOH) media buying and outdoor advertising freelancers." },
+            { id: 498, title: "BenchPro Freelance", category: "Freelance", region: "Global", url: "https://benchpro.io", desc: "Interim management, CFO-for-hire, and corporate strategy gig site." },
+            { id: 499, title: "Catalant", category: "Freelance", region: "Global", url: "https://gocatalant.com", desc: "Marketplace for high-level management consultants and interim executives." },
+            { id: 500, title: "Paro.ai", category: "Freelance", region: "North America", url: "https://paro.ai", desc: "AI-matched network of freelance CFOs, CPAs, and financial analysts." }
         ];
 
-        let portals = [];
         let activeCategory = 'All';
-
-        function initData() {
-            const stored = localStorage.getItem('arcknowledge_portals');
-            if (stored) {
-                portals = JSON.parse(stored);
-            } else {
-                portals = initialPortals;
-                localStorage.setItem('arcknowledge_portals', JSON.stringify(portals));
-            }
-            renderGrid(portals);
-        }
-
-        // SWITCH BETWEEN MEMBER & ADMIN LOGIN MODES ON MAIN SCREEN
-        function switchLoginMode(mode) {
-            const memberForm = document.getElementById('memberLoginForm');
-            const adminForm = document.getElementById('adminLoginForm');
-            const tabMember = document.getElementById('tabMember');
-            const tabAdmin = document.getElementById('tabAdmin');
-            const title = document.getElementById('loginTitle');
-            const subtitle = document.getElementById('loginSubtitle');
-            const iconContainer = document.getElementById('loginIconContainer');
-
-            if (mode === 'admin') {
-                memberForm.classList.add('hidden');
-                adminForm.classList.remove('hidden');
-                
-                tabAdmin.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-[#8250df] text-[#8250df] flex items-center justify-center gap-1.5";
-                tabMember.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-transparent text-[#636c76] hover:text-[#1f2328] flex items-center justify-center gap-1.5";
-                
-                title.innerText = "Admin Portal Login";
-                subtitle.innerText = "Authenticate with administrator master password.";
-                iconContainer.innerHTML = `<i data-lucide="shield-lock" class="w-7 h-7 text-[#8250df]"></i>`;
-            } else {
-                adminForm.classList.add('hidden');
-                memberForm.classList.remove('hidden');
-                
-                tabMember.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-[#0969da] text-[#0969da] flex items-center justify-center gap-1.5";
-                tabAdmin.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-transparent text-[#636c76] hover:text-[#1f2328] flex items-center justify-center gap-1.5";
-                
-                title.innerText = "Member Authentication";
-                subtitle.innerText = "Sign in with your access password key.";
-                iconContainer.innerHTML = `<i data-lucide="shield-check" class="w-7 h-7 text-[#0969da]"></i>`;
-            }
-            lucide.createIcons();
-        }
-
-        function handleUserLogin(e) {
-            e.preventDefault();
-            const passKey = document.getElementById('userLoginPassword').value;
-            const warningBox = document.getElementById('statusWarning');
-
-            const result = authenticateUser(passKey);
-
-            if (!result.success) {
-                warningBox.classList.remove('hidden');
-                
-                if (result.reason === "INVALID_KEY") {
-                    warningBox.className = "p-3 rounded-md text-xs border bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30";
-                    warningBox.innerHTML = "<strong>Access Denied:</strong> Invalid password key provided.";
-                } else if (result.reason === "PENDING") {
-                    warningBox.className = "p-3 rounded-md text-xs border bg-[#fff8c5] text-[#9a6700] border-[#d4a72c]/30";
-                    warningBox.innerHTML = `<strong>Account Pending:</strong> Your account status for key <code>${result.key}</code> is pending activation. Please wait for administrator review.`;
-                } else if (result.reason === "INACTIVE") {
-                    const b = result.bankDetails;
-                    warningBox.className = "p-3 rounded-md text-xs border bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30 space-y-2";
-                    warningBox.innerHTML = `
-                        <div><strong>Account Inactive:</strong> Your subscription has expired or is inactive.</div>
-                        <div class="bg-white p-2.5 rounded border border-[#ff8182]/30 text-[#1f2328] space-y-1">
-                            <div class="font-semibold text-xs border-b pb-1 text-[#cf222e]">Bank Payment Details for Reactivation:</div>
-                            <div><strong>Bank Name:</strong> ${b.bankName}</div>
-                            <div><strong>Branch Name:</strong> ${b.branchName}</div>
-                            <div><strong>Branch Code:</strong> ${b.branchCode}</div>
-                            <div><strong>Account Holder:</strong> ${b.accountHolder}</div>
-                            <div><strong>Account Number:</strong> ${b.accountNumber}</div>
-                            <div><strong>Account Type:</strong> ${b.accountType}</div>
-                            <div><strong>SWIFT Code:</strong> ${b.swiftCode}</div>
-                            <div class="text-[10px] text-[#636c76] mt-1">* Use your Password Key as payment reference.</div>
-                        </div>
-                    `;
-                }
-                return;
-            }
-
-            warningBox.classList.add('hidden');
-            showMainSite();
-        }
-
-        // DIRECT ADMIN LOGIN FROM FRONT PAGE
-        function handleDirectAdminLogin(e) {
-            e.preventDefault();
-            const password = document.getElementById('directAdminPassword').value;
-            const errBox = document.getElementById('adminDirectAuthError');
-
-            if (password === ADMIN_PASSWORD) {
-                errBox.classList.add('hidden');
-                showMainSite();
-                openAdminPanelDirectly();
-            } else {
-                errBox.classList.remove('hidden');
-            }
-        }
-
-        function openAdminPanelDirectly() {
-            if (document.getElementById('adminUserSearchInput')) document.getElementById('adminUserSearchInput').value = '';
-            if (document.getElementById('adminStatusFilter')) document.getElementById('adminStatusFilter').value = 'All';
-            renderAdminUserTable();
-            openModal('adminPanelModal');
-        }
-
-        function showMainSite() {
-            document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('mainContent').classList.remove('hidden');
-            document.getElementById('mainContent').classList.add('flex');
-            
-            const users = getUsers();
-            const activeKey = sessionStorage.getItem('active_user_key');
-            const currentUser = users.find(u => u.passwordKey === activeKey);
-
-            if (currentUser) {
-                document.getElementById('headerSubStatus').innerText = currentUser.status;
-                document.getElementById('userModalKey').innerText = currentUser.passwordKey;
-                document.getElementById('userModalStatus').innerText = currentUser.status;
-            } else {
-                document.getElementById('headerSubStatus').innerText = "Admin Session";
-                document.getElementById('userModalKey').innerText = "Administrator";
-                document.getElementById('userModalStatus').innerText = "System Level";
-            }
-
-            initData();
-        }
-
-        function handleLogout() {
-            sessionStorage.removeItem('active_user_key');
-            document.getElementById('mainContent').classList.add('hidden');
-            document.getElementById('loginPage').classList.remove('hidden');
-            document.getElementById('userLoginPassword').value = '';
-            document.getElementById('directAdminPassword').value = '';
-            document.getElementById('statusWarning').classList.add('hidden');
-            document.getElementById('adminDirectAuthError').classList.add('hidden');
-            switchLoginMode('member');
-        }
-
-        function renderAdminUserTable() {
-            const tbody = document.getElementById('userTableBody');
-            const noUsersFound = document.getElementById('adminNoUsersFound');
-            const userCountLabel = document.getElementById('adminUserCount');
-            const searchQuery = (document.getElementById('adminUserSearchInput')?.value || '').toLowerCase().trim();
-            const statusFilter = document.getElementById('adminStatusFilter')?.value || 'All';
-
-            tbody.innerHTML = '';
-            const allUsers = getUsers();
-
-            const filteredUsers = allUsers.filter(user => {
-                const matchesSearch = user.passwordKey.toLowerCase().includes(searchQuery);
-                const matchesStatus = statusFilter === 'All' || user.status === statusFilter;
-                return matchesSearch && matchesStatus;
-            });
-
-            userCountLabel.innerText = `Showing ${filteredUsers.length} of ${allUsers.length} users`;
-
-            if (filteredUsers.length === 0) {
-                noUsersFound.classList.remove('hidden');
-                return;
-            } else {
-                noUsersFound.classList.add('hidden');
-            }
-
-            filteredUsers.forEach((user) => {
-                const originalIndex = allUsers.findIndex(u => u.passwordKey === user.passwordKey);
-                
-                let badgeStyle = "bg-[#dafbe1] text-[#1a7f37] border-[#4ac26b]/30";
-                if (user.status === "Pending") badgeStyle = "bg-[#fff8c5] text-[#9a6700] border-[#d4a72c]/30";
-                if (user.status === "Inactive") badgeStyle = "bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30";
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-[#f6f8fa] transition-colors";
-                tr.innerHTML = `
-                    <td class="p-2.5 font-mono text-[#1f2328] font-medium">${user.passwordKey}</td>
-                    <td class="p-2.5">
-                        <span class="px-2 py-0.5 rounded-full text-[10px] font-medium border ${badgeStyle}">
-                            ${user.status}
-                        </span>
-                    </td>
-                    <td class="p-2.5 text-right">
-                        <select onchange="updateUserStatus(${originalIndex}, this.value)" class="bg-white border border-[#d0d7de] rounded px-2 py-1 text-xs focus:outline-none focus:border-[#0969da]">
-                            <option value="Subscribed" ${user.status === 'Subscribed' ? 'selected' : ''}>Subscribed</option>
-                            <option value="Pending" ${user.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                            <option value="Inactive" ${user.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
-                        </select>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function updateUserStatus(index, newStatus) {
-            const users = getUsers();
-            users[index].status = newStatus;
-            saveUsers(users);
-            renderAdminUserTable();
-        }
 
         function renderGrid(data) {
             const grid = document.getElementById('directoryGrid');
@@ -575,12 +652,8 @@
             filterPortals();
         }
 
-        function openModal(id) { document.getElementById(id).classList.remove('opacity-0', 'pointer-events-none'); }
-        function closeModal(id) { document.getElementById(id).classList.add('opacity-0', 'pointer-events-none'); }
-
         window.addEventListener('DOMContentLoaded', () => {
-            const activeKey = sessionStorage.getItem('active_user_key');
-            if (activeKey) showMainSite();
+            renderGrid(portals);
             lucide.createIcons();
         });
     </script>

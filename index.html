@@ -16,14 +16,23 @@
     <div id="loginPage" class="fixed inset-0 z-50 flex items-center justify-center bg-[#f6f8fa] p-4">
         <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-md p-6 shadow-sm">
             <div class="flex flex-col items-center mb-6 text-center">
-                <div class="p-3 bg-[#f6f8fa] border border-[#d0d7de] rounded-full text-[#1f2328] mb-3">
-                    <i data-lucide="shield-check" class="w-7 h-7 text-[#0969da]"></i>
+                <div id="loginIconContainer" class="p-3 bg-[#f6f8fa] border border-[#d0d7de] rounded-full text-[#1f2328] mb-3">
+                    <i id="loginIcon" data-lucide="shield-check" class="w-7 h-7 text-[#0969da]"></i>
                 </div>
-                <h2 class="text-xl font-semibold tracking-tight text-[#1f2328]">Member Authentication</h2>
-                <p class="text-xs text-[#636c76] mt-1">Sign in with your access password key.</p>
+                <h2 id="loginTitle" class="text-xl font-semibold tracking-tight text-[#1f2328]">Member Authentication</h2>
+                <p id="loginSubtitle" class="text-xs text-[#636c76] mt-1">Sign in with your access password key.</p>
             </div>
 
-            <form onsubmit="handleUserLogin(event)" class="space-y-4">
+            <div class="flex border-b border-[#d0d7de] mb-4">
+                <button type="button" id="tabMember" onclick="switchLoginMode('member')" class="flex-1 py-2 text-center text-xs font-semibold border-b-2 border-[#0969da] text-[#0969da] flex items-center justify-center gap-1.5">
+                    <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Member Access
+                </button>
+                <button type="button" id="tabAdmin" onclick="switchLoginMode('admin')" class="flex-1 py-2 text-center text-xs font-semibold border-b-2 border-transparent text-[#636c76] hover:text-[#1f2328] flex items-center justify-center gap-1.5">
+                    <i data-lucide="shield-lock" class="w-3.5 h-3.5 text-[#8250df]"></i> Admin Portal
+                </button>
+            </div>
+
+            <form id="memberLoginForm" onsubmit="handleUserLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-[#1f2328] mb-1">Access Password Key</label>
                     <input type="password" id="userLoginPassword" placeholder="Enter password key..." required class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-3 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]">
@@ -32,16 +41,31 @@
                 <div id="statusWarning" class="hidden p-3 rounded-md text-xs border space-y-2"></div>
 
                 <button type="submit" class="w-full bg-[#1f2328] hover:bg-[#24292f] text-white text-sm font-medium py-2 rounded-md transition-colors shadow-sm flex items-center justify-center gap-2">
-                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
+                    <i data-lucide="log-in" class="w-4 h-4"></i> Sign In as Member
+                </button>
+
+                <div class="mt-4 pt-4 border-t border-[#d0d7de] text-center">
+                    <span class="text-xs text-[#636c76]">Demo Keys for Testing:</span>
+                    <div class="flex justify-center gap-2 mt-1 text-[11px] text-[#0969da]">
+                        <code>#PetalChain_26</code> | <code>#UserKey_01</code> | <code>#UserKey_02</code>
+                    </div>
+                </div>
+            </form>
+
+            <form id="adminLoginForm" onsubmit="handleDirectAdminLogin(event)" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-medium text-[#1f2328] mb-1">Administrator Master Password</label>
+                    <input type="password" id="directAdminPassword" placeholder="Enter admin password..." required class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-3 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#8250df] focus:ring-1 focus:ring-[#8250df]">
+                </div>
+
+                <div id="adminDirectAuthError" class="hidden p-3 rounded-md text-xs border bg-[#ffebe9] text-[#cf222e] border-[#ff8182]/30">
+                    <strong>Access Denied:</strong> Incorrect administrator password key.
+                </div>
+
+                <button type="submit" class="w-full bg-[#8250df] hover:bg-[#6e3fc9] text-white text-sm font-medium py-2 rounded-md transition-colors shadow-sm flex items-center justify-center gap-2">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i> Sign In to Admin Control Panel
                 </button>
             </form>
-            <!--
-            <div class="mt-4 pt-4 border-t border-[#d0d7de] text-center">
-                <span class="text-xs text-[#636c76]">Demo Keys for Testing:</span>
-                <div class="flex justify-center gap-2 mt-1 text-[11px] text-[#0969da]">
-                    <code>#PetalChain_26</code> | <code>#UserKey_01</code> | <code>#UserKey_02</code>
-                </div>
-            </div>-->
         </div>
     </div>
 
@@ -62,9 +86,9 @@
                         <i data-lucide="user-check" class="w-3.5 h-3.5 text-[#0969da]"></i>
                         <span id="headerSubStatus">Status</span>
                     </button>
-                    <button onclick="openModal('adminAuthModal')" class="flex items-center gap-1.5 bg-[#f6f8fa] hover:bg-[#eaeef2] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
+                    <button onclick="openAdminPanelDirectly()" class="flex items-center gap-1.5 bg-[#f6f8fa] hover:bg-[#eaeef2] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
                         <i data-lucide="shield-lock" class="w-3.5 h-3.5 text-[#8250df]"></i>
-                        Admin
+                        Admin Panel
                     </button>
                     <button onclick="handleLogout()" class="p-1.5 bg-[#f6f8fa] hover:bg-[#ffebe9] text-[#cf222e] rounded-md border border-[#d0d7de]" title="Logout">
                         <i data-lucide="log-out" class="w-4 h-4"></i>
@@ -116,18 +140,6 @@
         </div>
     </div>
 
-    <div id="adminAuthModal" class="modal opacity-0 pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#24292f]/40">
-        <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-sm p-5 shadow-lg relative">
-            <button onclick="closeModal('adminAuthModal')" class="absolute top-3 right-3 text-[#636c76]"><i data-lucide="x" class="w-4 h-4"></i></button>
-            <h3 class="text-base font-semibold text-[#1f2328] mb-2">Admin Access</h3>
-            <form onsubmit="handleAdminLogin(event)" class="space-y-3">
-                <input type="password" id="adminPassword" placeholder="Admin Password" required class="w-full bg-[#f6f8fa] border border-[#d0d7de] rounded-md px-2.5 py-1.5 text-xs text-[#1f2328]">
-                <p id="authError" class="text-[#cf222e] text-xs hidden">Incorrect password.</p>
-                <button type="submit" class="w-full bg-[#2da44e] text-white text-xs font-semibold py-1.5 rounded-md">Login</button>
-            </form>
-        </div>
-    </div>
-
     <div id="adminPanelModal" class="modal opacity-0 pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-[#24292f]/40">
         <div class="bg-white border border-[#d0d7de] rounded-md w-full max-w-2xl p-6 shadow-lg relative max-h-[90vh] overflow-y-auto">
             <button onclick="closeModal('adminPanelModal')" class="absolute top-4 right-4 text-[#636c76]"><i data-lucide="x" class="w-4 h-4"></i></button>
@@ -171,7 +183,6 @@
     <script src="auth.js"></script>
 
     <script>
-        // Comprehensive List of 100+ Job Portals & Company Career Sites
         const initialPortals = [
             // Aggregators & General Job Boards (1-20)
             { id: 1, title: "LinkedIn Jobs", category: "Aggregator", region: "Global", url: "https://www.linkedin.com/jobs", desc: "The premier professional network and job search engine worldwide." },
@@ -300,6 +311,40 @@
             renderGrid(portals);
         }
 
+        // SWITCH BETWEEN MEMBER & ADMIN LOGIN MODES ON MAIN SCREEN
+        function switchLoginMode(mode) {
+            const memberForm = document.getElementById('memberLoginForm');
+            const adminForm = document.getElementById('adminLoginForm');
+            const tabMember = document.getElementById('tabMember');
+            const tabAdmin = document.getElementById('tabAdmin');
+            const title = document.getElementById('loginTitle');
+            const subtitle = document.getElementById('loginSubtitle');
+            const iconContainer = document.getElementById('loginIconContainer');
+
+            if (mode === 'admin') {
+                memberForm.classList.add('hidden');
+                adminForm.classList.remove('hidden');
+                
+                tabAdmin.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-[#8250df] text-[#8250df] flex items-center justify-center gap-1.5";
+                tabMember.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-transparent text-[#636c76] hover:text-[#1f2328] flex items-center justify-center gap-1.5";
+                
+                title.innerText = "Admin Portal Login";
+                subtitle.innerText = "Authenticate with administrator master password.";
+                iconContainer.innerHTML = `<i data-lucide="shield-lock" class="w-7 h-7 text-[#8250df]"></i>`;
+            } else {
+                adminForm.classList.add('hidden');
+                memberForm.classList.remove('hidden');
+                
+                tabMember.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-[#0969da] text-[#0969da] flex items-center justify-center gap-1.5";
+                tabAdmin.className = "flex-1 py-2 text-center text-xs font-semibold border-b-2 border-transparent text-[#636c76] hover:text-[#1f2328] flex items-center justify-center gap-1.5";
+                
+                title.innerText = "Member Authentication";
+                subtitle.innerText = "Sign in with your access password key.";
+                iconContainer.innerHTML = `<i data-lucide="shield-check" class="w-7 h-7 text-[#0969da]"></i>`;
+            }
+            lucide.createIcons();
+        }
+
         function handleUserLogin(e) {
             e.preventDefault();
             const passKey = document.getElementById('userLoginPassword').value;
@@ -341,6 +386,28 @@
             showMainSite();
         }
 
+        // DIRECT ADMIN LOGIN FROM FRONT PAGE
+        function handleDirectAdminLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('directAdminPassword').value;
+            const errBox = document.getElementById('adminDirectAuthError');
+
+            if (password === ADMIN_PASSWORD) {
+                errBox.classList.add('hidden');
+                showMainSite();
+                openAdminPanelDirectly();
+            } else {
+                errBox.classList.remove('hidden');
+            }
+        }
+
+        function openAdminPanelDirectly() {
+            if (document.getElementById('adminUserSearchInput')) document.getElementById('adminUserSearchInput').value = '';
+            if (document.getElementById('adminStatusFilter')) document.getElementById('adminStatusFilter').value = 'All';
+            renderAdminUserTable();
+            openModal('adminPanelModal');
+        }
+
         function showMainSite() {
             document.getElementById('loginPage').classList.add('hidden');
             document.getElementById('mainContent').classList.remove('hidden');
@@ -354,6 +421,10 @@
                 document.getElementById('headerSubStatus').innerText = currentUser.status;
                 document.getElementById('userModalKey').innerText = currentUser.passwordKey;
                 document.getElementById('userModalStatus').innerText = currentUser.status;
+            } else {
+                document.getElementById('headerSubStatus').innerText = "Admin Session";
+                document.getElementById('userModalKey').innerText = "Administrator";
+                document.getElementById('userModalStatus').innerText = "System Level";
             }
 
             initData();
@@ -364,10 +435,12 @@
             document.getElementById('mainContent').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
             document.getElementById('userLoginPassword').value = '';
+            document.getElementById('directAdminPassword').value = '';
             document.getElementById('statusWarning').classList.add('hidden');
+            document.getElementById('adminDirectAuthError').classList.add('hidden');
+            switchLoginMode('member');
         }
 
-        // FILTERABLE & SEARCHABLE ADMIN USER TABLE
         function renderAdminUserTable() {
             const tbody = document.getElementById('userTableBody');
             const noUsersFound = document.getElementById('adminNoUsersFound');
@@ -378,14 +451,12 @@
             tbody.innerHTML = '';
             const allUsers = getUsers();
 
-            // Filter users based on search term & status select
             const filteredUsers = allUsers.filter(user => {
                 const matchesSearch = user.passwordKey.toLowerCase().includes(searchQuery);
                 const matchesStatus = statusFilter === 'All' || user.status === statusFilter;
                 return matchesSearch && matchesStatus;
             });
 
-            // Update user count header
             userCountLabel.innerText = `Showing ${filteredUsers.length} of ${allUsers.length} users`;
 
             if (filteredUsers.length === 0) {
@@ -396,7 +467,6 @@
             }
 
             filteredUsers.forEach((user) => {
-                // Find actual index in original stored array for precise updates
                 const originalIndex = allUsers.findIndex(u => u.passwordKey === user.passwordKey);
                 
                 let badgeStyle = "bg-[#dafbe1] text-[#1a7f37] border-[#4ac26b]/30";
@@ -429,23 +499,6 @@
             users[index].status = newStatus;
             saveUsers(users);
             renderAdminUserTable();
-        }
-
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            if (document.getElementById('adminPassword').value === ADMIN_PASSWORD) {
-                document.getElementById('authError').classList.add('hidden');
-                closeModal('adminAuthModal');
-                
-                // Clear search inputs upon opening
-                if (document.getElementById('adminUserSearchInput')) document.getElementById('adminUserSearchInput').value = '';
-                if (document.getElementById('adminStatusFilter')) document.getElementById('adminStatusFilter').value = 'All';
-                
-                renderAdminUserTable();
-                openModal('adminPanelModal');
-            } else {
-                document.getElementById('authError').classList.remove('hidden');
-            }
         }
 
         function renderGrid(data) {

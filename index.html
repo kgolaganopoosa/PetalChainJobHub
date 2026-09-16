@@ -1,136 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arcknowledge - Job Hub | Global Directory 500</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Explore 500 global job portals, company career boards, remote work sites, regional employment platforms, and freelance networks.">
+<title>Arcknowledge Job Hub | Global Directory 500</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  #backToTopBtn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 99;
-    width: 48px;
-    height: 48px;
-    border: none;
-    outline: none;
-    background-color: #007bff;
-    color: #ffffff;
-    cursor: pointer;
-    border-radius: 50%;
-    font-size: 20px;
-    font-weight: bold;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.2s ease;
-  }
-
-  #backToTopBtn.show {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  #backToTopBtn:hover {
-    background-color: #0056b3;
-    transform: translateY(-3px);
-  }
+:root{--brand:#4b7bff;--accent:#00e0b3;--ink:#060910;--panel:#0c1120;--text:#f7f9ff;--muted:rgba(247,249,255,.6);--line:rgba(255,255,255,.1);--glass:rgba(255,255,255,.055)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:var(--text);font-family:Manrope,system-ui,sans-serif;min-height:100vh}button,input{font:inherit}button,a{touch-action:manipulation}.shell{position:relative;min-height:100vh;overflow:hidden}.ambient{position:absolute;inset:0;pointer-events:none}.glow{position:absolute;border-radius:50%;filter:blur(120px)}.glow.a{width:520px;height:520px;top:-160px;left:-130px;background:rgba(75,123,255,.3)}.glow.b{width:480px;height:480px;top:34%;right:-180px;background:rgba(0,224,179,.18)}.glow.c{width:420px;height:420px;bottom:0;left:34%;background:rgba(75,123,255,.1)}.glass-shape{position:absolute;border:1px solid var(--line);background:rgba(255,255,255,.04);backdrop-filter:blur(24px);border-radius:24px}.glass-shape.a{width:300px;height:640px;top:-100px;right:10%;transform:rotate(12deg);animation:floatA 14s ease-in-out infinite}.glass-shape.b{width:260px;height:520px;top:260px;left:-120px;transform:rotate(-10deg);animation:floatB 18s ease-in-out infinite}@keyframes floatA{50%{transform:translate(-14px,22px) rotate(16deg)}}@keyframes floatB{50%{transform:translate(16px,-20px) rotate(-14deg)}}.wrap{width:min(100% - 40px,1280px);margin:auto;position:relative;z-index:1}.topbar{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line);background:rgba(6,9,16,.76);backdrop-filter:blur(18px)}.topbar .wrap{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px}.mark{width:38px;height:38px;display:grid;place-items:center;border-radius:9px;background:var(--brand);box-shadow:0 0 24px -4px var(--brand);font:700 18px 'Space Grotesk'}.brand-name{font:700 17px 'Space Grotesk';line-height:1}.brand-sub{margin-top:4px;color:var(--accent);font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}.index-badge{border:1px solid rgba(0,224,179,.35);background:rgba(0,224,179,.08);color:var(--accent);padding:8px 12px;border-radius:8px;font-size:12px;font-weight:700}.hero{padding:72px 0 42px}.eyebrow{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--glass);padding:7px 12px;border-radius:999px;color:rgba(255,255,255,.72);font-size:12px;font-weight:700;backdrop-filter:blur(12px)}.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}h1{max-width:780px;margin:20px 0 0;font:700 clamp(44px,6.2vw,78px)/.95 'Space Grotesk';letter-spacing:0}.accent{color:var(--accent)}.intro{max-width:650px;margin:24px 0 0;color:var(--muted);font-size:18px;line-height:1.6}.search{max-width:760px;margin-top:38px;display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:6px;padding:8px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.06);box-shadow:0 20px 60px -20px #000;backdrop-filter:blur(18px)}.search:focus-within{border-color:rgba(0,224,179,.5);box-shadow:0 0 0 4px rgba(0,224,179,.08),0 20px 60px -20px #000}.search-icon{font-size:22px;text-align:center;color:rgba(255,255,255,.45)}.search input{min-width:0;padding:13px 4px;border:0;outline:0;background:transparent;color:var(--text);font-size:15px}.search input::placeholder{color:rgba(255,255,255,.38)}.search button{border:0;border-radius:11px;background:var(--brand);color:white;padding:13px 24px;font:700 14px 'Space Grotesk';cursor:pointer;box-shadow:0 10px 30px -8px var(--brand)}.filter-area{padding:0 0 28px}.filter-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.filter-label{margin-right:5px;color:rgba(255,255,255,.4);font-size:11px;font-weight:800;letter-spacing:.17em;text-transform:uppercase}.cat-btn{border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);color:rgba(255,255,255,.8);border-radius:999px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}.cat-btn:hover{background:rgba(255,255,255,.1)}.cat-btn.active{border-color:var(--accent);background:var(--accent);color:var(--ink)}.results{padding-bottom:96px}.result-head{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:18px;color:var(--muted);font-size:14px}.result-head strong{font:700 17px 'Space Grotesk';color:white}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{min-width:0;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:16px;background:var(--glass);padding:20px;backdrop-filter:blur(18px);transition:border-color .2s,background .2s,transform .2s}.card:hover{border-color:rgba(0,224,179,.4);background:rgba(255,255,255,.08);transform:translateY(-2px)}.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:18px}.initial{width:44px;height:44px;display:grid;place-items:center;border-radius:11px;background:rgba(75,123,255,.16);color:#86a6ff;font:700 18px 'Space Grotesk'}.card:nth-child(even) .initial{background:rgba(0,224,179,.13);color:var(--accent)}.region{max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.04);padding:5px 9px;color:var(--muted);font-size:10px;font-weight:700}.card h2{margin:0;font:700 18px/1.25 'Space Grotesk';overflow-wrap:anywhere}.desc{flex:1;margin:8px 0 18px;color:rgba(255,255,255,.55);font-size:13px;line-height:1.6}.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:15px;border-top:1px solid var(--line)}.category{color:var(--accent);font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.visit{display:inline-flex;align-items:center;gap:6px;color:white;text-decoration:none;font-size:13px;font-weight:700}.visit:hover{color:var(--accent)}.empty{display:none;border:1px solid var(--line);border-radius:16px;background:var(--glass);padding:70px 20px;text-align:center;color:var(--muted)}.empty h2{color:white;font:700 20px 'Space Grotesk'}.footer{position:relative;z-index:1;border-top:1px solid var(--line);background:rgba(12,17,32,.7);padding:56px 0}.legal{display:grid;grid-template-columns:repeat(3,1fr);gap:42px}.legal h3{margin:0 0 10px;font:700 15px 'Space Grotesk'}.legal p{margin:0;color:rgba(255,255,255,.48);font-size:12px;line-height:1.7}.copyright{margin-top:38px;padding-top:22px;border-top:1px solid var(--line);color:rgba(255,255,255,.4);font-size:12px;text-align:center}.to-top{position:fixed;right:22px;bottom:22px;z-index:30;width:48px;height:48px;border:1px solid rgba(255,255,255,.16);border-radius:50%;background:rgba(6,9,16,.7);color:white;backdrop-filter:blur(16px);font-size:20px;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(8px);transition:.2s}.to-top.show{opacity:1;visibility:visible;transform:none}.to-top:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.legal{grid-template-columns:1fr}.hero{padding-top:52px}}
+@media(max-width:600px){.wrap{width:min(100% - 28px,1280px)}.topbar .wrap{height:64px}.index-badge{font-size:10px;padding:7px 9px}.brand-name{font-size:15px}.hero{padding:44px 0 34px}h1{font-size:43px}.intro{font-size:16px}.search{grid-template-columns:34px 1fr;padding:7px}.search button{grid-column:1/-1;width:100%}.filter-label{width:100%;margin:8px 0 1px}.grid{grid-template-columns:1fr}.result-head{align-items:flex-end}.result-head span:last-child{font-size:11px}.glass-shape{display:none}.card{padding:18px}.footer{padding:44px 0}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.glass-shape{animation:none}.card,.to-top{transition:none}}
 </style>
 </head>
-<body class="bg-[#f6f8fa] text-[#1f2328] flex flex-col min-h-screen font-sans antialiased selection:bg-[#0969da] selection:text-white">
-
-    <header class="bg-[#ffffff] border-b border-[#d0d7de] sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-[#24292f] text-white rounded-md">
-                    <i data-lucide="briefcase" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <span class="text-lg font-semibold text-[#1f2328] tracking-tight">Arcknowledge</span>
-                    <span class="text-xs text-[#0969da] font-medium block -mt-1">Job Hub</span>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <span id="portalCountBadge" class="bg-[#f6f8fa] text-[#24292f] px-3 py-1.5 rounded-md text-xs font-semibold border border-[#d0d7de]">
-                    500 Portals Indexed
-                </span>
-            </div>
-        </div>
-    </header>
-
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="max-w-3xl mx-auto mb-8">
-            <h1 class="text-2xl sm:text-3xl font-semibold text-[#1f2328] tracking-tight mb-2">Global Job Portals & Career Directory</h1>
-            <p class="text-[#636c76] text-sm mb-6">Explore 500 aggregated employment platforms, enterprise career boards, niche tech job sites, regional portals, and freelance networks.</p>
-            
-            <div class="space-y-3">
-                <div class="relative">
-                    <i data-lucide="search" class="absolute left-3.5 top-2.5 w-4 h-4 text-[#636c76]"></i>
-                    <input type="text" id="searchInput" onkeyup="filterPortals()" placeholder="Search 500 portals, locations, or types (e.g., Remote, Google, Tech, Africa, Design)..." class="w-full bg-[#ffffff] border border-[#d0d7de] rounded-md pl-10 pr-4 py-2 text-sm text-[#1f2328] focus:outline-none focus:border-[#0969da] focus:ring-1 focus:ring-[#0969da]">
-                </div>
-
-                <div class="flex flex-wrap gap-1.5" id="categoryContainer">
-                    <button onclick="setCategory('All')" class="cat-btn active bg-[#0969da] text-white px-3 py-1 rounded-full text-xs font-medium transition-colors">All (500)</button>
-                    <button onclick="setCategory('Aggregator')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Aggregators</button>
-                    <button onclick="setCategory('Company Career')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Company Careers</button>
-                    <button onclick="setCategory('Remote & Tech')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Remote & Tech</button>
-                    <button onclick="setCategory('Regional')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Regional & SA</button>
-                    <button onclick="setCategory('Freelance')" class="cat-btn bg-[#ffffff] text-[#1f2328] px-3 py-1 rounded-full text-xs font-medium border border-[#d0d7de] transition-colors">Freelance</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="directoryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-
-        <div id="noResults" class="hidden text-center py-16 bg-[#ffffff] border border-[#d0d7de] rounded-md mt-4">
-            <i data-lucide="folder-search" class="w-10 h-10 text-[#636c76] mx-auto mb-2"></i>
-            <h3 class="text-sm font-semibold text-[#1f2328]">No portals matching your search query</h3>
-            <p class="text-[#636c76] text-xs mt-1">Try resetting category filters or searching with different keywords.</p>
-        </div>
-    </main>
-
-    <!-- Back to Top Button -->
-    <button id="backToTopBtn" aria-label="Back to top" onclick="scrollToTop()">
-      &#8593;
-    </button>
-    
-    <footer class="bg-[#ffffff] border-t border-[#d0d7de] py-10 mt-12 text-xs text-[#636c76]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-                <!-- Privacy Policy -->
-                <div>
-                    <h4 class="font-semibold text-[#1f2328] text-sm mb-2">Privacy Policy</h4>
-                    <p class="leading-relaxed">
-                        Arcknowledge Job Hub respects your privacy. We operate primarily as a directory and index of external career portals and job opportunities. We do not store personal application data, resumes, or financial records directly on our servers. Any interaction with external third-party links is subject to the respective privacy policies of those external platforms.
-                    </p>
-                </div>
-
-                <!-- Terms of Use -->
-                <div>
-                    <h4 class="font-semibold text-[#1f2328] text-sm mb-2">Terms of Use</h4>
-                    <p class="leading-relaxed">
-                        By accessing Arcknowledge Job Hub, you agree to use our indexed resources for lawful personal job-seeking and professional research purposes only. Automated scraping, data harvesting, or commercial redistribution of our indexed portal links without explicit written consent is strictly prohibited.
-                    </p>
-                </div>
-
-                <!-- Terms & Conditions -->
-                <div>
-                    <h4 class="font-semibold text-[#1f2328] text-sm mb-2">Terms & Conditions</h4>
-                    <p class="leading-relaxed">
-                        All third-party names, logos, trademarks, and job postings listed within this directory remain the exclusive property of their respective owners. Arcknowledge Job Hub provides external directory links solely for convenience and informational purposes without warranty or guarantee of employment outcomes.
-                    </p>
-                </div>
-            </div>
-
-            <div class="border-t border-[#d0d7de] pt-6 text-center">
-                <p>Arcknowledge Job Hub &copy; 2026. Centralized global employment directory.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
+<body>
+<div class="shell" id="top">
+<div class="ambient"><div class="glow a"></div><div class="glow b"></div><div class="glow c"></div><div class="glass-shape a"></div><div class="glass-shape b"></div></div>
+<header class="topbar"><div class="wrap"><div class="brand"><div class="mark">A</div><div><div class="brand-name">Arcknowledge</div><div class="brand-sub">Job Hub</div></div></div><div class="index-badge">500 PORTALS INDEXED</div></div></header>
+<main>
+<section class="hero"><div class="wrap"><div class="eyebrow"><i></i>500 curated global employment platforms</div><h1>One directory for<br><span class="accent">every job platform</span><br>on the planet.</h1><p class="intro">Explore aggregated employment platforms, enterprise career boards, niche tech job sites, regional portals, and freelance networks.</p><div class="search" role="search"><span class="search-icon" aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search 500 portals — try ‘remote’, ‘Google’ or ‘Africa’" aria-label="Search job portals"><button id="searchButton" type="button">Search</button></div></div></section>
+<section class="filter-area"><div class="wrap"><div class="filter-row" id="categoryContainer"><span class="filter-label">Category</span><button class="cat-btn active" data-category="All">All (500)</button><button class="cat-btn" data-category="Aggregator">Aggregators</button><button class="cat-btn" data-category="Company Career">Company Careers</button><button class="cat-btn" data-category="Remote & Tech">Remote &amp; Tech</button><button class="cat-btn" data-category="Regional">Regional &amp; SA</button><button class="cat-btn" data-category="Freelance">Freelance</button></div></div></section>
+<section class="results"><div class="wrap"><div class="result-head"><span><strong id="resultCount">500</strong> platforms match your filters</span><span>Sorted by directory order</span></div><div class="grid" id="directoryGrid"></div><div class="empty" id="noResults"><h2>No matching portals</h2><p>Try another keyword or reset the category filter.</p></div></div></section>
+</main>
+<footer class="footer"><div class="wrap"><div class="legal"><section><h3>Privacy Policy</h3><p>Arcknowledge Job Hub respects your privacy. We operate primarily as a directory and index of external career portals and job opportunities. We do not store personal application data, resumes, or financial records directly on our servers. Any interaction with external third-party links is subject to the respective privacy policies of those external platforms.</p></section><section><h3>Terms of Use</h3><p>By accessing Arcknowledge Job Hub, you agree to use our indexed resources for lawful personal job-seeking and professional research purposes only. Automated scraping, data harvesting, or commercial redistribution of our indexed portal links without explicit written consent is strictly prohibited.</p></section><section><h3>Terms &amp; Conditions</h3><p>All third-party names, logos, trademarks, and job postings listed within this directory remain the exclusive property of their respective owners. Arcknowledge Job Hub provides external directory links solely for convenience and informational purposes without warranty or guarantee of employment outcomes.</p></section></div><div class="copyright">Arcknowledge Job Hub &copy; 2026. Centralized global employment directory.</div></div></footer>
+<button class="to-top" id="backToTopBtn" aria-label="Back to top">↑</button>
+</div>
+<script>
         const portals = [
             // Aggregators & General Job Boards (1-85)
             { id: 1, title: "LinkedIn Jobs", category: "Aggregator", region: "Global", url: "https://www.linkedin.com/jobs", desc: "The premier professional network and job search engine worldwide." },
@@ -642,92 +539,19 @@
             { id: 499, title: "Dialectica", category: "Freelance", region: "Global", url: "https://dialecticanet.com", desc: "B2B information provider matching private equity with expert advisors." },
             { id: 500, title: "Arcknowledge Global Directory", category: "Aggregator", region: "Global", url: "#", desc: "Centralized employment index mapping top job resources across continents." }
         ];
-
-        let currentCategory = 'All';
-
-        function renderPortals(list) {
-            const grid = document.getElementById('directoryGrid');
-            const noResults = document.getElementById('noResults');
-            
-            grid.innerHTML = '';
-            
-            if (list.length === 0) {
-                noResults.classList.remove('hidden');
-                return;
-            } else {
-                noResults.classList.add('hidden');
-            }
-
-            list.forEach(portal => {
-                const card = document.createElement('div');
-                card.className = "bg-[#ffffff] border border-[#d0d7de] rounded-md p-4 flex flex-col justify-between hover:border-[#0969da] transition-colors shadow-sm";
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-start justify-between gap-2 mb-2">
-                            <h2 class="text-sm font-semibold text-[#1f2328] line-clamp-1">${portal.title}</h2>
-                            <span class="bg-[#f6f8fa] text-[#636c76] text-[10px] px-2 py-0.5 rounded border border-[#d0d7de] whitespace-nowrap">${portal.region}</span>
-                        </div>
-                        <p class="text-xs text-[#636c76] mb-4 line-clamp-2 leading-relaxed">${portal.desc}</p>
-                    </div>
-                    <div class="flex items-center justify-between pt-2 border-t border-[#f0f2f5]">
-                        <span class="text-[11px] font-medium text-[#0969da] bg-[#ddf4ff] px-2 py-0.5 rounded">${portal.category}</span>
-                        <a href="${portal.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs text-[#0969da] hover:underline font-medium">
-                            Visit Portal <i data-lucide="external-link" class="w-3 h-3"></i>
-                        </a>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-        }
-
-        function filterPortals() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = portals.filter(p => {
-                const matchesCategory = currentCategory === 'All' || p.category === currentCategory;
-                const matchesSearch = p.title.toLowerCase().includes(query) || 
-                                     p.region.toLowerCase().includes(query) || 
-                                     p.desc.toLowerCase().includes(query) ||
-                                     p.category.toLowerCase().includes(query);
-                return matchesCategory && matchesSearch;
-            });
-            renderPortals(filtered);
-        }
-
-        function setCategory(cat) {
-            currentCategory = cat;
-            const buttons = document.querySelectorAll('.cat-btn');
-            buttons.forEach(btn => {
-                if (btn.innerText.startsWith(cat) || (cat === 'All' && btn.innerText.startsWith('All'))) {
-                    btn.classList.add('bg-[#0969da]', 'text-white');
-                    btn.classList.remove('bg-[#ffffff]', 'text-[#1f2328]');
-                } else {
-                    btn.classList.remove('bg-[#0969da]', 'text-white');
-                    btn.classList.add('bg-[#ffffff]', 'text-[#1f2328]');
-                }
-            });
-            filterPortals();
-        }
-
-        // Back to Top functionality
-        const backToTopBtn = document.getElementById('backToTopBtn');
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                backToTopBtn.classList.add('show');
-            } else {
-                backToTopBtn.classList.remove('show');
-            }
-        };
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // Initial render
-        renderPortals(portals);
-    </script>
+let currentCategory='All';
+const escapeHTML=(value)=>String(value).replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+function renderPortals(list){
+ const grid=document.getElementById('directoryGrid'); const empty=document.getElementById('noResults');
+ document.getElementById('resultCount').textContent=list.length; grid.innerHTML=''; empty.style.display=list.length?'none':'block';
+ const fragment=document.createDocumentFragment();
+ list.forEach(portal=>{const article=document.createElement('article');article.className='card';article.innerHTML=`<div class="card-top"><div class="initial">${escapeHTML(portal.title.trim().charAt(0).toUpperCase())}</div><span class="region" title="${escapeHTML(portal.region)}">${escapeHTML(portal.region)}</span></div><h2>${escapeHTML(portal.title)}</h2><p class="desc">${escapeHTML(portal.desc)}</p><div class="card-foot"><span class="category">${escapeHTML(portal.category)}</span><a class="visit" href="${escapeHTML(portal.url)}" target="_blank" rel="noopener noreferrer">Visit <span aria-hidden="true">→</span></a></div>`;fragment.appendChild(article)});grid.appendChild(fragment)
+}
+function filterPortals(){const query=document.getElementById('searchInput').value.trim().toLowerCase();renderPortals(portals.filter(p=>(currentCategory==='All'||p.category===currentCategory)&&[p.title,p.region,p.desc,p.category].some(v=>v.toLowerCase().includes(query))))}
+document.getElementById('categoryContainer').addEventListener('click',event=>{const button=event.target.closest('button[data-category]');if(!button)return;currentCategory=button.dataset.category;document.querySelectorAll('.cat-btn').forEach(item=>item.classList.toggle('active',item===button));filterPortals()});
+document.getElementById('searchInput').addEventListener('input',filterPortals);document.getElementById('searchButton').addEventListener('click',filterPortals);
+const topButton=document.getElementById('backToTopBtn');window.addEventListener('scroll',()=>topButton.classList.toggle('show',window.scrollY>400),{passive:true});topButton.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+renderPortals(portals);
+</script>
 </body>
 </html>

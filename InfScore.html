@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfScore - Social Media Influence & Brand Valuation Engine</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2pdf.js Bundle CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ghBg: '#f6f8fa',
+                        ghBorder: '#d0d7de',
+                        ghText: '#1f2328',
+                        ghMuted: '#636c76',
+                        ghHover: '#f3f4f6',
+                        limeAccent: '#1a7f37',
+                        limeBright: '#2da44e',
+                        limeGlow: '#2aea62',
+                        limeLight: '#dafbe1',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f6f8fa;
+            color: #1f2328;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d0d7de;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8c959f;
+        }
+        
+        /* Strict A4 document container for printable engine */
+        .pdf-export-box {
+            width: 700px;
+            max-width: 700px;
+            background-color: #ffffff !important;
+            color: #1f2328 !important;
+            padding: 24px 28px;
+            box-sizing: border-box !important;
+            border: 1px solid #d0d7de;
+            margin: 0 auto;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+        .pdf-export-box * {
+            box-sizing: border-box !important;
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between selection:bg-limeLight selection:text-limeAccent">
+
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-ghBorder shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-ghText flex items-center justify-center text-limeGlow shadow">
+                    <i class="fa-solid fa-chart-line text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-tight text-ghText">Inf<span class="text-limeAccent">Score</span></span>
+                    <span class="hidden sm:inline-block ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-limeLight text-limeAccent border border-lime-300">Auditor & Valuation v3.2</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="scrollToCalc()" class="hidden md:inline-flex items-center space-x-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md border border-ghBorder bg-white text-ghText hover:bg-ghHover transition shadow-sm">
+                    <i class="fa-solid fa-calculator text-limeAccent"></i>
+                    <span>Calculator</span>
+                </button>
+                <button onclick="openPDFModal()" class="inline-flex items-center space-x-2 px-4 py-1.5 text-xs font-bold rounded-md bg-limeAccent text-white hover:bg-limeBright transition shadow-sm focus:ring-2 focus:ring-lime-500">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Preview & Export PDF</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Hero Header -->
+        <div class="text-center max-w-3xl mx-auto mb-8">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-ghHover border border-ghBorder text-xs font-medium text-ghMuted mb-3">
+                <span class="w-2 h-2 rounded-full bg-limeAccent animate-pulse"></span>
+                <span>Guaranteed Baseline Reach & Brand Investment Index</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ghText mb-3">
+                Measure Your Post Reach & Brand Value
+            </h1>
+            <p class="text-sm text-ghMuted leading-relaxed">
+                <strong class="text-ghText">InfScore</strong> represents your <span class="bg-limeLight text-limeAccent px-1.5 py-0.5 rounded font-semibold">guaranteed baseline reach per post</span> across all top 10 social channels combined (1% of total reach). It serves as an objective standard for brands to calculate influencer investment rates (e.g. <strong>1,234 InfScore = R1,234 ZAR or ~$75 USD</strong>).
+            </p>
+        </div>
+
+        <div class="space-y-6">
+
+            <div class="bg-white rounded-xl border border-ghBorder p-5 sm:p-6 shadow-sm">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-ghBorder">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-limeLight flex items-center justify-center text-limeAccent font-bold text-xs">
+                            1
+                        </div>
+                        <h2 class="text-base font-bold text-ghText">Creator Profile Details</h2>
+                    </div>
+                    <span class="text-xs text-ghMuted">Required for Official Audit Statement</span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="creator-name" class="block text-xs font-semibold text-ghText mb-1">Full Name or Brand Name *</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-ghMuted">
+                                <i class="fa-regular fa-user text-xs"></i>
+                            </span>
+                            <input type="text" id="creator-name" placeholder="e.g. Sarah Jenkins" oninput="recalculate()"
+                                class="w-full pl-9 pr-3.5 py-2 text-sm rounded-md border border-ghBorder bg-white text-ghText focus:outline-none focus:ring-2 focus:ring-limeAccent focus:border-transparent transition">
+                        </div>
+                    </div>
+                    
+                    <!-- Searchable Country Dropdown Widget -->
+                    <div class="relative" id="country-widget">
+                        <label class="block text-xs font-semibold text-ghText mb-1">Country of Origin (195 Sovereign States) *</label>
+                        <div onclick="toggleCountryDropdown()" id="country-selector-btn"
+                            class="w-full pl-9 pr-8 py-2 text-sm rounded-md border border-ghBorder bg-white text-ghText cursor-pointer focus:outline-none focus:ring-2 focus:ring-limeAccent transition flex items-center justify-between select-none">
+                            <span id="country-selected-text" class="text-ghMuted truncate">Select country...</span>
+                            <span class="text-ghMuted text-xs ml-2"><i class="fa-solid fa-chevron-down"></i></span>
+                        </div>
+                        <span class="absolute top-[28px] left-3 pointer-events-none text-ghMuted text-xs">
+                            <i class="fa-solid fa-globe"></i>
+                        </span>
+
+                        <!-- Custom Searchable Country Menu -->
+                        <div id="country-dropdown-menu" class="hidden absolute left-0 right-0 top-full mt-1 z-50 bg-white border border-ghBorder rounded-lg shadow-xl overflow-hidden flex flex-col max-h-64">
+                            <div class="p-2 border-b border-ghBorder bg-ghBg sticky top-0">
+                                <div class="relative">
+                                    <input type="text" id="country-search-input" placeholder="Search 195 countries..." oninput="filterCountries()"
+                                        class="w-full pl-8 pr-3 py-1.5 text-xs rounded-md border border-ghBorder bg-white text-ghText focus:outline-none focus:ring-2 focus:ring-limeAccent">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-ghMuted text-xs"></i>
+                                </div>
+                            </div>
+                            <div id="country-list-container" class="overflow-y-auto flex-1 divide-y divide-gray-100">
+                                <!-- Dynamically populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Total Audience -->
+                <div class="bg-white rounded-xl border border-ghBorder p-5 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold text-ghMuted uppercase tracking-wider">Total Combined Audience</p>
+                        <h3 id="stat-total-followers" class="text-2xl font-black text-ghText mt-1">0</h3>
+                        <p class="text-xs text-ghMuted mt-1">Across 10 Top Platforms</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-ghHover border border-ghBorder flex items-center justify-center text-limeAccent">
+                        <i class="fa-solid fa-users text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- InfScore -->
+                <div class="bg-ghText text-white rounded-xl border border-ghBorder p-5 shadow-md flex items-center justify-between relative overflow-hidden">
+                    <div class="absolute -right-3 -bottom-3 w-20 h-20 bg-limeAccent/30 rounded-full blur-xl pointer-events-none"></div>
+                    <div>
+                        <p class="text-[11px] font-bold text-limeGlow uppercase tracking-wider">Guaranteed Reach (InfScore)</p>
+                        <h3 id="stat-inf-score" class="text-2xl font-black text-white mt-1">0.00</h3>
+                        <p class="text-[11px] text-gray-300 mt-1 font-medium">1% Baseline Post Reach</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-white/10 backdrop-blur border border-white/20 flex items-center justify-center text-limeGlow">
+                        <i class="fa-solid fa-bullhorn text-lg"></i>
+                    </div>
+                </div>
+
+                <!-- Brand Valuation (ZAR) -->
+                <div class="bg-white rounded-xl border border-ghBorder p-5 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold text-ghMuted uppercase tracking-wider">Per-Post Investment (ZAR)</p>
+                        <h3 id="stat-val-zar" class="text-2xl font-black text-limeAccent mt-1">R0.00</h3>
+                        <p class="text-xs text-ghMuted mt-1">1 InfScore = R1.00 ZAR</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-limeLight border border-lime-200 flex items-center justify-center text-limeAccent font-black">
+                        R
+                    </div>
+                </div>
+
+                <!-- Brand Valuation (USD) -->
+                <div class="bg-white rounded-xl border border-ghBorder p-5 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold text-ghMuted uppercase tracking-wider">Per-Post Investment (USD)</p>
+                        <h3 id="stat-val-usd" class="text-2xl font-black text-ghText mt-1">$0.00</h3>
+                        <p class="text-xs text-ghMuted mt-1">Approx. ~$0.06 USD / point</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-ghHover border border-ghBorder flex items-center justify-center text-ghText font-black">
+                        $
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benchmark Explanation Banner -->
+            <div class="bg-gradient-to-r from-white via-limeLight/40 to-white rounded-xl border border-lime-300 p-5 shadow-sm">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="flex items-start space-x-3.5">
+                        <div class="w-10 h-10 rounded-xl bg-limeAccent text-white flex items-center justify-center text-lg flex-shrink-0 mt-0.5 shadow">
+                            <i class="fa-solid fa-hand-holding-dollar"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-ghText">Recommended Brand Investment Benchmark</h3>
+                            <p class="text-xs text-ghMuted mt-0.5 leading-relaxed">
+                                InfScore quantifies the <strong class="text-ghText">guaranteed per-post audience engagement threshold</strong>. Brands use this metric to standardise influencer budgets fairly across single post campaigns, multi-platform releases, or video integrations.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-white px-3.5 py-2 rounded-lg border border-ghBorder shadow-xs self-stretch md:self-auto justify-between md:justify-start">
+                        <div class="text-right">
+                            <p class="text-[10px] font-bold text-ghMuted uppercase">Baseline Rate Benchmark</p>
+                            <p id="valuation-example-text" class="text-xs font-black text-limeAccent">1,000 InfScore = R1,000 / $60.80</p>
+                        </div>
+                        <i class="fa-solid fa-circle-check text-limeBright text-base ml-1"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calculator-section" class="bg-white rounded-xl border border-ghBorder p-5 sm:p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-4 border-b border-ghBorder gap-3">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-7 h-7 rounded-lg bg-limeLight flex items-center justify-center text-limeAccent font-bold text-xs">
+                            2
+                        </div>
+                        <div>
+                            <h2 class="text-base font-bold text-ghText">Top 10 Social Media Platforms</h2>
+                            <p class="text-xs text-ghMuted">Enter handle and audience count per network.</p>
+                        </div>
+                    </div>
+                    <button onclick="resetAllFields()" class="self-start sm:self-auto inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold rounded-md border border-ghBorder text-ghMuted hover:text-ghText hover:bg-ghHover transition">
+                        <i class="fa-solid fa-rotate-left"></i>
+                        <span>Reset All Fields</span>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="platforms-grid">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-between bg-white rounded-xl border border-ghBorder p-5 shadow-sm gap-4">
+            <div class="flex items-center space-x-3.5 text-left">
+                <div class="w-10 h-10 rounded-full bg-limeLight flex items-center justify-center text-limeAccent flex-shrink-0">
+                    <i class="fa-solid fa-file-invoice text-lg"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-ghText">Download Certified Audit & Valuation Statement</h4>
+                    <p class="text-xs text-ghMuted">Exports clean single-page PDF containing creator details, guaranteed post reach, and brand valuation index.</p>
+                </div>
+            </div>
+            <button onclick="openPDFModal()" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-2.5 text-xs font-bold rounded-md bg-limeAccent text-white hover:bg-limeBright transition shadow-sm focus:ring-2 focus:ring-lime-500">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Preview & Export Statement</span>
+            </button>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-ghBorder mt-16 text-ghMuted text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 rounded-md bg-ghText text-limeGlow flex items-center justify-center font-black text-xs">IS</div>
+                <span class="font-semibold text-ghText">&copy; 2026 InfScore Brand. All rights reserved.</span>
+            </div>
+            <div class="flex flex-wrap items-center justify-center gap-6 font-medium">
+                <button onclick="openModal('privacyModal')" class="hover:text-ghText transition">Privacy Policy</button>
+                <button onclick="openModal('termsUseModal')" class="hover:text-ghText transition">Terms of Use</button>
+                <button onclick="openModal('termsCondModal')" class="hover:text-ghText transition">Terms & Conditions</button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- PDF Preview & Export Modal -->
+    <div id="pdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-2 sm:p-4">
+        <div class="bg-white rounded-2xl border border-ghBorder max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-ghBorder bg-ghBg">
+                <div class="flex items-center space-x-2.5">
+                    <i class="fa-solid fa-file-pdf text-limeAccent text-xl"></i>
+                    <div>
+                        <h3 class="font-bold text-ghText text-base">InfScore Audit Statement Preview</h3>
+                        <p class="text-xs text-ghMuted">A4 single-page print statement preview with valuation index.</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('pdfModal')" class="text-ghMuted hover:text-ghText p-1 rounded-lg hover:bg-ghHover transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Scrollable Document Preview Area -->
+            <div class="p-4 sm:p-6 overflow-y-auto bg-gray-200 flex justify-center">
+                <div id="pdf-modal-preview-content" class="shadow-lg rounded-sm overflow-hidden bg-white">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Modal Footer Actions -->
+            <div class="px-6 py-4 border-t border-ghBorder bg-ghBg flex flex-col sm:flex-row items-center justify-between gap-3">
+                <span class="text-xs text-ghMuted">A4 Scaled Vector Capture Engine</span>
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <button onclick="closeModal('pdfModal')" class="w-1/2 sm:w-auto px-4 py-2 text-xs font-semibold rounded-md border border-ghBorder text-ghText bg-white hover:bg-ghHover transition">
+                        Close
+                    </button>
+                    <button id="download-btn" onclick="downloadPDF()" class="w-1/2 sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-2 text-xs font-bold rounded-md bg-limeAccent text-white hover:bg-limeBright transition shadow-sm">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Download PDF Statement</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Printable DOM Container for html2pdf conversion -->
+    <div style="position: absolute; left: -9999px; top: -9999px; width: 700px;" id="pdf-hidden-host">
+        <!-- Render target injected here before html2pdf capture -->
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="privacyModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-xl border border-ghBorder max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-ghBorder bg-ghBg">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-limeAccent"></i>
+                    <h3 class="font-bold text-ghText text-base">Privacy Policy</h3>
+                </div>
+                <button onclick="closeModal('privacyModal')" class="text-ghMuted hover:text-ghText p-1.5 rounded-lg hover:bg-ghHover transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-3 text-ghText text-xs sm:text-sm leading-relaxed">
+                <p class="text-ghMuted text-xs">Last updated: October 2026</p>
+                <h4 class="font-bold text-ghText">1. Local Browser Calculation</h4>
+                <p>InfScore calculates guaranteed post reach and brand valuation locally inside your browser memory. Input data is never sent or sold to third-party databases.</p>
+                <h4 class="font-bold text-ghText">2. PDF Export Privacy</h4>
+                <p>Generated PDF reports are processed instantly via client-side vector compilation.</p>
+            </div>
+            <div class="px-6 py-3 border-t border-ghBorder bg-ghBg flex justify-end">
+                <button onclick="closeModal('privacyModal')" class="px-4 py-1.5 text-xs font-semibold rounded-md bg-ghText text-white hover:bg-gray-800 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms of Use Modal -->
+    <div id="termsUseModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-xl border border-ghBorder max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-ghBorder bg-ghBg">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-file-contract text-limeAccent"></i>
+                    <h3 class="font-bold text-ghText text-base">Terms of Use</h3>
+                </div>
+                <button onclick="closeModal('termsUseModal')" class="text-ghMuted hover:text-ghText p-1.5 rounded-lg hover:bg-ghHover transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-3 text-ghText text-xs sm:text-sm leading-relaxed">
+                <p class="text-ghMuted text-xs">Effective date: October 2026</p>
+                <h4 class="font-bold text-ghText">1. Guaranteed Reach Standard</h4>
+                <p>InfScore calculates a 1% baseline per-post reach benchmark across combined follower footprints across the 10 supported platforms.</p>
+                <h4 class="font-bold text-ghText">2. Investment Valuation Benchmark</h4>
+                <p>Recommended brand investment calculations (1 InfScore = R1.00 ZAR = ~$0.06 USD) serve as baseline rate suggestions for creator partnerships.</p>
+            </div>
+            <div class="px-6 py-3 border-t border-ghBorder bg-ghBg flex justify-end">
+                <button onclick="closeModal('termsUseModal')" class="px-4 py-1.5 text-xs font-semibold rounded-md bg-ghText text-white hover:bg-gray-800 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div id="termsCondModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-xl border border-ghBorder max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-ghBorder bg-ghBg">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-scale-balanced text-limeAccent"></i>
+                    <h3 class="font-bold text-ghText text-base">Terms and Conditions</h3>
+                </div>
+                <button onclick="closeModal('termsCondModal')" class="text-ghMuted hover:text-ghText p-1.5 rounded-lg hover:bg-ghHover transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-3 text-ghText text-xs sm:text-sm leading-relaxed">
+                <p class="text-ghMuted text-xs">General Terms</p>
+                <h4 class="font-bold text-ghText">1. Accuracy of Representation</h4>
+                <p>Users are responsible for entering honest subscriber and follower metrics when generating export certificates for brand sponsorship proposals.</p>
+            </div>
+            <div class="px-6 py-3 border-t border-ghBorder bg-ghBg flex justify-end">
+                <button onclick="closeModal('termsCondModal')" class="px-4 py-1.5 text-xs font-semibold rounded-md bg-ghText text-white hover:bg-gray-800 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exchange conversion constant (1 ZAR = ~$0.0608 USD)
+        const ZAR_TO_USD_RATE = 0.0608;
+
+        // Definition of all 195 UN-Recognized Sovereign Countries
+        const allCountries = [
+            "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+            "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+            "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+            "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Costa Rica",
+            "Croatia", "Cuba", "Cyprus", "Czechia (Czech Republic)", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador",
+            "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France",
+            "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau",
+            "Guyana", "Haiti", "Holy See (Vatican City)", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq",
+            "Ireland", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati",
+            "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania",
+            "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius",
+            "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar (Burma)", "Namibia",
+            "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway",
+            "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland",
+            "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino",
+            "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands",
+            "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland",
+            "Syria", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey",
+            "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu",
+            "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
+        ];
+
+        // State for selected country
+        let selectedCountryValue = "";
+
+        // Definition of the 10 Top Social Platforms
+        const socialPlatforms = [
+            { id: 'youtube', name: 'YouTube', icon: 'fa-brands fa-youtube', color: '#dc2626', bg: '#fef2f2', placeholder: '@channel' },
+            { id: 'instagram', name: 'Instagram', icon: 'fa-brands fa-instagram', color: '#db2777', bg: '#fdf2f8', placeholder: '@username' },
+            { id: 'tiktok', name: 'TikTok', icon: 'fa-brands fa-tiktok', color: '#000000', bg: '#f3f4f6', placeholder: '@handle' },
+            { id: 'twitter', name: 'X (Twitter)', icon: 'fa-brands fa-x-twitter', color: '#000000', bg: '#f3f4f6', placeholder: '@handle' },
+            { id: 'facebook', name: 'Facebook', icon: 'fa-brands fa-facebook', color: '#2563eb', bg: '#eff6ff', placeholder: 'Page / Profile' },
+            { id: 'linkedin', name: 'LinkedIn', icon: 'fa-brands fa-linkedin-in', color: '#1d4ed8', bg: '#eff6ff', placeholder: 'in/username' },
+            { id: 'pinterest', name: 'Pinterest', icon: 'fa-brands fa-pinterest', color: '#b91c1c', bg: '#fef2f2', placeholder: '@username' },
+            { id: 'snapchat', name: 'Snapchat', icon: 'fa-brands fa-snapchat', color: '#ca8a04', bg: '#fefce8', placeholder: '@username' },
+            { id: 'reddit', name: 'Reddit', icon: 'fa-brands fa-reddit-alien', color: '#ea580c', bg: '#fff7ed', placeholder: 'u/username' },
+            { id: 'threads', name: 'Threads', icon: 'fa-brands fa-threads', color: '#000000', bg: '#f3f4f6', placeholder: '@username' }
+        ];
+
+        // Custom Country Dropdown Logic
+        function renderCountryList(filterText = '') {
+            const container = document.getElementById('country-list-container');
+            const cleanFilter = filterText.toLowerCase().trim();
+            const filtered = allCountries.filter(c => c.toLowerCase().includes(cleanFilter));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="px-3 py-3 text-xs text-ghMuted text-center">No matching country found</div>`;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(c => {
+                const isSelected = selectedCountryValue === c;
+                html += `
+                    <div onclick="selectCountry('${c.replace(/'/g, "\\'")}')" 
+                        class="px-3 py-2 text-xs font-medium text-ghText hover:bg-limeLight hover:text-limeAccent cursor-pointer flex items-center justify-between transition ${isSelected ? 'bg-limeLight/60 text-limeAccent font-bold' : ''}">
+                        <span>${c}</span>
+                        ${isSelected ? '<i class="fa-solid fa-check text-limeAccent text-xs"></i>' : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleCountryDropdown() {
+            const menu = document.getElementById('country-dropdown-menu');
+            const isHidden = menu.classList.contains('hidden');
+            
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                document.getElementById('country-search-input').focus();
+            } else {
+                menu.classList.add('hidden');
+            }
+        }
+
+        function filterCountries() {
+            const query = document.getElementById('country-search-input').value;
+            renderCountryList(query);
+        }
+
+        function selectCountry(country) {
+            selectedCountryValue = country;
+            const textSpan = document.getElementById('country-selected-text');
+            textSpan.innerText = country;
+            textSpan.classList.remove('text-ghMuted');
+            textSpan.classList.add('text-ghText', 'font-semibold');
+            
+            document.getElementById('country-dropdown-menu').classList.add('hidden');
+            recalculate();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const widget = document.getElementById('country-widget');
+            if (widget && !widget.contains(e.target)) {
+                const menu = document.getElementById('country-dropdown-menu');
+                if (menu) menu.classList.add('hidden');
+            }
+        });
+
+        // Render Platform Input Grid
+        function renderPlatformGrid() {
+            const grid = document.getElementById('platforms-grid');
+            let html = '';
+            
+            socialPlatforms.forEach((p, index) => {
+                html += `
+                    <div class="border border-ghBorder rounded-lg p-4 bg-ghBg hover:border-gray-400 transition flex flex-col justify-between space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2.5">
+                                <div class="w-8 h-8 rounded-md flex items-center justify-center text-sm shadow-sm" style="background-color: ${p.bg}; color: ${p.color};">
+                                    <i class="${p.icon}"></i>
+                                </div>
+                                <span class="font-bold text-ghText text-sm">${p.name}</span>
+                            </div>
+                            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded bg-white border border-ghBorder text-ghMuted">#${index + 1}</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-ghMuted mb-1">Username / Handle</label>
+                                <input type="text" id="handle-${p.id}" placeholder="${p.placeholder}" oninput="recalculate()"
+                                    class="w-full px-3 py-1.5 text-xs rounded-md border border-ghBorder bg-white text-ghText focus:outline-none focus:ring-2 focus:ring-limeAccent focus:border-transparent transition">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-ghMuted mb-1">Followers / Subscribers</label>
+                                <input type="number" id="count-${p.id}" min="0" placeholder="0" oninput="recalculate()"
+                                    class="w-full px-3 py-1.5 text-xs rounded-md border border-ghBorder bg-white text-ghText focus:outline-none focus:ring-2 focus:ring-limeAccent focus:border-transparent transition">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+        function getData() {
+            const userName = document.getElementById('creator-name').value.trim() || 'Unspecified Creator';
+            const userCountry = selectedCountryValue || 'Unspecified Location';
+            
+            let totalFollowers = 0;
+            let activeCount = 0;
+            const rows = [];
+
+            socialPlatforms.forEach(p => {
+                const handle = document.getElementById(`handle-${p.id}`).value.trim();
+                const countRaw = document.getElementById(`count-${p.id}`).value;
+                const count = parseInt(countRaw) || 0;
+                
+                if (count > 0 || handle !== '') {
+                    activeCount++;
+                }
+
+                totalFollowers += count;
+
+                rows.push({
+                    name: p.name,
+                    icon: p.icon,
+                    color: p.color,
+                    handle: handle !== '' ? handle : '—',
+                    count: count
+                });
+            });
+
+            // Guaranteed Baseline Reach = 1% of Total Combined Reach (Total * 0.01)
+            const infScore = totalFollowers * 0.01;
+
+            // Brand Investment Valuation Formulas:
+            // 1 InfScore = R1.00 ZAR
+            // 1 InfScore = $0.0608 USD
+            const valZar = infScore;
+            const valUsd = infScore * ZAR_TO_USD_RATE;
+
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            const statementId = 'INF-' + Math.floor(100000 + Math.random() * 900000);
+
+            return {
+                userName,
+                userCountry,
+                totalFollowers,
+                infScore,
+                valZar,
+                valUsd,
+                activeCount,
+                rows,
+                formattedDate,
+                statementId
+            };
+        }
+
+        function recalculate() {
+            const data = getData();
+            document.getElementById('stat-total-followers').innerText = data.totalFollowers.toLocaleString();
+            document.getElementById('stat-inf-score').innerText = data.infScore.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('stat-val-zar').innerText = 'R ' + data.valZar.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('stat-val-usd').innerText = '$ ' + data.valUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            const exText = data.infScore > 0 
+                ? `${data.infScore.toLocaleString(undefined, {maximumFractionDigits: 0})} InfScore = R${data.valZar.toLocaleString(undefined, {maximumFractionDigits: 0})} ZAR or ~$${data.valUsd.toLocaleString(undefined, {maximumFractionDigits: 0})} USD`
+                : '1,234 InfScore = R1,234 ZAR or ~$75 USD';
+            document.getElementById('valuation-example-text').innerText = exText;
+        }
+
+        function buildPDFStatementMarkup(data) {
+            let tableRows = '';
+            
+            data.rows.forEach((p, idx) => {
+                const formattedCount = p.count > 0 ? p.count.toLocaleString() : '0';
+                const rowBg = idx % 2 === 0 ? '#ffffff' : '#fcfdfd';
+                tableRows += `
+                    <tr style="border-bottom: 1px solid #e1e4e8; background-color: ${rowBg};">
+                        <td style="padding: 6px 8px; font-size: 10px; font-weight: 600; color: #1f2328; width: 32%;">
+                            <i class="${p.icon}" style="color: ${p.color}; margin-right: 5px; width: 12px; text-align: center;"></i>
+                            ${p.name}
+                        </td>
+                        <td style="padding: 6px 8px; font-size: 10px; color: #57606a; font-family: monospace; width: 38%; word-break: break-all;">${p.handle}</td>
+                        <td style="padding: 6px 8px; font-size: 10px; font-weight: 700; color: #1f2328; text-align: right; font-family: monospace; width: 30%;">${formattedCount}</td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <div class="pdf-export-box" id="pdf-statement-canvas">
+                    <!-- Header -->
+                    <div style="display: table; width: 100%; border-bottom: 3px solid #1a7f37; padding-bottom: 10px; margin-bottom: 12px;">
+                        <div style="display: table-cell; vertical-align: middle; width: 65%;">
+                            <div style="display: inline-block; vertical-align: middle; width: 32px; height: 32px; background-color: #1f2328; color: #2aea62; border-radius: 6px; font-weight: 900; font-size: 14px; text-align: center; line-height: 32px; margin-right: 8px;">
+                                IS
+                            </div>
+                            <div style="display: inline-block; vertical-align: middle;">
+                                <h1 style="font-size: 16px; font-weight: 800; color: #1f2328; margin: 0; line-height: 1.1;">InfScore Audit Statement</h1>
+                                <p style="font-size: 8.5px; font-weight: 700; color: #636c76; text-transform: uppercase; letter-spacing: 0.5px; margin: 2px 0 0 0;">Guaranteed Reach & Brand Investment Report</p>
+                            </div>
+                        </div>
+                        <div style="display: table-cell; vertical-align: middle; text-align: right; width: 35%;">
+                            <p style="font-size: 9px; font-weight: 600; color: #1f2328; margin: 0;">Date: ${data.formattedDate}</p>
+                            <p style="font-size: 8.5px; color: #636c76; margin: 1px 0 0 0; font-family: monospace;">ID: ${data.statementId}</p>
+                            <span style="display: inline-block; margin-top: 2px; padding: 1px 5px; border-radius: 4px; font-size: 8px; font-weight: 700; background-color: #dafbe1; color: #1a7f37; border: 1px solid #9be9a8;">Verified Baseline</span>
+                        </div>
+                    </div>
+
+                    <!-- Creator Details -->
+                    <div style="background-color: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 10px 12px; margin-bottom: 12px; display: table; width: 100%; box-sizing: border-box;">
+                        <div style="display: table-cell; width: 50%; vertical-align: top; padding-right: 8px;">
+                            <p style="font-size: 8.5px; font-weight: 700; color: #636c76; text-transform: uppercase; margin: 0 0 2px 0;">Creator / Brand Name</p>
+                            <p style="font-size: 12px; font-weight: 700; color: #1f2328; margin: 0; word-break: break-word;">${data.userName}</p>
+                        </div>
+                        <div style="display: table-cell; width: 50%; vertical-align: top; padding-left: 8px;">
+                            <p style="font-size: 8.5px; font-weight: 700; color: #636c76; text-transform: uppercase; margin: 0 0 2px 0;">Country of Origin</p>
+                            <p style="font-size: 12px; font-weight: 700; color: #1f2328; margin: 0; word-break: break-word;">${data.userCountry}</p>
+                        </div>
+                    </div>
+
+                    <!-- Score Highlight & Valuation Matrix -->
+                    <div style="background-color: #1f2328; color: #ffffff; border-radius: 6px; padding: 12px 14px; margin-bottom: 12px; display: table; width: 100%; box-sizing: border-box;">
+                        <div style="display: table-cell; vertical-align: middle; width: 50%;">
+                            <p style="font-size: 9px; font-weight: 700; color: #2aea62; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 1px 0;">Guaranteed Reach (InfScore)</p>
+                            <h2 style="font-size: 22px; font-weight: 800; color: #ffffff; margin: 0; font-family: monospace;">${data.infScore.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h2>
+                            <p style="font-size: 8px; color: #adbac7; margin: 2px 0 0 0;">1% Baseline Reach per post (Total / 100)</p>
+                        </div>
+                        <div style="display: table-cell; vertical-align: middle; text-align: right; width: 50%;">
+                            <div style="background-color: rgba(255, 255, 255, 0.08); padding: 8px 10px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.15); text-align: right;">
+                                <p style="font-size: 8px; font-weight: 700; color: #2aea62; text-transform: uppercase; margin: 0 0 2px 0;">Rec. Brand Investment / Post</p>
+                                <p style="font-size: 13px; font-weight: 800; color: #ffffff; margin: 0; font-family: monospace;">
+                                    R ${data.valZar.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ZAR
+                                </p>
+                                <p style="font-size: 10px; font-weight: 600; color: #d0d7de; margin: 1px 0 0 0; font-family: monospace;">
+                                    ~ $ ${data.valUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} USD
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guaranteed Reach Note -->
+                    <div style="background-color: #dafbe1; border: 1px solid #9be9a8; border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; font-size: 8.5px; color: #1a7f37; line-height: 1.3;">
+                        <strong>Guaranteed Baseline Reach Definition:</strong> The InfScore represents the minimum guaranteed baseline organic post impressions when posting across all top 10 channels. Recommended brand investment formula: 1 InfScore = R1.00 ZAR = ~$0.06 USD per post.
+                    </div>
+
+                    <!-- Platforms Table -->
+                    <div style="margin-bottom: 12px;">
+                        <div style="display: table; width: 100%; margin-bottom: 4px;">
+                            <div style="display: table-cell; font-size: 9px; font-weight: 700; color: #1f2328; text-transform: uppercase; letter-spacing: 0.5px;">
+                                Top 10 Social Media Footprint
+                            </div>
+                            <div style="display: table-cell; text-align: right; font-size: 8.5px; color: #636c76;">
+                                Total Combined Reach: <strong>${data.totalFollowers.toLocaleString()}</strong>
+                            </div>
+                        </div>
+                        <table style="width: 100%; border-collapse: collapse; border: 1px solid #d0d7de; border-radius: 6px; overflow: hidden; table-layout: fixed;">
+                            <thead>
+                                <tr style="background-color: #f6f8fa; border-bottom: 1px solid #d0d7de; text-align: left;">
+                                    <th style="padding: 5px 8px; font-size: 8.5px; font-weight: 700; color: #636c76; text-transform: uppercase; width: 32%;">Platform</th>
+                                    <th style="padding: 5px 8px; font-size: 8.5px; font-weight: 700; color: #636c76; text-transform: uppercase; width: 38%;">Handle / Username</th>
+                                    <th style="padding: 5px 8px; font-size: 8.5px; font-weight: 700; color: #636c76; text-transform: uppercase; text-align: right; width: 30%;">Audience Reach</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Certification Footer -->
+                    <div style="padding-top: 8px; border-top: 1px solid #d0d7de; text-align: center; font-size: 8px; color: #636c76; line-height: 1.3;">
+                        <p style="margin: 0;">This official audit statement certifies guaranteed baseline reach and recommended brand investment parameters as generated on ${data.formattedDate}.</p>
+                        <p style="margin: 2px 0 0 0;">&copy; 2026 InfScore Brand. All rights reserved.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openPDFModal() {
+            const data = getData();
+            const previewHost = document.getElementById('pdf-modal-preview-content');
+            previewHost.innerHTML = buildPDFStatementMarkup(data);
+            openModal('pdfModal');
+        }
+
+        function downloadPDF() {
+            const data = getData();
+            const hiddenHost = document.getElementById('pdf-hidden-host');
+            hiddenHost.innerHTML = buildPDFStatementMarkup(data);
+
+            const btn = document.getElementById('download-btn');
+            const originalBtnHtml = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Compiling PDF...</span>`;
+            btn.disabled = true;
+
+            const opt = {
+                margin:       [8, 8, 8, 8],
+                filename:     `InfScore_Valuation_${data.userName.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { 
+                    scale: 2, 
+                    useCORS: true, 
+                    logging: false,
+                    windowWidth: 700,
+                    scrollX: 0,
+                    scrollY: 0
+                },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    const targetElement = hiddenHost.firstElementChild;
+                    html2pdf().set(opt).from(targetElement).save().then(() => {
+                        btn.innerHTML = originalBtnHtml;
+                        btn.disabled = false;
+                        closeModal('pdfModal');
+                    }).catch(err => {
+                        console.error('PDF Generation Error:', err);
+                        btn.innerHTML = originalBtnHtml;
+                        btn.disabled = false;
+                        alert('PDF export encountered an error. Please try again.');
+                    });
+                }, 200);
+            });
+        }
+
+        function resetAllFields() {
+            document.getElementById('creator-name').value = '';
+            selectedCountryValue = '';
+            const textSpan = document.getElementById('country-selected-text');
+            textSpan.innerText = 'Select country...';
+            textSpan.classList.remove('text-ghText', 'font-semibold');
+            textSpan.classList.add('text-ghMuted');
+
+            socialPlatforms.forEach(p => {
+                document.getElementById(`handle-${p.id}`).value = '';
+                document.getElementById(`count-${p.id}`).value = '';
+            });
+            renderCountryList();
+            recalculate();
+        }
+
+        function scrollToCalc() {
+            document.getElementById('calculator-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        window.onclick = function(event) {
+            ['privacyModal', 'termsUseModal', 'termsCondModal', 'pdfModal'].forEach(id => {
+                const el = document.getElementById(id);
+                if (event.target === el) closeModal(id);
+            });
+        };
+
+        window.onload = function() {
+            renderCountryList();
+            renderPlatformGrid();
+            recalculate();
+        };
+    </script>
+</body>
+</html>
